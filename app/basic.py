@@ -51,7 +51,7 @@ class BaseHandler(tornado.web.RequestHandler, ArgumentMixin):
                         follow_redirects=False,
                         connect_timeout=connect_timeout,
                         request_timeout=request_timeout,
-                        user_agent=user_agent or 'bitlybot')
+                        user_agent=user_agent)
         self.http.fetch(req, callback=functools.partial(self._finish_http_fetch, callback=callback))
 
     def _finish_http_fetch(self, response, callback):

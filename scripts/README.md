@@ -14,10 +14,3 @@ and they should add the application path to sys.path by doing an expanded relati
     base_dir = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
     if base_dir not in sys.path:
         sys.path.append(base_dir)
-
-(a note about sys.path; It's ok to add the application directory into sys.path when running 
-scripts in a sub-directory; that directory must be expanded and not relative to 
-'current working directory'. There are no other acceptable cases for changing sys.path)
-
-python files should run `tornado.options.options.parse_command_line()` in their `__main__` block
-shell scripts should accept command line arguments matching `.sh` bitly standards
