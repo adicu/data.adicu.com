@@ -8,6 +8,11 @@ Once installed run
     source bin/activate
     sudo pip install -r requirements.txt
 
+To set up your environment, we use environment variables. An example has been
+included for you in conf/settings.example
+
+This app is deployed on heroku. To get access to heroku, first off install
+heroku. :) Then ask Justin or Zach for access.
 
 # app structure
 
