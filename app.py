@@ -7,16 +7,15 @@ import os
 
 import app.main
 
+env = os.environ
 class Application(tornado.web.Application):
     def __init__(self):
-        debug = tornado.options.options.environment == "dev"
-        if debug:
-            logging.getLogger().setLevel(logging.DEBUG)
+        logging.getLogger().setLevel(logging.DEBUG)
 
         app_settings = {
-            'debug': debug,
+            'debug': "dev",
             #"xsrf_cookies" : True,
-            "cookie_secret" : 'skeleton_app',
+            "cookie_secret" : 'app',
             "template_path" : os.path.join(os.path.dirname(__file__), "templates"),
             "static_path" : os.path.join(os.path.dirname(__file__), "static"),
             "autoescape" : None,
@@ -37,9 +36,9 @@ class PingHandler(tornado.web.RequestHandler):
 
 if __name__ == "__main__":
     # this port should be unique system wide; all ports used should be listed in ~/services.py
-    tornado.options.define("port", default=8080, help="Listen on port", type=int)
+    tornado.options.define("port", default=int(env["PORT"]), help="Listen on port", type=int)
     tornado.options.parse_command_line()
-    logging.info("starting skeleton_app on 0.0.0.0:%d" % tornado.options.options.port)
+    logging.info("starting app on 0.0.0.0:%d" % tornado.options.options.port)
     http_server = tornado.httpserver.HTTPServer(request_callback=Application())
     http_server.listen(tornado.options.options.port, address="0.0.0.0")
     tornado.ioloop.IOLoop.instance().start()

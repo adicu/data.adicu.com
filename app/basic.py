@@ -7,7 +7,6 @@ import simplejson as json
 import urllib
 
 from lib.ArgumentMixin import ArgumentMixin
-import settings
 
 class BaseHandler(tornado.web.RequestHandler, ArgumentMixin):
     http = tornado.httpclient.AsyncHTTPClient()

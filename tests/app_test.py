@@ -10,11 +10,11 @@ import test_shunt
 def pytest_generate_tests(metafunc):
     # this is called once for each function
     # you call metafunc.addcall() appropriately to add extra executions of the test function
-    if metafunc.function == test_skeleton_app:
+    if metafunc.function == test_app:
         for i in range(2):
             metafunc.addcall(funcargs=dict(days=i))
 
-def test_skeleton_app(days):
+def test_app(days):
     # just use assertions to do tests
     # it's ok to build generic fuctions that test a common bit of functionality
     # and use those functions in lots of different tests (ie: a generic http_get that asserts response.code == 200)
