@@ -1,6 +1,7 @@
 import tornado.options
 import tornado.httpserver
 import tornado.ioloop
+import lib.dbs as dbs
 
 import logging
 import os
@@ -28,6 +29,7 @@ class Application(tornado.web.Application):
             (r"/courses$", app.courses.CoursesHandler),
         ]
         tornado.web.Application.__init__(self, handlers, **app_settings)
+        # pg = pg_async
 
 class PingHandler(tornado.web.RequestHandler):
     def get(self):

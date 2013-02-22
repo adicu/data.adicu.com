@@ -1,11 +1,31 @@
 import app.basic
+# import lib.dbs as dbs
 
 class CoursesHandler(app.basic.BaseHandler):
     def get(self):
-        # this is a basic handler
-        # key = self.get_argument("key") # to get query parameters. add a default parameter for optional parameters
-        # the full list of gett'rs are: (defined in basic.py and web.py)
-        # self.get_argument, self.get_bool_argument, self.get_int_argument, self.get_int_argument_range, self.get_arguments
-        self.render('index.html', message="Hello World!")
-        # for an api response
-        # return self.api_response(dict(message="Hello World!"))
+        get_arg = self.get_argument
+        possible = [
+                "building",
+                "term",
+                "school",
+                "call_number",
+                "not_full",
+                "professor",
+                "department",
+                "students_less_than",
+                "class_type",
+                "meets",
+                "starts_before",
+                "starts_after",
+                "ends_before",
+                "ends_after",
+                "approval_required",
+                "units",
+                "title",
+                "subtitle",
+                "campus",
+                "courseid",
+        ]
+        querys = {q: get_arg(q, None) for q in possible if get_arg(q, None)}
+
+        return self.api_response(querys)

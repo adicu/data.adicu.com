@@ -3,11 +3,12 @@ import os
 import momoko
 import psycopg2
 
-base_dir = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+base_dir =
+os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '../..'))
 if base_dir not in sys.path:
     sys.path.append(base_dir)
 
-import lib.dbs as db
+import lib.dbs as dbs
 
 schema =  [
     "Term varchar(32)",
@@ -95,7 +96,6 @@ def create_courses_t():
     cur = pg.cursor()
     db_query = "CREATE TABLE courses_t (%s);" % ", ".join(schema)
     cur.execute(db_query)
-    cur.fetchone()
     print "win"
 
 

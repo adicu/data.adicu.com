@@ -50,11 +50,3 @@ mongouri = "mongodb://%s:%s@%s:%s/%s" % (mongo_user, mongo_pass,
 mongo = motor.MotorClient(host=mongouri)
 
 
-def get_pg():
-    return pg
-
-def get_redis():
-    return redis
-
-def get_mongo():
-    return mongo
