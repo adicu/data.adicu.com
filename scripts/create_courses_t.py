@@ -1,6 +1,7 @@
 import sys
 import os
 import momoko
+import psycopg2
 
 base_dir = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 if base_dir not in sys.path:
@@ -90,13 +91,13 @@ schema =  [
 ]
 
 def create_courses_t():
-    pg = db.get_pg()
-    db_query = "CREATE TABLE course_t (%s);" % ", ".join(schema)
-    pg.execute(db_query, callback=_on_response)
-
-
-def _on_response(cursor):
+    pg = db.pg_sync
+    cur = pg.cursor()
+    db_query = "CREATE TABLE courses_t (%s);" % ", ".join(schema)
+    cur.execute(db_query)
+    cur.fetchone()
     print "win"
+
 
 if __name__ == "__main__":
     create_courses_t()

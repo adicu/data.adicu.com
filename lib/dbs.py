@@ -2,6 +2,7 @@ import os
 import momoko
 import tornadoredis
 import motor
+import psycopg2
 
 env = os.environ
 
@@ -14,7 +15,7 @@ pg_pass = env['PG_PASSWORD']
 dsn = 'dbname=%s user=%s password=%s host=%s port=%s' % (
             pg_db, pg_user, pg_pass, pg_host, pg_port)
 
-pg = momoko.AsyncClient({
+pg_async = momoko.BlockingClient({
     'host': pg_host,
     'database': pg_db,
     'port': pg_port,
@@ -24,6 +25,8 @@ pg = momoko.AsyncClient({
     'max_conn': 20,
     'cleanup_timeout': 5
 })
+pg_sync = psycopg2.connect(database=pg_db, user=pg_user, password=pg_pass,
+        host=pg_host, port=pg_port)
 
 # Redis
 redis_host = env['REDIS_HOST']
