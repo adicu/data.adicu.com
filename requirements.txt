@@ -1,1 +1,8 @@
 tornado
+tornado-redis
+simple-json
+gunicorn
+pycurl
+wsgiref
+momoko
+motor
