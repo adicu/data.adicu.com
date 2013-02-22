@@ -8,9 +8,13 @@ lib-cov
 *.gz
 *.pyc
 
+.Python
 pids
 logs
 results
+bin
+include
+lib/python2.7
 
 config/settings.dev
 config/settings.prod
