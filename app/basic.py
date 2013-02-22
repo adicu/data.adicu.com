@@ -11,32 +11,6 @@ from lib.ArgumentMixin import ArgumentMixin
 class BaseHandler(tornado.web.RequestHandler, ArgumentMixin):
     http = tornado.httpclient.AsyncHTTPClient()
 
-    def get_render_args(self):
-        return {
-            'host' : self.host,
-            'uri' : self.request.uri,
-            # values or functions that should get passed to every render() call
-            # 'site_wide_message' : lib.site_wide_message.get(),
-        }
-    
-    def render(self, *args, **kwargs):
-        """ pass in extra values to templates """
-        new_kwargs = self.get_render_args()
-        new_kwargs.update(kwargs)
-        self.set_header("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate")
-        self.set_header("Pragma", "no-cache")
-        # turn on google chrome frame when available
-        if 'chromeframe' in self.request.headers.get('User-Agent', []):
-            self.set_header("X-UA-Compatible","chrome=1")
-        return super(BaseHandler, self).render(*args, **new_kwargs)
-
-    def get_current_user(self):
-        return self.get_secure_cookie('user')
-    
-    @property
-    def host(self):
-        return self.request.host.split(':', 1)[0].lower()
-    
     def api_call(self, url, params, callback, connect_timeout=10, request_timeout=10, headers=None, user_agent=None):
         """start an async GET api call"""
         headers = headers or {}
