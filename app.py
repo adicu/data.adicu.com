@@ -6,6 +6,7 @@ import logging
 import os
 
 import app.main
+import app.courses
 
 env = os.environ
 class Application(tornado.web.Application):
@@ -24,7 +25,7 @@ class Application(tornado.web.Application):
         handlers = [
             (r"/$", app.main.MainHandler),
             (r"/ping$", PingHandler),
-            (r"/courses$", CoursesHandler),
+            (r"/courses$", app.courses.CoursesHandler),
         ]
         tornado.web.Application.__init__(self, handlers, **app_settings)
 
