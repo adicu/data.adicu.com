@@ -1,0 +1,21 @@
+# data.adicu.com
+export PORT=3000
+
+# Postgres connection
+export PG_HOST=localhost
+export PG_PORT=5432
+export PG_USER=user
+export PG_PASSWORD=password
+export PG_DB=database
+
+# Redis connection
+export REDIS_HOST=localhost
+export REDIS_PORT=6379
+export REDIS_PASSWORD=password
+
+# Mongo connection
+export MONGO_HOST=localhost
+export MONGO_PORT=27017
+export MONGO_USER=mongo
+export MONGO_PASSWORD=password
+export MONGO_DB=database

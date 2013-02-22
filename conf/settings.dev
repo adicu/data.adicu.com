@@ -1,0 +1,21 @@
+
+# data.adicu.com
+export PORT=3000
+
+# Postgres connection
+export PG_HOST=ec2-54-243-234-143.compute-1.amazonaws.com
+export PG_PORT=5432
+export PG_USER=tucwquuxjbycan
+export PG_PASSWORD=sLZhiKVau0pkkdfQAyiRr8W3Di
+export PG_DB=d5fmhu45smct6n
+
+# Redis connection
+export REDIS_HOST=pub-redis-12612.us-east-1-4.3.ec2.garantiadata.com
+export REDIS_PORT=12612
+export REDIS_PASSWORD=Lb0BdzvBlxJUObPm
+
+# Mongo connection
+export MONGO_HOST=linus.mongohq.com
+export MONGO_PORT=10077
+export MONGO_USER=dev
+export MONGO_DB=app12176079
