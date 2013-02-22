@@ -16,8 +16,8 @@ class Application(tornado.web.Application):
 
         app_settings = {
             'debug': "dev",
-            #"xsrf_cookies" : True,
-            "cookie_secret" : 'app',
+            "xsrf_cookies" : True,
+            "cookie_secret" : 'data.adicu.com',
             "template_path" : os.path.join(os.path.dirname(__file__), "templates"),
             "static_path" : os.path.join(os.path.dirname(__file__), "static"),
             "autoescape" : None,
