@@ -1,12 +1,8 @@
 import sys
+import argparse
 import os
-import momoko
 
-base_dir = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '../..'))
-if base_dir not in sys.path:
-    sys.path.append(base_dir)
-
-import lib.dbs as dbs
+from lib import dbs
 
 schema =  [
     "Term varchar(32)",
@@ -97,6 +93,10 @@ def create_courses_t():
     pg.commit()
     print "win"
 
+def main():
+    parser = argparse.ArgumentParser(description="""Read a directory of courses
+            JSON dump file""")
+    pass
 
 if __name__ == "__main__":
-    create_courses_t()
+    main()
