@@ -51,6 +51,11 @@ class BaseHandler(tornado.web.RequestHandler, ArgumentMixin):
         self.set_header("Content-Type", "application/json; charset=utf-8")
         self.finish(json.dumps(dict(data=data, status_code=status_code, status_txt=status_txt)))
 
+    def get_arguments_as_dict(self, accepted_queries):
+        queries = {query: self.get_argument(query)
+                for query in accepted_queries if self.get_argument(q, None)}
+
+
 def format_api_errors(method):
     @functools.wraps(method)
     def wrapper(self, *args, **kwargs):

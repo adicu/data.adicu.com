@@ -6,16 +6,14 @@ import functools
 class CoursesHandler(app.basic.BaseHandler):
     @tornado.web.asynchronous
     def get(self):
-        get_arg = self.get_argument
-        possible = model.possible_query_parameters
-        queries = {q: get_arg(q, None) for q in possible if get_arg(q, None)}
+        acceptable = model.accepted_query_parameters
+        queries = get_arguments_as_dict(acceptable)
         if not len(queries):
-            return self.error(400, "Bad Request. No Arguments")
+            return self.error(status_code=400, status_txt="MISSING_QUERY_ARGUMENTS")
         model.do_sql(self.pg, queries, callback=self._finish)
 
-    def _finish(self, cursor):
-        if isinstance(cursor, dict):
-            return self.api_response(cursor)
+    def _finish(self, response):
+        if isinstance(response, dict):
+            return self.api_response(response)
         else:
-            return self.error(status_code=413,
-                    status_txt="RESPONSE_TOO_LARGE")
+            return self.error(status_code=204, status_txt="NO_CONTENT_FOR_REQUEST")
