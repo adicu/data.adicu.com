@@ -2,7 +2,7 @@ import sys
 import argparse
 import os
 
-from lib import dbs
+from lib.pg import pg_sync
 
 schema =  [
     "Term varchar(32)",
@@ -85,7 +85,7 @@ schema =  [
     "ChargeAmt2 varchar(32)",
 ]
 
-def create_courses_t():
+def create_table():
     pg = dbs.pg_sync()
     cursor = pg.cursor()
     db_query = "CREATE TABLE courses_t (%s);" % ", ".join(schema)
@@ -95,8 +95,9 @@ def create_courses_t():
 
 def main():
     parser = argparse.ArgumentParser(description="""Read a directory of courses
-            JSON dump file""")
-    pass
+            JSON dump file and writes """)
+    parser.add_argument('--create', action='store_true')
+    args = parser.parse_args()
 
 if __name__ == "__main__":
     main()
