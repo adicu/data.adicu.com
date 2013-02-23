@@ -34,11 +34,18 @@ possible_query_parameters = [
 
 # Queries takes a dict
 # We let the driver take care of injections
-def do_sql(pg, queries, callback=None):
+def do_sql(pg, queries, callback):
     # we build a string query with place holders such as 
     # "INSERT INTO test (num, data) VALUES (%s, %s)"
     # And a tuple for values such as 
     # (100, "abc'def")
-    # to do pg.execute(str_query, tuples, callback);
-    pass
+    internal_callback = functools.partial(form_dict, callback=callback)
+    pg.execute("SELECT * FROM courses_t;", callback=internal_callback);
+
+def form_dict(cursor, callback=None):
+    # here we call back to the origninal function
+    # ideally, we take our cursor here, and spit back a dict from our tuple
+    # object
+    callback({})
+
 

@@ -1,7 +1,6 @@
 import tornado.options
 import tornado.httpserver
 import tornado.ioloop
-import lib.dbs as dbs
 
 import logging
 import os

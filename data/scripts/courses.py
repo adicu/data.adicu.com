@@ -87,12 +87,18 @@ schema =  [
 
 def create_table():
     print 'Creating courses table with proper schema...'
-    pg = lib.pg.pg_sync()
+    pg = lib.pg.pg_aync()
     cursor = pg.cursor()
-    db_query = 'CREATE TABLE IF NOT EXISTS courses_t (%s);' % ", ".join(schema)
-    cursor.execute(db_query)
-    pg.commit()
+    db_query = 'SELECT * FROM courses_t;'
+    #db_query = 'CREATE TABLE IF NOT EXISTS courses_t (%s);' % ", ".join(schema)
+    cursor.execute(db_query, _finish)
+    #pg.commit()
     print 'Courses table created.'
+
+def _finish(cursor):
+    print '%s' % cursor.fetchall()
+    print 'Courses table created.'
+
 
 def main():
     parser = argparse.ArgumentParser(description="""Read a directory of courses

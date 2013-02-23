@@ -5,7 +5,7 @@ import functools
 import logging
 import simplejson as json
 import urllib
-import lib.dbs as dbs
+import lib.pg
 
 from lib.ArgumentMixin import ArgumentMixin
 
@@ -15,7 +15,7 @@ class BaseHandler(tornado.web.RequestHandler, ArgumentMixin):
     @property
     def pg(self):
         if not hasattr(self.application, 'pg'):
-            self.application.db = dbs.pg_async()
+            self.application.pg = lib.pg.pg_aync()
         return self.application.pg
 
     def api_call(self, url, params, callback, connect_timeout=10, request_timeout=10, headers=None, user_agent=None):
