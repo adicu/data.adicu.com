@@ -102,8 +102,9 @@ def _finish(cursor):
 
 def main():
     parser = argparse.ArgumentParser(description="""Read a directory of courses
-            JSON dump file and writes """)
-    parser.add_argument('--create', action='store_true')
+            JSON dump file and writes to Postgres.""")
+    parser.add_argument('--create', action='store_true', help="""create the
+            courses_t table if it doesn't already exist""")
     args = parser.parse_args()
     if args.create: create_table()
 
