@@ -205,7 +205,7 @@ def load_data(dump_file):
                  print 'submitting a batch'
                  pg.batch(query_queue, callback=_finish(
                      'Finished loading a batch of JSON data'))
-                 #query_queue.clear()
+                 query_queue.clear()
 
 def main():
     parser = argparse.ArgumentParser(description="""Read a directory of courses
