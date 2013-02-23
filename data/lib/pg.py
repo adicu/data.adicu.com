@@ -4,7 +4,7 @@ import momoko
 import psycopg2
 
 pg_host = os.getenv('PG_HOST')
-pg_port = os.getenv('PG_PORT')
+pg_port = int(os.getenv('PG_PORT'))
 pg_db   = os.getenv('PG_DB')
 pg_user = os.getenv('PG_USER')
 pg_pass = os.getenv('PG_PASSWORD')
