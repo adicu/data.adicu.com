@@ -86,12 +86,13 @@ schema =  [
 ]
 
 def create_table():
+    print 'Creating courses table with proper schema...'
     pg = dbs.pg_sync()
     cursor = pg.cursor()
     db_query = "CREATE TABLE courses_t (%s);" % ", ".join(schema)
     cursor.execute(db_query)
     pg.commit()
-    print "win"
+    print 'Courses table created.'
 
 def main():
     parser = argparse.ArgumentParser(description="""Read a directory of courses
