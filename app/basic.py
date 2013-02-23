@@ -5,11 +5,18 @@ import functools
 import logging
 import simplejson as json
 import urllib
+import lib.dbs as dbs
 
 from lib.ArgumentMixin import ArgumentMixin
 
 class BaseHandler(tornado.web.RequestHandler, ArgumentMixin):
     http = tornado.httpclient.AsyncHTTPClient()
+    
+    @property
+    def pg(self):
+        if not hasattr(self.application, 'pg'):
+            self.application.db = dbs.pg_async()
+        return self.application.pg
 
     def api_call(self, url, params, callback, connect_timeout=10, request_timeout=10, headers=None, user_agent=None):
         """start an async GET api call"""

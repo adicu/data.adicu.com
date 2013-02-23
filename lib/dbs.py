@@ -15,7 +15,8 @@ pg_pass = env['PG_PASSWORD']
 dsn = 'dbname=%s user=%s password=%s host=%s port=%s' % (
             pg_db, pg_user, pg_pass, pg_host, pg_port)
 
-pg_async = momoko.BlockingClient({
+def pg_aync()
+    return momoko.AsyncClient({
     'host': pg_host,
     'database': pg_db,
     'port': pg_port,
@@ -25,8 +26,10 @@ pg_async = momoko.BlockingClient({
     'max_conn': 20,
     'cleanup_timeout': 5
 })
-pg_sync = psycopg2.connect(database=pg_db, user=pg_user, password=pg_pass,
-        host=pg_host, port=pg_port)
+
+def pg_sync()
+    return psycopg2.connect(database=pg_db, user=pg_user,
+            password=pg_pass, host=pg_host, port=pg_port)
 
 # Redis
 redis_host = env['REDIS_HOST']

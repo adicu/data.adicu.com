@@ -1,18 +1,21 @@
 import app.basic
 import models.courses as model
-import lib.dbs as dbs
+import tornado.web
 
 class CoursesHandler(app.basic.BaseHandler):
+    @tornado.web.asynchronous
     def get(self):
         get_arg = self.get_argument
         possible = model.possible_query_parameters
         queries = {q: get_arg(q, None) for q in possible if get_arg(q, None)}
-
-        sql_query, sql_params = model.build_sql_query(queries)
-        sql_response = dbs.do_sql(sql_query, sql_params)
-        
         if not len(queries):
             return self.error(400, "Bad Request. No Arguments")
-        else:
-    #def _finish(err,
-            return self.api_response(queries)
+
+        model.do_sql(self.pg, queries, callback=_finish)
+
+    def _finish(self, response, error=None):
+        if isinstance(response, dict):
+            return self.api_response(response)
+        else
+            return self.error(status_code=413,
+                    status_txt="RESPONSE_TOO_LARGE")

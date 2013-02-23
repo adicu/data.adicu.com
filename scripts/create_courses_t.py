@@ -92,10 +92,11 @@ schema =  [
 ]
 
 def create_courses_t():
-    pg = db.pg_sync
-    cur = pg.cursor()
+    pg = dbs.pg_sync()
+    cursor = pg.cursor()
     db_query = "CREATE TABLE courses_t (%s);" % ", ".join(schema)
     cur.execute(db_query)
+    cursor.commit()
     print "win"
 
 

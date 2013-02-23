@@ -1,13 +1,13 @@
 import logging
 import sys
 import os
+import momoko
+import functools
 
 base_dir = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 if base_dir not in sys.path:
     sys.path.append(base_dir)
 
-
-import lib.dbs
 
 possible_query_parameters = [
                 "building",
@@ -32,5 +32,12 @@ possible_query_parameters = [
                 "courseid",
             ]
 
-def build_sql_query(queries):
-    pass
+# Queries takes a dict
+# We let the driver take care of injections
+def do_sql(pg, queries, callback=None):
+    # we build a string query with place holders such as 
+    # "INSERT INTO test (num, data) VALUES (%s, %s)"
+    # And a tuple for values such as 
+    # (100, "abc'def")
+    # to do pg.execute(str_query, tuples, callback);
+
