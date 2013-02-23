@@ -2,7 +2,7 @@ import sys
 import argparse
 import os
 
-from lib.pg import pg_sync
+import lib.pg
 
 schema =  [
     "Term varchar(32)",
@@ -87,9 +87,9 @@ schema =  [
 
 def create_table():
     print 'Creating courses table with proper schema...'
-    pg = dbs.pg_sync()
+    pg = lib.pg.pg_sync()
     cursor = pg.cursor()
-    db_query = "CREATE TABLE courses_t (%s);" % ", ".join(schema)
+    db_query = 'CREATE TABLE IF NOT EXISTS courses_t (%s);' % ", ".join(schema)
     cursor.execute(db_query)
     pg.commit()
     print 'Courses table created.'
@@ -99,6 +99,7 @@ def main():
             JSON dump file and writes """)
     parser.add_argument('--create', action='store_true')
     args = parser.parse_args()
+    if args.create: create_table()
 
 if __name__ == "__main__":
     main()
