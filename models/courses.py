@@ -29,7 +29,7 @@ possible_query_parameters = [
                 "title",
                 "subtitle",
                 "campus",
-                "courseid",
+                "courseid"
             ]
 
 # Queries takes a dict
@@ -40,4 +40,5 @@ def do_sql(pg, queries, callback=None):
     # And a tuple for values such as 
     # (100, "abc'def")
     # to do pg.execute(str_query, tuples, callback);
+    pass
 

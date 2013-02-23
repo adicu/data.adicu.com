@@ -15,7 +15,7 @@ pg_pass = env['PG_PASSWORD']
 dsn = 'dbname=%s user=%s password=%s host=%s port=%s' % (
             pg_db, pg_user, pg_pass, pg_host, pg_port)
 
-def pg_aync()
+def pg_aync():
     return momoko.AsyncClient({
     'host': pg_host,
     'database': pg_db,
@@ -27,7 +27,7 @@ def pg_aync()
     'cleanup_timeout': 5
 })
 
-def pg_sync()
+def pg_sync():
     return psycopg2.connect(database=pg_db, user=pg_user,
             password=pg_pass, host=pg_host, port=pg_port)
 

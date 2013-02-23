@@ -10,12 +10,12 @@ class CoursesHandler(app.basic.BaseHandler):
         queries = {q: get_arg(q, None) for q in possible if get_arg(q, None)}
         if not len(queries):
             return self.error(400, "Bad Request. No Arguments")
-
-        model.do_sql(self.pg, queries, callback=_finish)
+        return self.api_response(queries)
+        #model.do_sql(self.pg, queries, callback=_finish)
 
     def _finish(self, response, error=None):
         if isinstance(response, dict):
             return self.api_response(response)
-        else
+        else:
             return self.error(status_code=413,
                     status_txt="RESPONSE_TOO_LARGE")

@@ -1,10 +1,8 @@
 import sys
 import os
 import momoko
-import psycopg2
 
-base_dir =
-os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '../..'))
+base_dir = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '../..'))
 if base_dir not in sys.path:
     sys.path.append(base_dir)
 
@@ -95,8 +93,8 @@ def create_courses_t():
     pg = dbs.pg_sync()
     cursor = pg.cursor()
     db_query = "CREATE TABLE courses_t (%s);" % ", ".join(schema)
-    cur.execute(db_query)
-    cursor.commit()
+    cursor.execute(db_query)
+    pg.commit()
     print "win"
 
 
