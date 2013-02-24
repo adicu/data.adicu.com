@@ -2,6 +2,7 @@ import sys
 import argparse
 import os
 import time
+import tornado.ioloop
 
 import simplejson as json
 
@@ -146,26 +147,31 @@ def _special_treatment(course, schema):
     pairs = []
     for i in range(1, 1 + num_meets):
         meets = course['Meets' + str(i)]
-        if meets:
-            for item in meets_format:
-                value = meets[item[2]:item[3]].strip()
-                if value:
-                    pairs.append((item[0] + str(i), _typify(value, item[1])))
+        for item in meets_format:
+            value = meets[item[2]:item[3]].strip()
+            if value:
+                pairs.append((item[0] + str(i), _typify(value, item[1])))
+            else:
+                pairs.append((item[0] + str(i), None))
+
     for prefix in ['Exam']:
         meets = course[prefix + 'Meet']
-        if meets:
-            for item in meets_format:
-                value = meets[item[2]:item[3]].strip()
-                if value:
-                    pairs.append((prefix + item[0], _typify(value, item[1])))
+        for item in meets_format:
+            value = meets[item[2]:item[3]].strip()
+            if value:
+                pairs.append((prefix + item[0], _typify(value, item[1])))
+            else:
+                pairs.append((prefix + item[0], None))
     return pairs
 
 def create_table():
     print 'Creating courses table with proper schema...'
-    pg = lib.pg.pg_aync()
+    pg = lib.pg.pg_sync()
     db_query = 'CREATE TABLE IF NOT EXISTS courses_t (%s);' % (", ".join(
             ['%s %s' % column for column in schema]))
-    pg.execute(db_query, callback=_finish('Courses table created.'))
+    cursor = pg.cursor()
+    cursor.execute(db_query)
+    pg.commit()
 
 def _finish(action):
     def f(cursor):
@@ -174,38 +180,41 @@ def _finish(action):
 
 def drop_table():
     print 'Dropping courses table...'
-    pg = lib.pg.pg_aync()
+    pg = lib.pg.pg_sync()
     db_query = 'DROP TABLE courses_t;'
-    pg.execute(db_query, callback=_finish('Courses table dropped.'))
+    cursor = pg.cursor()
+    cursor.execute(db_query)
+    pg.commit()
 
 def _typify(value, data_type):
     if data_type.startswith('varchar'):
-        return '\'%s\'' % value.replace('\'','\\\'')
+        return '%s' % value.replace('\'','\\\'')
     if data_type == 'int':
-        return str(int(value))
+        return str(int(value)) if value else 0
     if data_type == 'time':
-        return '\'%sM\'' % value # given data is in form '09:00A'
+        return '%sM' % value # given data is in form '09:00A'
     else:
-        return value
+        return None
 
 def load_data(dump_file):
-    pg = lib.pg.pg_aync()
-    query_queue = {}
+    pg = lib.pg.pg_sync()
+    query_queue = []
     with open(dump_file) as f:
          for course in json.load(f):
              pairs = [(name, _typify(course[name], data_type)) for (name,
-                     data_type) in schema if name not in special_fields and
-                     course[name]]
+                     data_type) in schema if name not in special_fields]
              pairs += _special_treatment(course, schema)
              [columns, values] = zip(*pairs)
              db_query = 'INSERT INTO courses_t (%s) VALUES (%s);' % (
-                     ', '.join(columns), ', '.join(values))
-             query_queue[len(query_queue)]  = db_query
-             if len(query_queue) == 100:
+                     ', '.join(columns), ', '.join(["%s"] * len(values)))
+             query_queue.append(values)
+             if len(query_queue) == 10000:
                  print 'submitting a batch'
-                 pg.batch(query_queue, callback=_finish(
-                     'Finished loading a batch of JSON data'))
-                 query_queue.clear()
+                 cursor = pg.cursor()
+                 cursor.executemany(db_query, query_queue)
+                 pg.commit()
+                 cursor.close()
+                 query_queue = []
 
 def main():
     parser = argparse.ArgumentParser(description="""Read a directory of courses
@@ -224,4 +233,5 @@ def main():
         load_data(args.dump_file)
 
 if __name__ == "__main__":
+    tornado.ioloop.IOLoop.instance().start()
     main()
