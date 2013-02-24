@@ -55,6 +55,7 @@ class BaseHandler(tornado.web.RequestHandler, ArgumentMixin):
         queries = {query: self.get_argument(query)
                 for query in accepted_queries if self.get_argument(q, None)}
     
+    # We define a valid query parameter if we have a function for it model_functions
     def valid_query_arguments(self, model_functions):
         return [func for func in dir(model_functions) if not "__" in func]
 

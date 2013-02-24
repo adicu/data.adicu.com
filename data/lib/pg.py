@@ -1,5 +1,4 @@
 import os
-
 import momoko
 import psycopg2
 
@@ -28,7 +27,6 @@ def pg_sync():
             password=pg_pass, host=pg_host, port=pg_port)
 
 class PGQuery:
-
     def __init__(self, pg=None, model=None):
         self.pg = pg
         self.model = model
