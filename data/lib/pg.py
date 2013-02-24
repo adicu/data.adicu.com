@@ -55,7 +55,9 @@ class PGQuery:
                 "query_fragments": ", ".join(query_fragments),
                 "limit": pg_limit,
         }
-        query = "SELECT %(select_body)s FROM %(table)s WHERE %(query_fragments)s limit %(limit)d;" % sql_query_fragments
+        #query = "SELECT %(select_body)s FROM %(table)s WHERE %(query_fragments)s limit %(limit)d;" % sql_query_fragments
+        query = "SELECT %(select_body)s FROM %(table)s WHERE %(query_fragments)s limit 1;" % sql_query_fragments
+
         return query
     
     def attr_func_wrap(self, key, value):
