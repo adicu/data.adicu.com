@@ -1,5 +1,6 @@
 import app.basic
 import models.courses as model
+import models.courses_functions as model_functions
 import tornado.web
 import functools
 
