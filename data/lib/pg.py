@@ -52,8 +52,8 @@ class PGQuery:
         sql_query_fragments = {
                 "select_body": ", ".join(model.SELECT),
                 "table": model.TABLE,
-                "query_fragments": ", ".join(query_fragments)
-                "limit": pg_limit
+                "query_fragments": ", ".join(query_fragments),
+                "limit": pg_limit,
         }
         query = "SELECT %(select_body)s FROM %(table)s WHERE %(query_fragments)s limit %(limit)d;" % sql_query_fragments
         return query
