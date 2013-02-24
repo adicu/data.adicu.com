@@ -44,6 +44,7 @@ class PGQuery:
             arguments["limit"] = limit
         else:
             arguments["limit"] = pg_limit
+        arguments["page"] = page * arguments["limit"]
 
         logging.info("Making SQL Query: %s %s" % (query, str(arguments)))
         self.pg.execute(query, arguments, callback=internal_callback)
@@ -59,10 +60,11 @@ class PGQuery:
                 "select_body": ", ".join(model.SELECT),
                 "table": model.TABLE,
                 "query_fragments": ", ".join(query_fragments),
-                "limit_str": "%(limit)s",
+                "limit": "%(limit)s",
+                "page": "%(page)s",
         }
         #query = "SELECT %(select_body)s FROM %(table)s WHERE %(query_fragments)s limit %(limit)d;" % sql_query_fragments
-        query = "SELECT %(select_body)s FROM %(table)s WHERE %(query_fragments)s LIMIT %(limit_str)s;" % sql_query_fragments
+        query = "SELECT %(select_body)s FROM %(table)s WHERE %(query_fragments)s LIMIT %(limit)s OFFSET %(page)s;" % sql_query_fragments
 
         return query
     
