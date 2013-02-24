@@ -5,9 +5,11 @@ import functools
 
 class CoursesHandler(app.basic.BaseHandler):
     @tornado.web.asynchronous
+    self.model = model
+    self.model_functions = model_functions
     def get(self):
-        acceptable = model.accepted_query_parameters
-        queries = get_arguments_as_dict(acceptable)
+        acceptable = self.valid_query_arguements(self.model_functions)
+        queries = self.get_arguments_as_dict(acceptable)
         if not len(queries):
             return self.error(status_code=400, status_txt="MISSING_QUERY_ARGUMENTS")
         model.do_sql(self.pg, queries, callback=self._finish)
