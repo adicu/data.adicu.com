@@ -1,6 +1,7 @@
 import os
 import momoko
 import psycopg2
+import functools
 
 pg_host = os.getenv('PG_HOST')
 pg_port = int(os.getenv('PG_PORT'))
@@ -38,9 +39,9 @@ class PGQuery:
         self.pg.execute(query, arguments, callback=self._on_sql_response)
 
     def build_sql_query():
-    # We have a dict of query keys and values and call getattr with the key,
-    # which returns a function pointer with the name of "key", which we call, which
-    # provides a query fragment that function makes
+        # We have a dict of query keys and values and call getattr with the key,
+        # which returns a function pointer with the name of "key", which we call, which
+        # provides a query fragment that function makes
         model = self.model
         query_fragments = [getattr(model, key)(value) for key, value in arguments]
         select = model.SELECT
