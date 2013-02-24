@@ -6,11 +6,12 @@ import models.courses as model
 import models.courses_functions as model_functions
 
 class CoursesHandler(app.basic.BaseHandler):
+    self.pgquery = PGQuery(self.pg, model)
+    
     @tornado.web.asynchronous
     def get(self):
-        pgquery = PGQuery(self.pg, model)
-        acceptable = self.valid_query_arguements(model_functions)
-        queries = self.get_arguments_as_dict(acceptable)
+        recognized_arguments = self.valid_query_arguements(model_functions)
+        queries = self.get_arguments_as_dict(recognized_arguments)
         if not len(queries):
             return self.error(status_code=400, status_txt="MISSING_QUERY_ARGUMENTS")
         pgquery.execute(queries, callback=self._finish)
