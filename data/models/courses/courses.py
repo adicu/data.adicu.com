@@ -1,9 +1,6 @@
 import logging
 import sys
 import os
-import momoko
-import functools
-import courses_request
 
 base_dir = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 if base_dir not in sys.path:
@@ -45,12 +42,8 @@ single_course_format = {
         }
     }
 
-SELECT = []
+SELECT = ["*"]
 TABLE = "courses_t"
 
 def build_response_dict(row):
-    pass
-    # We take a row, but the format of that row is dependent on SELECT
-
-# We define a valid query parameter if we have a function for it in courses_request
-
+    return row

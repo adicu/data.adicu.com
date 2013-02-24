@@ -1,11 +1,8 @@
-def __init__(self, queries):
-    self.request = queries
+#def approval_required(value):
+#    return ""
 
-def approval_required(value):
-    return ""
-
-    # def building():
-        # pass
+def building(value):
+    return "Building1=%(building)s"
     
     # def call_number():
         # pass

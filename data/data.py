@@ -27,7 +27,6 @@ class Application(tornado.web.Application):
             (r"/courses$", app.courses.CoursesHandler),
         ]
         tornado.web.Application.__init__(self, handlers, **app_settings)
-        # pg = pg_async
 
 class PingHandler(tornado.web.RequestHandler):
     def get(self):

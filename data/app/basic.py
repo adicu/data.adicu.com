@@ -51,9 +51,10 @@ class BaseHandler(tornado.web.RequestHandler, ArgumentMixin):
         self.set_header("Content-Type", "application/json; charset=utf-8")
         self.finish(json.dumps(dict(data=data, status_code=status_code, status_txt=status_txt)))
 
-    def get_arguments_as_dict(self, accepted_queries):
+    def get_recognized_arguments(self, accepted_queries):
         queries = {query: self.get_argument(query)
-                for query in accepted_queries if self.get_argument(q, None)}
+                for query in accepted_queries if self.get_argument(query, None)}
+        return queries
     
     # We define a valid query parameter if we have a function for it model_functions
     def valid_query_arguments(self, model_functions):
