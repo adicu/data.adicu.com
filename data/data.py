@@ -8,7 +8,6 @@ import os
 import app.main
 import app.courses
 
-env = os.environ
 class Application(tornado.web.Application):
     def __init__(self):
         logging.getLogger().setLevel(logging.DEBUG)
@@ -39,7 +38,7 @@ class PingHandler(tornado.web.RequestHandler):
 
 if __name__ == "__main__":
     # this port should be unique system wide; all ports used should be listed in ~/services.py
-    tornado.options.define("port", default=int(env["PORT"]), help="Listen on port", type=int)
+    tornado.options.define("port", default=int(os.environ["PORT"]), help="Listen on port", type=int)
     tornado.options.parse_command_line()
     logging.info("starting app on 0.0.0.0:%d" % tornado.options.options.port)
     http_server = tornado.httpserver.HTTPServer(request_callback=Application())
