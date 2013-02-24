@@ -54,6 +54,9 @@ class BaseHandler(tornado.web.RequestHandler, ArgumentMixin):
     def get_arguments_as_dict(self, accepted_queries):
         queries = {query: self.get_argument(query)
                 for query in accepted_queries if self.get_argument(q, None)}
+    
+    def valid_query_arguments(self, model_functions):
+        return [func for func in dir(model_functions) if not "__" in func]
 
 
 def format_api_errors(method):
