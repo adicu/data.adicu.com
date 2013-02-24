@@ -208,7 +208,7 @@ def load_data(dump_file):
              db_query = 'INSERT INTO courses_t (%s) VALUES (%s);' % (
                      ', '.join(columns), ', '.join(["%s"] * len(values)))
              query_queue.append(values)
-             if len(query_queue) == 10000:
+             if len(query_queue) == 1000:
                  print 'submitting a batch'
                  cursor = pg.cursor()
                  cursor.executemany(db_query, query_queue)

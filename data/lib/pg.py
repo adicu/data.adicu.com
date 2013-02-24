@@ -4,11 +4,12 @@ import psycopg2
 import functools
 import logging
 
-pg_host = os.getenv('PG_HOST')
-pg_port = int(os.getenv('PG_PORT'))
-pg_db   = os.getenv('PG_DB')
-pg_user = os.getenv('PG_USER')
-pg_pass = os.getenv('PG_PASSWORD')
+pg_host  = os.getenv('PG_HOST')
+pg_port  = int(os.getenv('PG_PORT'))
+pg_db    = os.getenv('PG_DB')
+pg_user  = os.getenv('PG_USER')
+pg_pass  = os.getenv('PG_PASSWORD')
+pg_limit = int(os.getenv('PG_LIMIT'))
 dsn = 'dbname=%s user=%s password=%s host=%s port=%s' % (
             pg_db, pg_user, pg_pass, pg_host, pg_port)
 
@@ -52,10 +53,9 @@ class PGQuery:
                 "select_body": ", ".join(model.SELECT),
                 "table": model.TABLE,
                 "query_fragments": ", ".join(query_fragments)
+                "limit": pg_limit
         }
-        query = "SELECT %(select_body)s FROM %(table)s limit 1;" % sql_query_fragments
-
-        #query = "SELECT %(select_body)s FROM %(table)s WHERE %(query_fragments)s limit 1;" % sql_query_fragments
+        query = "SELECT %(select_body)s FROM %(table)s WHERE %(query_fragments)s limit %(limit)d;" % sql_query_fragments
         return query
     
     def attr_func_wrap(self, key, value):

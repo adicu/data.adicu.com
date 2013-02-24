@@ -7,6 +7,7 @@ export PG_PORT=5432
 export PG_USER=user
 export PG_PASSWORD=password
 export PG_DB=database
+export PG_LIMIT=250
 
 # Redis connection
 export REDIS_HOST=localhost
