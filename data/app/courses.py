@@ -16,7 +16,7 @@ class CoursesHandler(app.basic.BaseHandler):
         page = self.get_int_argument("page", 0)
         if not queries:
             return self.error(status_code=400, status_txt="MISSING_QUERY_ARGUMENTS")
-        self.pgquery.execute(queries, callback=self._finish)
+        self.pgquery.execute(queries, page=page, limit=limit, callback=self._finish)
 
     def _finish(self, response):
         if response:

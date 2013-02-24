@@ -36,9 +36,15 @@ class PGQuery:
         self.model = model
         self.model_functions = model_functions
     
-    def execute(self, arguments, callback=None):
+    def execute(self, arguments, page=0, limit=0, callback=None):
         internal_callback = functools.partial(self._on_sql_response, callback=callback)
         query = self.build_sql_query(arguments)
+        
+        if limit and limit < pg_limit:
+            arguments["limit"] = limit
+        else:
+            arguments["limit"] = pg_limit
+
         logging.info("Making SQL Query: %s %s" % (query, str(arguments)))
         self.pg.execute(query, arguments, callback=internal_callback)
 
@@ -53,10 +59,10 @@ class PGQuery:
                 "select_body": ", ".join(model.SELECT),
                 "table": model.TABLE,
                 "query_fragments": ", ".join(query_fragments),
-                "limit": pg_limit,
+                "limit_str": "%(limit)s",
         }
         #query = "SELECT %(select_body)s FROM %(table)s WHERE %(query_fragments)s limit %(limit)d;" % sql_query_fragments
-        query = "SELECT %(select_body)s FROM %(table)s WHERE %(query_fragments)s limit 1;" % sql_query_fragments
+        query = "SELECT %(select_body)s FROM %(table)s WHERE %(query_fragments)s LIMIT %(limit_str)s;" % sql_query_fragments
 
         return query
     
