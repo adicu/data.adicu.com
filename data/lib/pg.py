@@ -36,9 +36,9 @@ class PGQuery:
         self.model = model
         self.model_functions = model_functions
     
-    def execute(self, arguments, page=0, limit=0, callback=None):
+    def execute(self, args, page=0, limit=0, callback=None):
         internal_callback = functools.partial(self._on_sql_response, callback=callback)
-        query = self.build_sql_query(arguments)
+        query, arguments = self.build_sql_query(args)
         
         if limit and limit < pg_limit:
             arguments["limit"] = limit
@@ -54,23 +54,26 @@ class PGQuery:
         # which returns a function pointer with the name of "key", which we call, which
         # provides a query fragment that function makes
         model = self.model
-        query_fragments = [self.attr_func_wrap(key, value) for key, value in
+        # slug is a list, each with (key, value, query_fragment)
+        slug = [self.attr_func_wrap(key, value) for key, value in
                 arguments.iteritems()]
+        query_fragments = [fragment for _, _, fragment in slug]
+        modified_arguments = {key: value for key, value, _ in slug}
         sql_query_fragments = {
                 "select_body": ", ".join(model.SELECT),
                 "table": model.TABLE,
-                "query_fragments": ", ".join(query_fragments),
+                "query_fragments": " AND ".join(query_fragments),
                 "limit": "%(limit)s",
                 "page": "%(page)s",
         }
-        #query = "SELECT %(select_body)s FROM %(table)s WHERE %(query_fragments)s limit %(limit)d;" % sql_query_fragments
         query = "SELECT %(select_body)s FROM %(table)s WHERE %(query_fragments)s LIMIT %(limit)s OFFSET %(page)s;" % sql_query_fragments
 
-        return query
+        return query, modified_arguments
     
     def attr_func_wrap(self, key, value):
         func = getattr(self.model_functions, key)
-        return func(value)
+        value, fragment = func(value)
+        return key, value, fragment
 
     def _on_sql_response(self, cursor, callback=None):
         response = [self.model.build_response_dict(row) for row in cursor.fetchall()]

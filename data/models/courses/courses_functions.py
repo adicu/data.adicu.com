@@ -2,7 +2,7 @@
 #    return ""
 
 def building(value):
-    return "Building1=%(building)s"
+    return value, "Building1=%(building)s"
     
     # def call_number():
         # pass
@@ -15,9 +15,9 @@ def building(value):
     
     # def courseid():
         # pass
-    
-    # def department():
-        # pass
+
+def department(value):
+    return value, "(DepartmentName=%(department)s OR DepartmentCode=%(department)s)"
     
     # def ends_after():
         # pass
