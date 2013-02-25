@@ -25,6 +25,8 @@ class Application(tornado.web.Application):
             (r"/$", app.main.MainHandler),
             (r"/ping$", PingHandler),
             (r"/courses$", app.courses.CoursesHandler),
+            (r"/dining$", app.dining.DiningHandler),
+
         ]
         tornado.web.Application.__init__(self, handlers, **app_settings)
 
