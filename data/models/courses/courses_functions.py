@@ -51,8 +51,8 @@ def starts_before(value):
     starts_formatted = value[0:2] + ":" + value[2:4] + ":00"
     return starts_formatted, "StartTime1<%(starts_before)s"
     
-    # def students_less_than():
-        # pass
+def students_less_than(value):
+    return value, "NumEnrolled<%(students_less_than)s"
     
     # def subtitle():
         # pass
