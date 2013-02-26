@@ -7,6 +7,7 @@ lib-cov
 *.pid
 *.gz
 *.pyc
+*.swp
 
 .Python
 pids
@@ -19,3 +20,10 @@ lib/python2.7
 config/settings.dev
 config/settings.prod
 config/settings.test
+
+bin/activate*
+bin/easy_install*
+bin/pip*
+bin/python*
+local
+

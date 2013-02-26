@@ -4,11 +4,11 @@
 def building(value):
     return value, "Building1=%(building)s"
     
-    # def call_number():
-        # pass
+def call_number(value):
+    return value, "CallNumber=%(call_number)s"
     
-    # def campus():
-        # pass
+def campus(value):
+    return value, "(CampusName=%(campus)s OR CampusCode=%(campus)s)"
     
     # def class_type():
         # pass

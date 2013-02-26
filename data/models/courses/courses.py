@@ -33,6 +33,8 @@ single_course_format = {
     "Room2": "",
     "StartTime2" : "",
     "EndTime2": "",
+    "CampusName": "",
+    "CampusCode": ""
 }
 
 time_format = ["StartTime1", "EndTime1", "StartTime2", "EndTime2"]
