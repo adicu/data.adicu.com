@@ -10,11 +10,11 @@ def call_number(value):
 def campus(value):
     return value, "(CampusName=%(campus)s OR CampusCode=%(campus)s)"
     
-    # def class_type():
-        # pass
+def class_type(value):
+    return value, "(TypeCode=%(class_type)s OR TypeName=%(class_type)s)"
     
-    # def courseid():
-        # pass
+def courseid(value):
+    return value, "Course=%(courseid)s"
 
 def department(value):
     return value, "(DepartmentName=%(department)s OR DepartmentCode=%(department)s)"
