@@ -3,11 +3,11 @@ import tornado.web
 import lib.mongo
 import functools
 
-import models.dining.courses as model
-import models.courses.courses_functions as model_functions
+import models.dining.dining as model
+import models.dining.dining_functions as model_functions
 
 class DiningHandler(app.basic.BaseHandler):
-    mongo = lib.mongo.MongoQuery(model, model_functions)
+    #mongo = lib.mongo.MongoQuery(model, model_functions)
 
     @tornado.web.asynchronous
     def get(self):
@@ -19,7 +19,8 @@ class DiningHandler(app.basic.BaseHandler):
         if not queries:
             return self.error(status_code=400, status_txt="MISSING_QUERY_ARGUMENTS")
         internal_callback = functools.partial(self._finish, pretty=pretty)
-        self.mongo.execute(queries, page=page, limit=limit, callback=internal_callback)
+        #self.mongo.execute(queries, page=page, limit=limit, callback=internal_callback)
+        internal_callback(recognized_arguments)
 
     def _finish(self, response, pretty=None):
         if response:
