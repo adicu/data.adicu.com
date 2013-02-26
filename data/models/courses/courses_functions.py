@@ -43,11 +43,13 @@ def professor(value):
     # def school():
         # pass
     
-    # def starts_after():
-        # pass
+def starts_after(value):
+    starts_formatted = value[0:2] + ":" + value[2:4] + ":00"
+    return starts_formatted, "StartTime1>%(starts_after)s"
     
-    # def starts_before():
-        # pass
+def starts_before(value):
+    starts_formatted = value[0:2] + ":" + value[2:4] + ":00"
+    return starts_formatted, "StartTime1<%(starts_before)s"
     
     # def students_less_than():
         # pass
