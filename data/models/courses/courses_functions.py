@@ -19,8 +19,10 @@ def courseid(value):
 def department(value):
     return value, "(DepartmentName=%(department)s OR DepartmentCode=%(department)s)"
     
-    # def ends_after():
-        # pass
+def ends_after(value):
+    ends_formatted = value[0:2] + ":" + value[2:4] + ":00"
+
+    return ends_formatted, "EndTime1>%(ends_after)s"
     
     # def ends_before():
         # pass
