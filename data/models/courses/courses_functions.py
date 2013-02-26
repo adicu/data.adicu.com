@@ -1,6 +1,15 @@
 #def approval_required(value):
 #    return ""
 
+#import os,sys
+#base_dir = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '../..'))
+#if base_dir not in sys.path:
+#    sys.path.append(base_dir)
+
+#@format_api_errors
+#def raise_exception():    
+#    raise Exception("Invalid query")
+
 def building(value):
     return value, "Building1=%(building)s"
     
@@ -57,9 +66,18 @@ def students_less_than(value):
     # def subtitle():
         # pass
     
-    # def term():
-        # pass
-    
+def term(value):
+    if "spring" in value.lower():
+	term_formatted = value[6:]+"1"
+	return term_formatted, "Term=%(term)s"
+    elif "fall" in value.lower():
+	term_formatted = value[4:]+"2"
+	return term_formatted, "Term=%(term)s"
+    else:
+    	#No matched queries...TODO
+    	return value, "Term=asdfasdf"
+
+
     # def title():
         # pass
     
