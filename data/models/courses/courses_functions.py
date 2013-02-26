@@ -30,8 +30,11 @@ def ends_before(value):
     # def meets():
         # pass
     
-    # def not_full():
-        # pass
+def not_full(value):
+    if value == "true":
+    	return value, "(NumEnrolled<MaxSize OR MaxSize=0)"
+    else:
+    	return value, "NumEnrolled>MaxSize"
     
     # def professor():
         # pass
