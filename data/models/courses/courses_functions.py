@@ -76,3 +76,6 @@ def term(value):
 def title(value):
     title_formatted = value.upper()
     return title_formatted, "CourseTitle ~ %(title)s"
+
+def meets_on(value):
+    return value, "MeetsOn1=%(meets_on)s"
