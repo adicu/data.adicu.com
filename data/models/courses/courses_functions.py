@@ -36,9 +36,6 @@ def ends_before(value):
     ends_formatted = value[0:2] + ":" + value[2:4] + ":00"
     return ends_formatted, "EndTime1<%(ends_before)s"
     
-    # def meets():
-        # pass
-    
 def not_full(value):
     if value == "true":
     	return value, "(NumEnrolled<MaxSize OR MaxSize=0)"
@@ -73,7 +70,7 @@ def term(value):
 	return term_formatted, "Term=%(term)s"
     else:
     	#No matched queries...TODO
-    	return value, "Term=asdfasdf"
+    	return value, "Term=%(term)s"
 
 
     # def title():
