@@ -49,8 +49,9 @@ def professor(value):
     name_formatted = value.upper()
     return name_formatted, "Instructor1Name ~ %(professor)s"
     
-    # def school():
-        # pass
+def school(value):
+    school_formatted = value.upper()
+    return school_formatted, "SchoolName ~ %(school)s"
     
 def starts_after(value):
     starts_formatted = value[0:2] + ":" + value[2:4] + ":00"
@@ -62,9 +63,6 @@ def starts_before(value):
     
 def students_less_than(value):
     return value, "NumEnrolled<%(students_less_than)s"
-    
-    # def subtitle():
-        # pass
     
 def term(value):
     if "spring" in value.lower():
