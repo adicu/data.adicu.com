@@ -73,8 +73,6 @@ def term(value):
     	return value, "Term=%(term)s"
 
 
-    # def title():
-        # pass
-    
-    # def units():
-        # pass
+def title(value):
+    title_formatted = value.upper()
+    return title_formatted, "CourseTitle ~ %(title)s"
