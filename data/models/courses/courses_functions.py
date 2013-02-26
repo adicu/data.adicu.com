@@ -36,8 +36,9 @@ def not_full(value):
     else:
     	return value, "NumEnrolled>MaxSize"
     
-    # def professor():
-        # pass
+def professor(value):
+    name_formatted = value.upper()
+    return name_formatted, "Instructor1Name ~ %(professor)s"
     
     # def school():
         # pass
