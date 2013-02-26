@@ -5,9 +5,11 @@ This is a suggested means of setting up data.adicu.com for development.
 First and foremost, make sure you are using [virtualenv](http://www.virtualenv.org/en/1.9.X/#installation).
 Then setup a directory as follows:
 
-    mkdir data.adicu.com && cd data.adicu.com
+    mkdir data.adicu.com
+    cd data.adicu.com
     virtualenv --no-site-packages .
     source bin/activate
+    mkdir github
     git clone git@github.com:adicu/data.adicu.com.git github
     cd github
     sudo pip install -r requirements.txt
