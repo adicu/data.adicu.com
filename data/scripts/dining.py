@@ -42,7 +42,7 @@ def main():
             dining collection""")
     parser.add_argument('--create', action='store_true', help="""create the
             dining collection""")
-    parser.add_argument('dump_file', help="""file containing the JSON dump""")
+    parser.add_argument('--dump_file', help="""file containing the JSON dump""")
     args = parser.parse_args()
     if args.drop:
         drop()

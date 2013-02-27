@@ -24,5 +24,8 @@ def build_response_dict(document):
     print document
     response = single_meal_format.copy()
     for i, key in enumerate(single_meal_format):
-        response[key] = document[key]
+        if key in time_format:
+            response[key] = str(document[key])
+        else:
+            response[key] = document[key]
     return response
