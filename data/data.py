@@ -26,7 +26,10 @@ class Application(tornado.web.Application):
             (r"/ping$", PingHandler),
             (r"/courses$", app.courses.CoursesHandler),
             (r"/dining$", app.dining.DiningHandler),
-
+            (r"/affairs$", app.affairs.AffairsHandler),
+            (r"/affairs/student_events$", app.affairs.StudentEventsHandler),
+            (r"/affairs/alumni_events$", app.affairs.AlumniEventsHanlder),
+            (r"/affairs/social_media$", app.affairs.SocialMediaHandler),
         ]
         tornado.web.Application.__init__(self, handlers, **app_settings)
 
