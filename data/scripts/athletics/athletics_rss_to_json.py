@@ -2,6 +2,7 @@ import feedparser
 import simplejson as json
 import argparse
 import re
+from datetime import datetime
 
 base = "http://www.gocolumbialions.com/rss.dbml?DB_LANG=C&db_oem_id=9600&"
 
@@ -42,23 +43,61 @@ def parse_summary(summary):
     locations = [item.strip() for item in r.findall(summary)]
     r = re.compile('"(.+?)"')
     article = [item.strip() for item in r.findall(summary)]
-    if article:
+    r = re.compile('-(.+?)-')
+    time = [item.strip() for item in r.findall(summary)]
+    if article and ("ONLY" not in article[0]):
         article = article[0]
     else:
         article = None
-    return article, locations[0]
+    return article, locations[0], time[0]
+
+def parse_opponent(title):
+    r = re.compile('vs(.+?)\(')
+    opponent = [item.strip() for item in r.findall(title)][0]
+    return opponent
+
+def parse_score(title):
+    r = re.compile('-(.+?)$')
+    score = [item.strip() for item in r.findall(title)]
+    win = [item.strip() for item in r.findall(title)]
+    if score:
+        score = score[0][3:-1]
+    else:
+        score = None
+    if win and win[0][0:1] == "W":
+        win = True
+    elif win:
+        win = False
+    else:
+        win = None
+    return score, win
 
 
-def individual_sport(feed):
+def fix_published(time, published):
+    if time == "TBA" or time == "All Day" or time == "The  Armory":
+        time = "12:00 AM"
+    time_string = "%s %s" % (published.replace("\\",""), time)
+    dt = datetime.strptime(time_string, "%m/%d/%Y %I:%M %p")
+    return dt.strftime("%a, %d %b %Y %H:%M:%S EST")
+
+
+
+def individual_sport(feed, rss):
     output = []
     for entry in feed['entries']:
         temp_dict = {}
-        temp_dict['published'] = entry['published']
         temp_dict['title'] = entry['title']
+        temp_dict['opponent'] = parse_opponent(entry['title'])
         temp_dict['link'] = entry['link']
-        article, location = parse_summary(entry['summary'])
-        temp_dict['article_link'] = article
+        article, location, time = parse_summary(entry['summary'])
         temp_dict['location'] = location
+        if rss == "results":
+            temp_dict['article_link'] = article
+            temp_dict['score'], temp_dict['win'] = parse_score(entry['title'])
+            temp_dict['time'] = entry['published']
+        elif rss == "schedules":
+            temp_dict["time"] = fix_published(time, entry["published"])
+
         output.append(temp_dict)
     return output
 
@@ -71,7 +110,7 @@ def get_rss_feeds(fname):
         for rss in feeds:
             feed_url = "%smedia=%s&RSS_SPORT_ID=%d" % (base, rss, value)
             feed = feedparser.parse(feed_url)
-            data = individual_sport(feed)
+            data = individual_sport(feed, rss)
             output[key][rss] = data
     with open(fname, "w") as f:
         json.dump(output, f)
