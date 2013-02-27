@@ -3,8 +3,8 @@ import tornado.web
 import lib.mongo
 import functools
 
-import models.dining.dining as model
-import models.dining.dining_functions as model_functions
+#import models.dining.dining as model
+#import models.dining.dining_functions as model_functions
 
 class DiningHandler(app.basic.BaseHandler):
     #mongo = lib.mongo.MongoQuery(model, model_functions)

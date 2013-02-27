@@ -24,28 +24,30 @@ def mongo_sync():
 
 class MongoQuery:
     def __init__(self, model=None, model_functions=None):
-        self.mongo = mongo_aync()
+        self.collection = mongo_aync()[model.get_collection()]
+        self.model = model
+        self.model_functions = model_functions
 
     @tornado.gen.engine
     def execute(self, args, page=0, limit=0, callback=None):
         results = []
-
-        query, arguments = self.build_mongo_query(args)
-
+        
+        arguments = self.build_mongo_query(args)
         if limit:
             arguments["limit"] = limit
-        cursor = collection.find(arguments, limit=limit, skip=page*limit)
+        cursor = self.collection.find(arguments, limit=limit, skip=page*limit)
         while (yield cursor.fetch_next):
             results.append(cursor.next_object())
         response = [self.model.build_response_dict(result) for result in results]
         callback(response)
 
     def build_mongo_query(self, arguments):
-        model = self.model
         # slug is a list, each with (key, value)
-        slug = [self.attr_func_wrap(key, value) for key, value in
+        if [func for func in dir(self.model_functions) if not "__" in func]:
+            slug = [self.attr_func_wrap(key, value) for key, value in
                 arguments.iteritems()]
-        return dict(slug)
+            arguments =  dict(slug)
+        return arguments
     
     def attr_func_wrap(self, key, value):
         func = getattr(self.model_functions, key)

@@ -8,6 +8,8 @@ import os
 import app.main
 import app.courses
 import app.affairs
+import app.dining
+
 
 class Application(tornado.web.Application):
     def __init__(self):
@@ -30,6 +32,7 @@ class Application(tornado.web.Application):
             (r"/affairs$", app.affairs.AffairsHandler),
             (r"/affairs/([^/]+)", app.affairs.AffairsHandler),
         ]
+        debug = True
         tornado.web.Application.__init__(self, handlers, **app_settings)
 
 class PingHandler(tornado.web.RequestHandler):
