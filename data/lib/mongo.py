@@ -36,6 +36,9 @@ class MongoQuery:
             arguments["limit"] = limit
         cursor = self.collection.find(arguments, limit=limit, skip=page*limit)
         results = []
+        # I don't like the generator model here ... It hides what
+        # the code is doing which is an async callback on the ioloop...
+        # But can't see a good way to handle it with current callback model
         while (yield cursor.fetch_next):
             results.append(cursor.next_object())
         response = [self.model.build_response_dict(result) for result in results]
