@@ -7,6 +7,7 @@ import os
 
 import app.main
 import app.courses
+import app.affairs
 
 class Application(tornado.web.Application):
     def __init__(self):
@@ -27,9 +28,7 @@ class Application(tornado.web.Application):
             (r"/courses$", app.courses.CoursesHandler),
             (r"/dining$", app.dining.DiningHandler),
             (r"/affairs$", app.affairs.AffairsHandler),
-            (r"/affairs/student_events$", app.affairs.StudentEventsHandler),
-            (r"/affairs/alumni_events$", app.affairs.AlumniEventsHanlder),
-            (r"/affairs/social_media$", app.affairs.SocialMediaHandler),
+            (r"/affairs/([^/]+)", app.affairs.AffairsHandler),
         ]
         tornado.web.Application.__init__(self, handlers, **app_settings)
 
