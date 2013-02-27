@@ -15,7 +15,7 @@ mongo_uri = "mongodb://%s:%s@%s:%s/%s" % (mongo_user, mongo_pass,
         mongo_host, mongo_port, mongo_db)
 
 def mongo_aync():
-    return motor.MotorClient(host=mongo_uri).open_sync()
+    return motor.MotorClient(host=mongo_uri).open_sync()[mongo_db]
 
 class MongoQuery:
     def __init__(self, model=None, model_functions=None):

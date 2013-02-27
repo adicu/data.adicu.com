@@ -2,8 +2,8 @@ import sys
 import argparse
 import os
 import tornado.ioloop
-import simplejson as json
-import time
+import bson.json_util as json
+from datetime import datetime
 import functools
 
 import lib.mongo
@@ -12,16 +12,17 @@ def load_data(dump_file=None):
     mongo = lib.mongo.mongo_aync()
     insert_queue = []
     with open(dump_file) as f:
-        js = json.load(f)
+        js = json.loads(f.readline())
         for i, meal in enumerate(js["meals"]):
-            meal["day"] = time.strptime(meal["day"], "%m-%d-%Y")
+            meal["day"] = datetime.strptime(meal["day"], "%m-%d-%Y")
             meal["_id"] = i
             insert_queue.append(meal)
             if len(insert_queue) == 1000:
                 print 'submitting batch'
-                mongo.dining.insert(meal, callback=finish_callback)
+                mongo.dining.insert(insert_queue, callback=finish_callback)
                 insert_queue = []
-        mongo.dining.insert(insert_queue, callback=finish_callback)
+        if insert_queue:
+            mongo.dining.insert(insert_queue, callback=finish_callback)
 
 def finish_callback(result, error):
     print result
@@ -31,8 +32,7 @@ def create():
 
 def drop():
     mongo = lib.mongo.mongo_aync()
-    dining = mongo.dining
-    dining.drop()
+    mongo.drop_database('dining')
 
 def main():
     parser = argparse.ArgumentParser(description="""Read a directory of dining
