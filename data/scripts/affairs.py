@@ -59,8 +59,7 @@ def main():
         drop()
     elif not (args.social or args.students or args.alumni):
         print "You must specify either --social --students or --alumni"
-    elif args.social && (args.students || args.alumni) || (args.students &&
-            args.alumni)
+    elif args.social and (args.students or args.alumni) or (args.students and args.alumni):
         print "You can't specify more than two arguments"
     else:
         load_data(args.dump_file, args.social, args.students, args.alumni)
