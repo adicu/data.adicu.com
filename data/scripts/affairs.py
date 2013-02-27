@@ -15,11 +15,16 @@ def load_data(dump_file, social, students, alumni):
         js = json.loads(f.read())
         for item in js:
             if social:
-                pass
+                item["social_media"] = True
             elif students:
-                item["date"] = datetime.strptime(item["date"],"%m/%d/%Y")
+                if item["Date"] != "TBD":
+                    item["Date"] = datetime.strptime(item["Date"],"%m/%d/%Y")
+                item["student_events"] = True
             else:
                 item["DATE"] = datetime.strptime(item["DATE"], "%B %d, %Y")
+                if "DATE END" in item:
+                    item["DATE END"] = datetime.strptime(item["DATE END"], "%B %d, %Y")
+                item["alumni_events"] = True
             insert_queue.append(item)
             if len(insert_queue) == 1000:
                 print 'submitting batch'
@@ -36,8 +41,8 @@ def create():
     pass
 
 def drop():
-    mongo = lib.mongo.mongo_aync()
-    mongo.drop_database('affairs')
+    mongo = lib.mongo.mongo_sync()
+    mongo.drop_collection('affairs')
 
 def main():
     parser = argparse.ArgumentParser(description="""Read a directory of
