@@ -12,7 +12,7 @@ def load_data(dump_file, social, students, alumni):
     mongo = lib.mongo.mongo_sync()
     insert_queue = []
     with open(dump_file) as f:
-        js = json.loads(f.readline())
+        js = json.loads(f.read())
         for item in js:
             if social:
                 pass
@@ -53,7 +53,7 @@ def main():
     parser.add_argument('--alumni', action='store_true', help="""load the
             alumni docs into the collection""")
 
-    parser.add_argument('dump_file', help="""file containing the JSON dump""")
+    parser.add_argument('--dump_file', help="""file containing the JSON dump""")
     args = parser.parse_args()
     if args.drop:
         drop()
