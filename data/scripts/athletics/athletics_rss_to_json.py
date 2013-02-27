@@ -73,7 +73,6 @@ def get_rss_feeds(fname):
             feed = feedparser.parse(feed_url)
             data = individual_sport(feed)
             output[key][rss] = data
-    print output
     with open(fname, "w") as f:
         json.dump(output, f)
 
