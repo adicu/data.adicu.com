@@ -30,8 +30,7 @@ class MongoQuery:
 
     @tornado.gen.engine
     def execute(self, args, page=0, limit=0, callback=None):
-        results = []
-        
+
         arguments = self.build_mongo_query(args)
         if limit:
             arguments["limit"] = limit
@@ -44,12 +43,11 @@ class MongoQuery:
     def build_mongo_query(self, arguments):
         # slug is a list, each with (key, value)
         if [func for func in dir(self.model_functions) if not "__" in func]:
-            slug = [self.attr_func_wrap(key, value) for key, value in
-                arguments.iteritems()]
-            arguments =  dict(slug)
+            slug = {self.attr_func_wrap(key, value) for key, value in
+                arguments.iteritems()}
         return arguments
     
     def attr_func_wrap(self, key, value):
         func = getattr(self.model_functions, key)
-        value, fragment = func(value)
-        return fragment, value
+        key, value = func(value)
+        return key, value

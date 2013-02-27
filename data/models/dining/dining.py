@@ -16,9 +16,13 @@ single_meal_format = {
     }
 
 time_format = ["day"]
+
+def get_collection():
+    return "dining"
+
 def build_response_dict(document):
+    print document
     response = single_meal_format.copy()
     for i, key in enumerate(single_meal_format):
-        else:
-            response[key] = document[key]
+        response[key] = document[key]
     return response
