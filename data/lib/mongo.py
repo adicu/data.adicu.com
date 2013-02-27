@@ -3,6 +3,8 @@ import motor
 import functools
 import tornado.gen
 
+from pymongo import MongoClient
+
 
 mongo_user  = os.getenv('MONGO_USER')
 mongo_pass  = os.getenv('MONGO_PASSWORD')
@@ -16,6 +18,9 @@ mongo_uri = "mongodb://%s:%s@%s:%s/%s" % (mongo_user, mongo_pass,
 
 def mongo_aync():
     return motor.MotorClient(host=mongo_uri).open_sync()[mongo_db]
+
+def mongo_sync():
+    return MongoClient(mongo_uri)[mongo_db]
 
 class MongoQuery:
     def __init__(self, model=None, model_functions=None):

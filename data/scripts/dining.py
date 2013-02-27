@@ -9,7 +9,7 @@ import functools
 import lib.mongo
 
 def load_data(dump_file=None):
-    mongo = lib.mongo.mongo_aync()
+    mongo = lib.mongo.mongo_sync()
     insert_queue = []
     with open(dump_file) as f:
         js = json.loads(f.readline())
@@ -19,10 +19,11 @@ def load_data(dump_file=None):
             insert_queue.append(meal)
             if len(insert_queue) == 1000:
                 print 'submitting batch'
-                mongo.dining.insert(insert_queue, callback=finish_callback)
+                mongo.dining.insert(insert_queue)
                 insert_queue = []
         if insert_queue:
-            mongo.dining.insert(insert_queue, callback=finish_callback)
+            print 'submitting batch'
+            mongo.dining.insert(insert_queue)
 
 def finish_callback(result, error):
     print result
@@ -49,5 +50,4 @@ def main():
         load_data(args.dump_file)
 
 if __name__ == "__main__":
-    tornado.ioloop.IOLoop.instance().start()
     main()
