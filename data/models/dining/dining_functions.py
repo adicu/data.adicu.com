@@ -5,3 +5,6 @@ def dining_hall(value):
 
 def meal_type(value):
     return "meal_type", re.compile(value, re.IGNORECASE)
+
+def menu_item(value):
+    return "menu", value

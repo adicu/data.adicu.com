@@ -35,6 +35,7 @@ class MongoQuery:
         print arguments
         if limit:
             arguments["limit"] = limit
+        print arguments
         cursor = self.collection.find(arguments, limit=limit, skip=page*limit)
         results = []
         # I don't like the generator model here ... It hides what
@@ -56,4 +57,5 @@ class MongoQuery:
     def attr_func_wrap(self, key, value):
         func = getattr(self.model_functions, key)
         key, value = func(value)
+        print key, value
         return key, value
