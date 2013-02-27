@@ -35,6 +35,7 @@ class MongoQuery:
         if limit:
             arguments["limit"] = limit
         cursor = self.collection.find(arguments, limit=limit, skip=page*limit)
+        results = []
         while (yield cursor.fetch_next):
             results.append(cursor.next_object())
         response = [self.model.build_response_dict(result) for result in results]
