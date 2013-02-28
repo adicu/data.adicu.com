@@ -22,7 +22,7 @@ schema =  [
     ("DepartmentName", "varchar(64)"),
     ("SubtermCode", "varchar(32)"),
     ("SubtermName", "varchar(64)"),
-    ("CallNumber", "varchar(32)"),
+    ("CallNumber", "int"),
     ("NumEnrolled", "int"),
     ("MaxSize", "int"),
     ("EnrollmentStatus", "varchar(32)"),
