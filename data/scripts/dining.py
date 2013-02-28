@@ -32,8 +32,8 @@ def create():
     pass
 
 def drop():
-    mongo = lib.mongo.mongo_aync()
-    mongo.drop_database('dining')
+    mongo = lib.mongo.mongo_sync()
+    mongo.drop_collection('dining')
 
 def main():
     parser = argparse.ArgumentParser(description="""Read a directory of dining
