@@ -12,6 +12,7 @@ class RoomHandler(app.basic.BaseHandler):
     pgquery = lib.pg.PGQuery(room, room_functions)
 
     @tornado.web.asynchronous
+    @app.basic.format_api_errors
     def get(self):
         recognized_arguments = self.valid_query_arguments(room_functions)
         queries = self.get_recognized_arguments(recognized_arguments)
@@ -33,6 +34,7 @@ class BuildingHandler(app.basic.BaseHandler):
     pgquery = lib.pg.PGQuery(building, building_functions)
 
     @tornado.web.asynchronous
+    @app.basic.format_api_errors
     def get(self):
         recognized_arguments = self.valid_query_arguments(building_functions)
         queries = self.get_recognized_arguments(recognized_arguments)

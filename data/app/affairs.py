@@ -11,6 +11,7 @@ class AffairsHandler(app.basic.BaseHandler):
     mongo = lib.mongo.MongoQuery(model, model_functions)
 
     @tornado.web.asynchronous
+    @app.basic.format_api_errors
     def get(self, *arg):
         limit = self.get_int_argument("limit", 0)
         page = self.get_int_argument("page", 0)

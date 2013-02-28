@@ -10,6 +10,7 @@ class athleticsHandler(app.basic.BaseHandler):
     mongo = lib.mongo.MongoQuery(model, model_functions)
 
     @tornado.web.asynchronous
+    @app.basic.format_api_errors
     def get(self):
         recognized_arguments = self.valid_query_arguments(model_functions)
         queries = self.get_recognized_arguments(recognized_arguments)
