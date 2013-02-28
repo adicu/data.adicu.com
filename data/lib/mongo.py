@@ -32,6 +32,7 @@ class MongoQuery:
     def execute(self, args, page=0, limit=0, callback=None):
 
         arguments = self.build_mongo_query(args)
+        print arguments
         if limit:
             arguments["limit"] = limit
         cursor = self.collection.find(arguments, limit=limit, skip=page*limit)
@@ -47,8 +48,9 @@ class MongoQuery:
     def build_mongo_query(self, arguments):
         # slug is a list, each with (key, value)
         if [func for func in dir(self.model_functions) if not "__" in func]:
-            slug = {self.attr_func_wrap(key, value) for key, value in
-                arguments.iteritems()}
+            slug = dict([self.attr_func_wrap(key, value) for key, value in
+                arguments.iteritems()])
+            return slug
         return arguments
     
     def attr_func_wrap(self, key, value):

@@ -16,7 +16,6 @@ class DiningHandler(app.basic.BaseHandler):
         limit = self.get_int_argument("limit", 0)
         page = self.get_int_argument("page", 0)
         pretty = self.get_bool_argument("pretty", None)
-        print queries
         if not queries:
             return self.error(status_code=400, status_txt="MISSING_QUERY_ARGUMENTS")
         internal_callback = functools.partial(self._finish, pretty=pretty)
