@@ -10,9 +10,13 @@ import app.courses
 import app.affairs
 import app.dining
 import app.athletics
+<<<<<<< HEAD
 import app.housing
 import app.uem
 import app.docs
+=======
+import app.auth
+>>>>>>> Add google auth, save user, show api_token, valid api_token works
 
 
 class Application(tornado.web.Application):
@@ -22,10 +26,11 @@ class Application(tornado.web.Application):
         app_settings = {
             'debug': "dev",
             "xsrf_cookies" : True,
-            "cookie_secret" : 'data.adicu.com',
+            "cookie_secret" : "32oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o/Vo=",
             "template_path" : os.path.join(os.path.dirname(__file__), "templates"),
             "static_path" : os.path.join(os.path.dirname(__file__), "static"),
             "autoescape" : None,
+            "login_url" : "/login",
         }
 
         handlers = [
@@ -41,6 +46,8 @@ class Application(tornado.web.Application):
             (r"/housing/buildings$", app.housing.BuildingHandler),
             (r"/docs$", app.main.MainHandler),
             (r"/docs/([^/]+)", app.main.DocsHandler),
+            (r"/login$", app.auth.LoginHandler),
+            (r"/logout$", app.auth.LogoutHandler),
         ]
         debug = True
         tornado.web.Application.__init__(self, handlers, **app_settings)

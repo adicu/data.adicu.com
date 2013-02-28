@@ -1,5 +1,7 @@
 import tornado.web
 import tornado.httpclient
+import tornado.escape
+import tornado.auth
 
 import functools
 import logging
@@ -72,6 +74,10 @@ class BaseHandler(tornado.web.RequestHandler, ArgumentMixin):
             return method(self, *args, **kwargs)
         else:
             return self.error(status_code=500, status_txt="INVALID_API_TOKEN")
+    def get_current_user(self):
+        user_json = self.get_secure_cookie("user")
+        if not user_json: return None
+        return tornado.escape.json_decode(user_json)
 
 def format_api_errors(method):
     @functools.wraps(method)
