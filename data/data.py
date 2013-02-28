@@ -9,6 +9,7 @@ import app.main
 import app.courses
 import app.affairs
 import app.dining
+import app.athletics
 
 
 class Application(tornado.web.Application):
@@ -31,6 +32,7 @@ class Application(tornado.web.Application):
             (r"/dining$", app.dining.DiningHandler),
             (r"/affairs$", app.affairs.AffairsHandler),
             (r"/affairs/([^/]+)", app.affairs.AffairsHandler),
+            (r"/athletics$", app.athletics.athleticsHandler),
         ]
         debug = True
         tornado.web.Application.__init__(self, handlers, **app_settings)
