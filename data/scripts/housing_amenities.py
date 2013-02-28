@@ -15,7 +15,7 @@ schema =  [
     ("SemiPrivateBathroom", "boolean"),
     ("SharedBathroom", "boolean"),
     ("PrivateKitchen", "boolean"),
-    ("SemiPrivate", "boolean"),
+    ("SemiPrivateKitchen", "boolean"),
     ("SharedKitchen", "boolean"),
     ("Lounge", "varchar(32)")
 ]
@@ -79,12 +79,12 @@ def load_data(dump_file):
             query_queue = []
 
 def main():
-    parser = argparse.ArgumentParser(description="""Read a housing data CSV
-            dump file and writes to Postgres.""")
+    parser = argparse.ArgumentParser(description="""Read a housing_amenities
+            data CSV dump file and writes to Postgres.""")
     parser.add_argument('--create', action='store_true', help="""create the
-            housing_t table if it doesn't already exist""")
+            housing_amenities_t table if it doesn't already exist""")
     parser.add_argument('--drop', action='store_true', help="""drop the
-            housing_t table""")
+            housing_amenities_t table""")
     parser.add_argument('dump_file', help="""file containing the CSV dump""")
     args = parser.parse_args()
     if args.create:

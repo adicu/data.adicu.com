@@ -17,7 +17,7 @@ schema =  [
     ("Room", "varchar(32)"),
     ("RoomArea", "int"),
     ("RoomSpace", "varchar(32)"),
-    ("RoomType", "varchar(64)"),
+    ("RoomType", "varchar(32)"),
     ("AY1213RSStatus", "varchar(32)"),
     ("PointValue", "double precision"),
     ("LotteryNumber", "int"),
