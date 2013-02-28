@@ -11,22 +11,22 @@
 #    raise Exception("Invalid query")
 
 def building(value):
-    return value, "Building1=%(building)s"
+    return '%%%s%%' % value, "Building1~~*%(building)s"
     
 def call_number(value):
     return value, "CallNumber=%(call_number)s"
     
 def campus(value):
-    return value, "(CampusName=%(campus)s OR CampusCode=%(campus)s)"
+    return '%%%s%%' % value, "(CampusName~~*%(campus)s OR CampusCode~~*%(campus)s)"
     
 def class_type(value):
-    return value, "(TypeCode=%(class_type)s OR TypeName=%(class_type)s)"
+    return '%%%s%%' % value, "(TypeCode~~*%(class_type)s OR TypeName~~*%(class_type)s)"
     
 def courseid(value):
-    return value, "Course=%(courseid)s"
+    return '%%%s%%' % value, "Course~~*%(courseid)s"
 
 def department(value):
-    return value, "(DepartmentName=%(department)s OR DepartmentCode=%(department)s)"
+    return '%%%s%%' % value, "(DepartmentName~~*%(department)s OR DepartmentCode~~*%(department)s)"
     
 def ends_after(value):
     ends_formatted = value[0:2] + ":" + value[2:4] + ":00"
@@ -43,12 +43,10 @@ def not_full(value):
     	return value, "NumEnrolled>MaxSize"
     
 def professor(value):
-    name_formatted = value.upper()
-    return name_formatted, "Instructor1Name ~ %(professor)s"
+    return '%%%s%%' % value, "Instructor1Name~~*%(professor)s"
     
 def school(value):
-    school_formatted = value.upper()
-    return school_formatted, "SchoolName ~ %(school)s"
+    return '%%%s%%' % value, "SchoolName~~*%(school)s"
     
 def starts_after(value):
     starts_formatted = value[0:2] + ":" + value[2:4] + ":00"
@@ -63,19 +61,18 @@ def students_less_than(value):
     
 def term(value):
     if "spring" in value.lower():
-	term_formatted = value[6:]+"1"
-	return term_formatted, "Term=%(term)s"
+        term_formatted = value[6:]+"1"
+        return term_formatted, "Term=%(term)s"
     elif "fall" in value.lower():
-	term_formatted = value[4:]+"2"
-	return term_formatted, "Term=%(term)s"
+        term_formatted = value[4:]+"2"
+        return term_formatted, "Term=%(term)s"
     else:
     	#No matched queries...TODO
     	return value, "Term=%(term)s"
 
 
 def title(value):
-    title_formatted = value.upper()
-    return title_formatted, "CourseTitle ~ %(title)s"
+    return '%%%s%%' % value, "CourseTitle~~*%(title)s"
 
 def meets_on(value):
-    return value, "MeetsOn1=%(meets_on)s"
+    return '%%%s%%' % value, "MeetsOn1~~*%(meets_on)s"
