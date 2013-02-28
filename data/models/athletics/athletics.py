@@ -9,6 +9,37 @@ if base_dir not in sys.path:
 
 time_format = ["time"]
 
+def sports():
+    return [
+        'archery',
+        'baseball',
+        'cross_country',
+        'fencing',
+        'field_hockey',
+        'football',
+        'heavyweight_rowing',
+        'lacrosse',
+        'lightweight_rowing',
+        'mens_basketball',
+        'mens_golf',
+        'mens_soccer',
+        'mens_squash',
+        'mens_swimming',
+        'mens_tennis',
+        'softball',
+        'track',
+        'volleyball',
+        'womens_basketball',
+        'womens_golf',
+        'womens_soccer',
+        'womens_rowing',
+        'womens_squash',
+        'womens_swimming',
+        'womens_tennis',
+        'wrestling',
+    ]
+
+
 def get_collection():
     return "athletics"
 
