@@ -6,11 +6,14 @@ import logging
 import simplejson as json
 import urllib
 import lib.pg
+import lib.auth as auth
 
 from lib.ArgumentMixin import ArgumentMixin
 
 class BaseHandler(tornado.web.RequestHandler, ArgumentMixin):
     http = tornado.httpclient.AsyncHTTPClient()
+
+    token_auth = auth.TokenAuth()
     
     @property
     def pg(self):
@@ -64,6 +67,11 @@ class BaseHandler(tornado.web.RequestHandler, ArgumentMixin):
     def valid_query_arguments(self, model_functions):
         return [func for func in dir(model_functions) if not "__" in func]
 
+    def finish_validate_token(self, valid=None, method=None, args=None, kwargs=None):
+        if valid:
+            return method(self, *args, **kwargs)
+        else:
+            return self.error(status_code=500, status_txt="INVALID_API_TOKEN")
 
 def format_api_errors(method):
     @functools.wraps(method)
@@ -81,3 +89,12 @@ def format_api_errors(method):
             logging.exception('UNKNOWN API ERROR')
             return self.error(status_code=500, status_txt='UNKNOWN_ERROR')
     return wrapper
+
+def validate_token(method):
+    @functools.wraps(method)
+    def wrapper(self, *args, **kwargs):
+        api_token = self.get_argument('api_token', None)
+        internal_callback = functools.partial(self.finish_validate_token, method=method, args=args, kwargs=kwargs)
+        self.token_auth.validate_token(api_token, callback=internal_callback)
+    return wrapper
+

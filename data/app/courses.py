@@ -11,6 +11,7 @@ class CoursesHandler(basic.BaseHandler):
 
     @tornado.web.asynchronous
     @basic.format_api_errors
+    @app.basic.validate_token
     def get(self):
         recognized_arguments = self.valid_query_arguments(model_functions)
         queries = self.get_recognized_arguments(recognized_arguments)
