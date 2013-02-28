@@ -1,4 +1,4 @@
-import app.basic
+from app import basic
 import tornado.web
 import lib.pg
 import functools
@@ -6,10 +6,11 @@ import functools
 import models.courses.courses as model
 import models.courses.courses_functions as model_functions
 
-class CoursesHandler(app.basic.BaseHandler):
+class CoursesHandler(basic.BaseHandler):
     pgquery = lib.pg.PGQuery(model, model_functions)
 
     @tornado.web.asynchronous
+    @basic.format_api_errors
     def get(self):
         recognized_arguments = self.valid_query_arguments(model_functions)
         queries = self.get_recognized_arguments(recognized_arguments)
