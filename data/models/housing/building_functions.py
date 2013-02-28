@@ -1,5 +1,5 @@
 def name(value):
-    return value, "Building~~*%(name)s"
+    return '%%%s%%' % value, "Building~~*%(name)s"
 
 def apartment_style(value):
     return value, "ApartmentStyle=%(apartment_style)s"
