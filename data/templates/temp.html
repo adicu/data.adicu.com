@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data ADICU</title>
+
+    <!-- bootstrap 2.3.0 -->
+    <link href="{{static_url("css/bootstrap.css")}}" rel="stylesheet">
+    <link href="{{static_url("css/bootstrap-responsive.css")}}" rel="stylesheet">
+    <link href="{{static_url("css/bootstrap-responsive-fluid.css")}}" rel="stylesheet">
+    <script src="{{static_url("js/modernizr.js")}}"></script>
+
+    <link href="{{static_url("css/prometheus.css")}}" rel="stylesheet">
+    <link href="{{static_url("css/menu.css")}}" rel="stylesheet">
+    <link href="{{static_url("css/preview.css")}}" rel="stylesheet">
+
+</head>
+<body>
+
+<!-- ========================
+            Header
+============================= -->
+<header>
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+
+                <a class="logo" href="#">ADI Data API Docs</a>
+                <div class="nav-collapse collapse">
+                    <ul class="profileBar visible-desktop">
+                        <li class="profile">
+                            {% if user %}
+                            <li class="user"><img src="{{escape(user[photo])}}" alt=""></li>
+                                <a class="dropdown-toggle"
+                                    data-toggle="dropdown"
+                                    href="#">{{escape(user[photo])}}<span class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                    <li><a tabindex="-1" href="#">Log Out</a></li>
+                                    <li><a tabindex="-1" href="#">API Token</a></li>
+                                </ul>
+                            {% else %}
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="/login">Log In</a>
+                            {% end %}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+<!-- ========================
+            Sidebar
+============================= -->
+<aside class="visible-desktop">
+    <ul class="sideMenu">
+        {% for p in params %}
+        <li {% if current == p%}
+            class="active"
+            {% end %}
+            ><a href="{{escape(p)}}.html">{{escape(p)}}</a></li>
+        {% end %}
+        </ul>
+</aside>
+
+
+<!-- ========================
+            Content
+============================= -->
+<div id="content" class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <section id="{{escape(current)}}">
+                <h1>{{escape(current)}}</h1>
+
+                <hr>
+                <p class="lead"> Example Lead In.. </p>
+                <h2>GET Request</h2>
+                <div class="box-example">
+                    <h4 class="text-info">h4. Heading 4</h4>
+                </div>
+                <h2>Response</h2>
+                <div class="box-example">
+                    <h4 class="text-success">h4. Heading 4</h4>
+                </div>
+
+                <h2>Query Parameters</h2>
+                {% for q in queries %}
+                    <h4>{{escape(q)}}</h4>
+                    <pre class="prettyprint"><span class="tag">{{escape(queries[q])}}</span></pre>
+                {% end %}
+            </section>
+        </div>
+    </div>
+</div>
+
+
+<!-- ========================
+          Javascripts
+============================= -->
+
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="{{static_url("js/menu.js")}}"></script>
+<script src="{{static_url("js/bootstrap.min.js")}}"></script>
+
+
+</body>
+</html>
