@@ -9,3 +9,4 @@ simplejson==3.1.0
 tornado==2.4.1
 tornado-redis==1.0.1
 wsgiref==0.1.2
+lxml==3.1.0

@@ -91,7 +91,8 @@ schema =  [
     ("ChargeMsg1", "varchar(32)"),
     ("ChargeAmt1", "varchar(32)"),
     ("ChargeMsg2", "varchar(32)"),
-    ("ChargeAmt2", "varchar(32)")
+    ("ChargeAmt2", "varchar(32)"),
+    ("Description", "text")
 ]
 
 # these are given to us in a weird format and need to be massaged a little
@@ -130,7 +131,8 @@ special_fields = [
     'ExamStartTime',
     'ExamEndTime',
     'ExamBuilding',
-    'ExamRoom'
+    'ExamRoom',
+    'Description'
 ]
 # format for meeting string (ex. "TR     03:00P-05:10PPUP PUPIN LABORA1332")
 # these tuples are of the form (field, type, start_char, end_char)
@@ -215,6 +217,13 @@ def load_data(dump_file):
                  pg.commit()
                  cursor.close()
                  query_queue = []
+         if query_queue:
+             print 'submitting a batch'
+             cursor = pg.cursor()
+             cursor.executemany(db_query, query_queue)
+             pg.commit()
+             cursor.close()
+             query_queue = []
 
 def main():
     parser = argparse.ArgumentParser(description="""Read a directory of courses
@@ -223,7 +232,6 @@ def main():
             courses_t table if it doesn't already exist""")
     parser.add_argument('--drop', action='store_true', help="""drop the
             courses_t table""")
-    parser.add_argument('dump_file', help="""file containing the JSON dump""")
     args = parser.parse_args()
     if args.create:
         create_table()
