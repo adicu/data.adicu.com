@@ -1,0 +1,25 @@
+{% extends base.html %}
+
+{% block title %}Page Title{% end %}
+
+{% block middle_content %}
+
+<h1>GET {{'http://data.adicu.com/' + endpoint}}</h1>
+<table>
+    <thead>
+        <tr>
+        	<th>Key</th>
+        	<th>Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in params %}
+    	<tr>
+            <td>{{escape(p[0])}}</td>
+            <td>{{escape(p[1].__doc__) if p[1].__doc__ else ''}}</td>
+    	</tr>
+        {% end %}
+    </tbody>
+</table>
+
+{% end %}

@@ -37,7 +37,7 @@ def ends_before(value):
     return ends_formatted, "EndTime1<%(ends_before)s"
     
 def not_full(value):
-    if _to_bool(value):
+    if __to_bool(value):
     	return value, "(NumEnrolled<MaxSize OR MaxSize=0)"
     else:
     	return value, "NumEnrolled>MaxSize"
@@ -77,7 +77,7 @@ def title(value):
 def meets_on(value):
     return '%%%s%%' % value, "MeetsOn1~~*%(meets_on)s"
 
-def _to_bool(value):
+def __to_bool(value):
     """
        Converts 'something' to boolean. Raises exception for invalid formats
            Possible True  values: 1, True, "1", "True", "yes", "y", "t"
