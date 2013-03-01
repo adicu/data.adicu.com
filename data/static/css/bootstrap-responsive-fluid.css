@@ -1,0 +1,135 @@
+/*!
+ * Bootstrap Responsive v2.3.0
+ *
+ * Copyright 2012 Twitter, Inc
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Designed and built with all the love in the world @twitter by @mdo and @fat.
+ */
+
+@media (min-width: 1200px) {
+  .row-fluid input.span12,
+  .row-fluid textarea.span12,
+  .row-fluid .uneditable-input.span12 {
+    width: 1156px;
+  }
+  .row-fluid input.span11,
+  .row-fluid textarea.span11,
+  .row-fluid .uneditable-input.span11 {
+    width: 1056px;
+  }
+  .row-fluid input.span10,
+  .row-fluid textarea.span10,
+  .row-fluid .uneditable-input.span10 {
+    width: 956px;
+  }
+  .row-fluid input.span9,
+  .row-fluid textarea.span9,
+  .row-fluid .uneditable-input.span9 {
+    width: 856px;
+  }
+  .row-fluid input.span8,
+  .row-fluid textarea.span8,
+  .row-fluid .uneditable-input.span8 {
+    width: 756px;
+  }
+  .row-fluid input.span7,
+  .row-fluid textarea.span7,
+  .row-fluid .uneditable-input.span7 {
+    width: 656px;
+  }
+  .row-fluid input.span6,
+  .row-fluid textarea.span6,
+  .row-fluid .uneditable-input.span6 {
+    width: 556px;
+  }
+  .row-fluid input.span5,
+  .row-fluid textarea.span5,
+  .row-fluid .uneditable-input.span5 {
+    width: 456px;
+  }
+  .row-fluid input.span4,
+  .row-fluid textarea.span4,
+  .row-fluid .uneditable-input.span4 {
+    width: 356px;
+  }
+  .row-fluid input.span3,
+  .row-fluid textarea.span3,
+  .row-fluid .uneditable-input.span3 {
+    width: 256px;
+  }
+  .row-fluid input.span2,
+  .row-fluid textarea.span2,
+  .row-fluid .uneditable-input.span2 {
+    width: 156px;
+  }
+  .row-fluid input.span1,
+  .row-fluid textarea.span1,
+  .row-fluid .uneditable-input.span1 {
+    width: 56px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 979px) {
+  .row-fluid input.span12,
+  .row-fluid textarea.span12,
+  .row-fluid .uneditable-input.span12 {
+    width: 710px;
+  }
+  .row-fluid input.span11,
+  .row-fluid textarea.span11,
+  .row-fluid .uneditable-input.span11 {
+    width: 648px;
+  }
+  .row-fluid input.span10,
+  .row-fluid textarea.span10,
+  .row-fluid .uneditable-input.span10 {
+    width: 586px;
+  }
+  .row-fluid input.span9,
+  .row-fluid textarea.span9,
+  .row-fluid .uneditable-input.span9 {
+    width: 524px;
+  }
+  .row-fluid input.span8,
+  .row-fluid textarea.span8,
+  .row-fluid .uneditable-input.span8 {
+    width: 462px;
+  }
+  .row-fluid input.span7,
+  .row-fluid textarea.span7,
+  .row-fluid .uneditable-input.span7 {
+    width: 400px;
+  }
+  .row-fluid input.span6,
+  .row-fluid textarea.span6,
+  .row-fluid .uneditable-input.span6 {
+    width: 338px;
+  }
+  .row-fluid input.span5,
+  .row-fluid textarea.span5,
+  .row-fluid .uneditable-input.span5 {
+    width: 276px;
+  }
+  .row-fluid input.span4,
+  .row-fluid textarea.span4,
+  .row-fluid .uneditable-input.span4 {
+    width: 214px;
+  }
+  .row-fluid input.span3,
+  .row-fluid textarea.span3,
+  .row-fluid .uneditable-input.span3 {
+    width: 152px;
+  }
+  .row-fluid input.span2,
+  .row-fluid textarea.span2,
+  .row-fluid .uneditable-input.span2 {
+    width: 90px;
+  }
+  .row-fluid input.span1,
+  .row-fluid textarea.span1,
+  .row-fluid .uneditable-input.span1 {
+    width: 28px;
+  }
+}

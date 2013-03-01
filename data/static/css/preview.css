@@ -1,0 +1,160 @@
+/* =================================
+               Preview
+==================================== */
+hr {
+    margin: 30px 0 30px;
+}
+
+h2 code {
+    font-weight: normal;
+}
+
+section {
+    margin-bottom: 50px;
+}
+
+.show-grid .span1, .show-grid .span2,
+.show-grid .span3, .show-grid .span4,
+.show-grid .span5, .show-grid .span6,
+.show-grid .span7, .show-grid .span8,
+.show-grid .span9, .show-grid .span10,
+.show-grid .span11, .show-grid .span12 {
+    padding: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+    background-color: #f5f5f5;
+    -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+            border-radius: 5px;
+}
+
+.box-example {
+    position: relative;
+    margin: 15px 0;
+    padding: 39px 19px 14px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.box-example::after {
+    content: "Example";
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    padding: 3px 7px;
+    font-size: 12px;
+    font-weight: bold;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    color: #9da0a4;
+    -webkit-border-radius: 4px 0 4px 0;
+    -moz-border-radius: 4px 0 4px 0;
+    border-radius: 4px 0 4px 0;
+}
+
+.box-example + .prettyprint {
+    margin-top: -20px;
+    padding-top: 15px;
+}
+
+.prettyprint {
+    padding: 8px;
+    background-color: #f7f7f9;
+    border: 1px solid #e1e1e8;
+}
+
+.kwd, .prettyprint .tag {
+    color: #1e347b;
+}
+
+.pln {
+    color: #48484c;
+}
+
+.kwd, .prettyprint .tag {
+    color: #1e347b;
+}
+
+.typ, .atn, .dec, .var {
+    color: teal;
+}
+
+.pun, .opn, .clo {
+    color: #93a1a1;
+}
+
+.str, .atv {
+    color: #D14;
+}
+
+.prettyprint.linenums {
+    -webkit-box-shadow: inset 40px 0 0 #fbfbfc, inset 41px 0 0 #ececf0;
+    -moz-box-shadow: inset 40px 0 0 #fbfbfc, inset 41px 0 0 #ececf0;
+    box-shadow: inset 40px 0 0 #fbfbfc, inset 41px 0 0 #ececf0;
+}
+
+ol.linenums {
+    margin: 0 0 0 33px;
+}
+
+ol.linenums li {
+    padding-left: 12px;
+    color: #bebec5;
+    line-height: 20px;
+    text-shadow: 0 1px 0 #fff;
+}
+
+.box-example-submenus {
+    min-height: 180px;
+}
+
+.box-example-submenus .dropup > .dropdown-menu, .box-example-submenus .dropdown > .dropdown-menu {
+    display: block;
+    position: static;
+    margin-bottom: 5px;
+}
+
+.box-example-submenus > .pull-left + .pull-left {
+    margin-left: 20px;
+}
+
+form.box-example {
+    padding-bottom: 19px;
+}
+
+.box-tooltip-examples {
+    text-align: center;
+    margin: 0 0 10px;
+    list-style: none;
+}
+
+.box-tooltip-examples li {
+    display: inline;
+    padding: 0 10px;
+}
+
+/* navbar */
+.box-navbar-top-example {
+    -webkit-border-radius: 0 0 4px 4px;
+    -moz-border-radius: 0 0 4px 4px;
+    border-radius: 0 0 4px 4px;
+}
+
+.box-navbar-top-example, .box-navbar-bottom-example {
+    z-index: 1;
+    padding: 0;
+    height: 90px;
+    overflow: hidden;
+}
+
+/* popover */
+.box-example-popover .popover {
+    position: relative;
+    display: block;
+    float: left;
+    width: 260px;
+    margin: 20px;
+}
