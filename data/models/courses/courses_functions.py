@@ -77,6 +77,9 @@ def title(value):
 def meets_on(value):
     return '%%%s%%' % value, "MeetsOn1~~*%(meets_on)s"
 
+def description(value):
+    return '%%%s%%' % value, "Description~~*%(description)s"
+
 def __to_bool(value):
     """
        Converts 'something' to boolean. Raises exception for invalid formats
