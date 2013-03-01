@@ -232,6 +232,7 @@ def main():
             courses_t table if it doesn't already exist""")
     parser.add_argument('--drop', action='store_true', help="""drop the
             courses_t table""")
+    parser.add_argument('dump_file')
     args = parser.parse_args()
     if args.create:
         create_table()
