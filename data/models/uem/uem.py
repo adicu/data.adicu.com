@@ -1,20 +1,16 @@
 import logging
 
-single_event_format = {
 
-        }
+def get_collection():
+    return "uem"
 
-SELECT = [key for key in single_course_format]
+time_format = ["date", "Start", "End"]
 
-TABLE = "uem_t"
-
-time_format = ["StartTime", "EndTime"]
-
-def build_response_dict(row):
-    response = single_course_format.copy()
-    for i, key in enumerate(single_course_format):
+def build_response_dict(document):
+    for key in document:
         if key in time_format:
-            response[key] = str(row[i])
-        else:
-            response[key] = row[i]
-    return response
+            document[key] = str(document[i])
+        elif key == "_id":
+            document["id"] = str(document[i])
+            del document["_id"]
+    return document

@@ -1,13 +1,13 @@
 from app import basic
 import tornado.web
-import lib.pg
+import lib.mongo
 import functools
 
 import models.uem.uem as model
 import models.uem.uem_functions as model_functions
 
 class UemHandler(basic.BaseHandler):
-    pgquery = lib.pg.PGQuery(model, model_functions)
+    mongo = lib.mongo.MongoQuery(model, model_functions)
 
     @tornado.web.asynchronous
     @basic.format_api_errors
@@ -20,7 +20,7 @@ class UemHandler(basic.BaseHandler):
         if not queries:
             return self.error(status_code=400, status_txt="MISSING_QUERY_ARGUMENTS")
         internal_callback = functools.partial(self._finish, pretty=pretty)
-        self.pgquery.execute(queries, page=page, limit=limit, callback=internal_callback)
+        self.mongo.execute(queries, page=page, limit=limit, callback=internal_callback)
 
     def _finish(self, response, pretty=None):
         if response:

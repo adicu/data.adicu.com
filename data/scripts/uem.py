@@ -1,69 +1,50 @@
 import argparse
 import time
 import simplejson as json
+import functools
 
-import lib.pg
+from datetime import datetime
 
-schema = [
+import lib.mongo
 
-    ]
-
-def create_table():
-    print 'Creating uem table with proper schema...'
-    pg = lib.pg.pg_sync()
-    db_query = 'CREATE TABLE IF NOT EXISTS uem_t (%s);' % (", ".join(
-            ['%s %s' % column for column in schema]))
-    cursor = pg.cursor()
-    cursor.execute(db_query)
-    pg.commit()
-
-
-def drop_table():
-    print 'Dropping uem table...'
-    pg = lib.pg.pg_sync()
-    db_query = 'DROP TABLE uem_t;'
-    cursor = pg.cursor()
-    cursor.execute(db_query)
-    pg.commit()
-
-
-def _typify(value, data_type):
-    if data_type.startswith('varchar'):
-        return '%s' % value.replace('\'','\\\'')
-    if data_type == 'int':
-        return str(int(value)) if value else 0
-    if data_type == 'time':
-        return '%sM' % value # given data is in form '09:00A'
-    else:
-        return None
-
-
-def load_data(dump_file):
-    pg = lib.pg.pg_sync()
-    query_queue = []
+def load_data(dump_file=None):
+    mongo = lib.mongo.mongo_sync()
+    insert_queue = []
     with open(dump_file) as f:
-         for event in json.load(f):
-             pairs = [(name, _typify(event[name], data_type)) for (name, data_type) in schema]
-             [columns, values] = zip(*pairs)
-             db_query = 'INSERT INTO uem_t (%s) VALUES (%s);' % (
-                     ', '.join(columns), ', '.join(["%s"] * len(values)))
-             query_queue.append(values)
-             if len(query_queue) == 1000:
-                 print 'submitting a batch'
-                 cursor = pg.cursor()
-                 cursor.executemany(db_query, query_queue)
-                 pg.commit()
-                 cursor.close()
-                 query_queue = []
+        js = json.loads(f.read())
+        for event in js:
+            start = "%s %s" % (event["Date"], event["Start"])
+            end = "%s %s" % (event["Date"], event["End"])
+            event["Start"] = datetime.strptime(start, "%m/%d/%Y %I:%M %p")
+            event["End"] = datetime.strptime(end, "%m/%d/%Y %I:%M %p")
+            event["Date"] = datetime.strptime(event["Date"], "%m/%d/%Y")
+            insert_queue.append(event)
+            if len(insert_queue) == 1000:
+                print 'submitting batch'
+                mongo.uem.insert(insert_queue)
+                insert_queue = []
+        if insert_queue:
+            print 'submitting batch'
+            mongo.uem.insert(insert_queue)
+
+def finish_callback(result, error):
+    print result
+
+def create():
+    pass
+
+def drop():
+    mongo = lib.mongo.mongo_sync()
+    mongo.drop_collection('uem')
 
 
 def main():
     parser = argparse.ArgumentParser(description="""Read a directory of uem
-            JSON dump file and writes to Postgres.""")
+            JSON dump file and writes to mongo.""")
     parser.add_argument('--create', action='store_true', help="""create the
-            uem_t table if it doesn't already exist""")
+            uem collection if it doesn't already exist""")
     parser.add_argument('--drop', action='store_true', help="""drop the
-            uem_t table""")
+            uem collection""")
     parser.add_argument('--dump_file', help="""file containing the JSON dump""")
     args = parser.parse_args()
     if args.create:
