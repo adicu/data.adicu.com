@@ -32,11 +32,8 @@ class MongoQuery:
     def execute(self, args, page=0, limit=0, callback=None):
 
         arguments = self.build_mongo_query(args)
-        print arguments
-        if limit:
-            arguments["limit"] = limit
-        print arguments
-        cursor = self.collection.find(arguments, limit=limit, skip=page*limit)
+        cursor = self.collection.find(arguments)
+        cursor.limit(limit).skip(limit * page)
         results = []
         # I don't like the generator model here ... It hides what
         # the code is doing which is an async callback on the ioloop...
