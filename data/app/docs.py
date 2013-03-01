@@ -9,7 +9,8 @@ import models.athletics.athletics_functions as athletics
 import models.courses.courses_functions as courses
 import models.dining.dining_functions as dining
 import models.housing.room_functions as housing
-#import models.uem.uem_functions as uem
+import models.housing.building_functions as housing
+import models.uem.uem_functions as uem
 
 class DocsHandler(app.basic.BaseHandler):
     accepted_pages_args = {

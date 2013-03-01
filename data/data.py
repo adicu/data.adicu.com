@@ -39,8 +39,8 @@ class Application(tornado.web.Application):
             (r"/athletics$", app.athletics.athleticsHandler),
             (r"/housing/rooms$", app.housing.RoomHandler),
             (r"/housing/buildings$", app.housing.BuildingHandler),
-            (r"/docs$", app.docs.DocsHandler),
-            (r"/docs/([^/]+)", app.docs.DocsHandler),
+            (r"/docs$", app.main.DocsHandler),
+            (r"/docs/([^/]+)", app.main.DocsHandler),
         ]
         debug = True
         tornado.web.Application.__init__(self, handlers, **app_settings)

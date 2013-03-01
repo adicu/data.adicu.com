@@ -60,11 +60,20 @@
 ============================= -->
 <aside class="visible-desktop">
     <ul class="sideMenu">
-        {% for p in params %}
-        <li {% if current == p%}
+        <li {% if current == "Documentation" %}
             class="active"
             {% end %}
-            ><a href="{{escape(p)}}.html">{{escape(p)}}</a></li>
+            ><a href="Documentation">Documentation</a></li>
+        <li {% if current == "Authentication" %}
+            class="active"
+            {% end %}
+            ><a href="Authentication">Authentication</a></li>
+
+        {% for page in pages %}
+        <li {% if current == page%}
+            class="active"
+            {% end %}
+            ><a href="{{escape(page)}}">{{escape(page)}}</a></li>
         {% end %}
         </ul>
 </aside>
@@ -80,20 +89,28 @@
                 <h1>{{escape(current)}}</h1>
 
                 <hr>
-                <p class="lead"> Example Lead In.. </p>
-                <h2>GET Request</h2>
-                <div class="box-example">
-                    <h4 class="text-info">h4. Heading 4</h4>
-                </div>
-                <h2>Response</h2>
-                <div class="box-example">
-                    <h4 class="text-success">h4. Heading 4</h4>
-                </div>
+                {% if lead %}
+                    <p class="lead">Example ...</p>
+                {% end %}
 
-                <h2>Query Parameters</h2>
-                {% for q in queries %}
-                    <h4>{{escape(q)}}</h4>
-                    <pre class="prettyprint"><span class="tag">{{escape(queries[q])}}</span></pre>
+
+                {% if endpoints %}
+                    {% for endpoint in endpoints%}
+                        <h2>GET Request</h2>
+                        <div class="box-example">
+                            <h4 class="text-info">{{escape(endpoint['example']['request'])}}</h4>
+                        </div>
+                        <h2>Response</h2>
+                        <div class="box-example">
+                            <h4 class="text-success">Example ...</h4>
+                        </div>
+
+                        <h2>Query Parameters</h2>
+                        {% for q in endpoint['queries'] %}
+                            <h4>{{escape(q)}}</h4>
+                            <pre class="prettyprint"><span class="tag">{{escape(endpoint['queries'][q])}}</span></pre>
+                        {% end %}
+                    {% end %}
                 {% end %}
             </section>
         </div>
