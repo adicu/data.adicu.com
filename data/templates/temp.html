@@ -4,7 +4,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data ADICU</title>
 
-    <!-- bootstrap 2.3.0 -->
     <link href="{{static_url("css/bootstrap.css")}}" rel="stylesheet">
     <link href="{{static_url("css/bootstrap-responsive.css")}}" rel="stylesheet">
     <link href="{{static_url("css/bootstrap-responsive-fluid.css")}}" rel="stylesheet">
@@ -68,7 +67,6 @@
             class="active"
             {% end %}
             ><a href="Authentication">Authentication</a></li>
-
         {% for page in pages %}
         <li {% if current == page%}
             class="active"
@@ -90,25 +88,28 @@
 
                 <hr>
                 {% if lead %}
-                    <p class="lead">Example ...</p>
+                    <p class="lead">{{escape(lead)}}</p>
                 {% end %}
 
 
                 {% if endpoints %}
                     {% for endpoint in endpoints%}
-                        <h2>GET Request</h2>
+                    <h2>Endpoint {{escape(endpoint)}}</h2>
+                        <h3>GET Request</h3>
                         <div class="box-example">
-                            <h4 class="text-info">{{escape(endpoint['example']['request'])}}</h4>
+                            <h4 class="text-info">{{escape(endpoints[endpoint]['request'])}}</h4>
                         </div>
-                        <h2>Response</h2>
+                        <h3>Response</h3>
                         <div class="box-example">
-                            <h4 class="text-success">Example ...</h4>
+                            <h4
+                                class="text-success">{{escape(endpoints[endpoint]['response'])}}</h4>
                         </div>
 
                         <h2>Query Parameters</h2>
-                        {% for q in endpoint['queries'] %}
+                        {% for query in endpoints[endpoint]['queries'] %}
                             <h4>{{escape(q)}}</h4>
-                            <pre class="prettyprint"><span class="tag">{{escape(endpoint['queries'][q])}}</span></pre>
+                            <pre class="prettyprint"><span
+                            class="tag">{{escape(endpoints[endpoint]['queries'][query])}}</span></pre>
                         {% end %}
                     {% end %}
                 {% end %}
@@ -125,7 +126,6 @@
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script src="{{static_url("js/menu.js")}}"></script>
 <script src="{{static_url("js/bootstrap.min.js")}}"></script>
-
 
 </body>
 </html>

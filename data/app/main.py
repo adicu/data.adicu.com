@@ -1,16 +1,23 @@
 import app.basic
 
+import models.affairs.affairs_functions as affairs
+import models.athletics.athletics_functions as athletics
+import models.courses.courses_functions as courses
+import models.dining.dining_functions as dining
+import models.housing.room_functions as room
+import models.housing.building_functions as building
+import models.uem.uem_functions as uem
+
+from lib.docs import convert as c
+from inspect import getmembers as mem
+from inspect import isfunction as func
 
 class MainHandler(app.basic.BaseHandler):
     def get(self):
-        self.redirect("docs")
+        self.redirect("docs/Documentation")
 
 class DocsHandler(app.basic.BaseHandler):
     pages = {
-            # "Documentation" : {
-                    # "lead" : "Welcome to the API Data Documentation",
-                    # "endpoints" : None,
-            # },
             "affairs" : {
                 "lead" : None,
                 "endpoints" : {
@@ -38,7 +45,7 @@ class DocsHandler(app.basic.BaseHandler):
                     "athletics" : {
                         "request": None,
                         "response": None,
-                        "queries" : None,
+                        "queries" : c(mem(athletics, func)),
                     },
                 },
             },
@@ -48,7 +55,7 @@ class DocsHandler(app.basic.BaseHandler):
                     "courses" : {
                         "request" : None,
                         "response" : None,
-                        "queries" : None,
+                        "queries" : c(mem(courses, func)),
                     },
                 },
             },
@@ -56,9 +63,9 @@ class DocsHandler(app.basic.BaseHandler):
                 "lead" : None,
                 "endpoints" :{
                     "dining" : {
-                        "request" : None,
-                        "response" : None,
-                        "queries" : None,
+                        "request" : "Request",
+                        "response" : "Response",
+                        "queries" : c(mem(dining, func)),
                     },
                 },
             },
@@ -68,12 +75,12 @@ class DocsHandler(app.basic.BaseHandler):
                     "housing/room" : {
                         "request" : None,
                         "response" : None,
-                        "queries" : None,
+                        "queries" : c(mem(room, func)),
                     },
                     "housing/building" : {
                         "request" : None,
                         "response" : None,
-                        "queries" : None,
+                        "queries" : c(mem(building, func)),
                 },
             },
             "uem" : {
@@ -82,7 +89,7 @@ class DocsHandler(app.basic.BaseHandler):
                     "uem" : {
                         "request" : None,
                         "response" : None,
-                        "queries" : None,
+                        "queries" : c(mem(uem, func)),
                     },
                 },
             },
@@ -97,7 +104,7 @@ class DocsHandler(app.basic.BaseHandler):
             "Documentation"  : {
                 "lead" : "Hello World",
                 "endpoints" : None,
-            }
+            },
     }
 
     def get(self, *arg):
@@ -114,6 +121,7 @@ class DocsHandler(app.basic.BaseHandler):
             page = self.pages[current]
 
 
+        print page["endpoints"]
         self.render('temp.html',
                 pages=pages,
                 current=current,
