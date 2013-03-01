@@ -13,6 +13,7 @@ class RoomHandler(app.basic.BaseHandler):
 
     @tornado.web.asynchronous
     @app.basic.format_api_errors
+    @app.basic.validate_token
     def get(self):
         recognized_arguments = self.valid_query_arguments(room_functions)
         queries = self.get_recognized_arguments(recognized_arguments)
@@ -35,6 +36,7 @@ class BuildingHandler(app.basic.BaseHandler):
 
     @tornado.web.asynchronous
     @app.basic.format_api_errors
+    @app.basic.validate_token
     def get(self):
         recognized_arguments = self.valid_query_arguments(building_functions)
         queries = self.get_recognized_arguments(recognized_arguments)

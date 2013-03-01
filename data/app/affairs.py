@@ -12,6 +12,7 @@ class AffairsHandler(app.basic.BaseHandler):
 
     @tornado.web.asynchronous
     @app.basic.format_api_errors
+    @app.basic.validate_token
     def get(self, *arg):
         limit = self.get_int_argument("limit", 0)
         page = self.get_int_argument("page", 0)
