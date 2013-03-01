@@ -111,9 +111,8 @@
                         {% if endpoints[endpoint]['queries'] %}
                             <h3>Query Parameters</h3>
                             {% for query in endpoints[endpoint]['queries'] %}
-                                <h4>{{escape(q)}}</h4>
-                                <pre class="prettyprint"><span
-                                class="tag">{{escape(endpoints[endpoint]['queries'][query])}}</span></pre>
+                                <h4>{{escape(query)}}</h4>
+                                <p class="prettyprint"><span class="tag">{{escape(endpoints[endpoint]['queries'][query])}}</span></p>
                             {% end %}
                         {% end %}
                     {% end %}

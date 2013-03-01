@@ -2,6 +2,7 @@ import re
 from datetime import datetime
 
 def dining_hall(value):
+    """Search by dining hall, for things like 'fer' for ferrs"""
     return "place", re.compile(value, re.IGNORECASE)
 
 def meal_type(value):

@@ -24,18 +24,53 @@ class DocsHandler(app.basic.BaseHandler):
                 ping the endpoint, and see all the results we have fly!""",
                 "endpoints" : {
                     "affairs/social_media" : {
-                            "request": None,
-                            "response": None,
+                            "request": "http://data.adicu.com/affairs/social_media?pretty=true&api_token=TOKEN",
+                            "response": """{
+    "status_code": 200,
+    "data": [
+        {
+            "Facebook": "http://www.facebook.com/ColumbiaCSA",
+            "social_media": true,
+            "Name / Lead Office": "Center for Student Advising",
+            "Twitter Handle": "http://twitter.com/ColumbiaCSA"
+        },""",
                             "queries" : None,
                     },
                     "affairs/student_events" : {
-                            "request": None,
-                            "response": None,
+                        "request": "http://data.adicu.com/affairs/student_events?pretty=true&api_token=TOKEN",
+                            "response": """{
+    "status_code": 200,
+    "data": [
+        {
+            "": "",
+            "student_events": true,
+            "Description": "Reps from Tufts Vet School will present on veterinary medicine",
+            "Lead Office": "PreProfessional Advising (CSA)",
+            "Audience": "All students interested in veterinary medicine",
+            "Location": "401 Lerner",
+            "Time": "6:00 - 7:30 p.m.",
+            "Date": "2013-02-25 00:00:00",
+            "Event": "Tufts School of Vet Medicine Visit"
+        },""",
                             "queries" : None,
                     },
                     "affairs/alumni_events" : {
-                            "request": None,
-                            "response": None,
+                            "request": "http://data.adicu.com/affairs/alumni_events?pretty=true&api_token=TOKEN",
+                            "response": """{
+    "status_code": 200,
+    "data": [
+        {
+            "STATUS": "Confirmed",
+            "LEAD ALUMNI AFFAIRS STAFF": "Trimmer*",
+            "SPEAKER/PURPOSE": "Board Meeting",
+            "EVENT TIME": "7 p.m.",
+            "Sponsor": "CCYA",
+            "VENUE/LOCATION": "CAC, Schapiro Conference Room",
+            "DATE": "2013-02-20 00:00:00",
+            "TARGET AUDIENCE": "CCYA Board Members",
+            "EVENT": "CCYA Full Board Meeting",
+            "alumni_events": true
+        },""",
                             "queries" : None,
                     },
 
@@ -50,8 +85,22 @@ class DocsHandler(app.basic.BaseHandler):
                 formatted""",
                 "endpoints" : {
                     "athletics" : {
-                        "request": None,
-                        "response": None,
+                        "request": "http://data.adicu.com/athletics?win=true&pretty=true&api_token=TOKEN",
+                        "response": """ {
+    "status_code": 200,
+    "data": [
+        {
+            "feed": "results",
+            "sport": "wrestling",
+            "title": "Wrestling: vs San Francisco State (01/06/2013) - W (28-8)",
+            "win": true,
+            "article_link": "http://www.gocolumbialions.com/ViewArticle.dbml?DB_OEM_ID=9600&amp;ATCLID=205878762",
+            "score": "28-8",
+            "link": "http://www.gocolumbialions.com//SportSelect.dbml?DB_OEM_ID=9600&SPID=3876&SPSID=43591&Q_SEASON=2012",
+            "location": "San Luis Obispo, Calif.",
+            "time": "2013-01-06 15:00:00",
+            "opponent": "San Francisco State"
+        },""",
                         "queries" : c(mem(athletics, func)),
                     },
                 },
@@ -63,8 +112,41 @@ class DocsHandler(app.basic.BaseHandler):
                 you're making requests against.""",
                 "endpoints" : {
                     "courses" : {
-                        "request" : None,
-                        "response" : None,
+                        "request" : "http://data.adicu.com/courses?building=pupin&limit=1&pretty=true&api_token=API_TOKEN",
+                        "response" : """{
+    "status_code": 200,
+    "data": [
+        {
+            "CampusCode": "MORN",
+            "CampusName": "MORNINGSIDE",
+            "StartTime2": "None",
+            "StartTime1": "15:00:00",
+            "CourseTitle": "EARTH, MOON AND PLANETS",
+            "MinUnits": 0,
+            "CallNumber": "66696",
+            "Term": "20122",
+            "EndTime1": "17:10:00",
+            "Instructor1Name": "APPLEGATE, JAMES H",
+            "Building1": "PUPIN LABORA",
+            "Building2": null,
+            "NumEnrolled": 3,
+            "SchoolName": "SCHOOL OF CONTINUING EDUCATION",
+            "DepartmentName": "ASTRONOMY",
+            "MeetsOn1": "TR",
+            "MaxSize": 999,
+            "EndTime2": "None",
+            "MeetsOn2": null,
+            "TypeName": "LECTURE",
+            "NumFixedUnits": 30,
+            "MaxUnits": 0,
+            "Room2": null,
+            "Room1": "1332",
+            "Approval": "",
+            "CourseSubtitle": "EARTH, MOON AND PLANETS"
+        }
+    ],
+    "status_txt": "OK"
+} """,
                         "queries" : c(mem(courses, func)),
                     },
                 },
@@ -76,8 +158,29 @@ class DocsHandler(app.basic.BaseHandler):
                 ferris.""",
                 "endpoints" :{
                     "dining" : {
-                        "request" : "Request",
-                        "response" : "Response",
+                        "request" : "http://data.adicu.com/dining?menu_item=pizza&pretty=true&api_token=TOKEN",
+                        "response" : """ {
+    "status_code": 200,
+    "data": [
+        {
+            "url": "http://dining.columbia.edu/122week-one-tuesday-lunch-fbc",
+            "menu": [
+                "Firecracker Chicken Wrap",
+                "Cheese Pizza",
+                "Pepperoni Pizza",
+                "Genovese Pizza",
+                "Mushroom & Garlic Pizza",
+                "Meatball Hero",
+                "Chicken Tortilla Soup",
+                "Smoked Ham Calzone",
+                "Broccoli & Cheddar Soup",
+                "Grits",
+                "Waffles"
+            ],
+            "place": "Fer",
+            "day": "2013-01-22 00:00:00",
+            "meal_type": "LU"
+        },""",
                         "queries" : c(mem(dining, func)),
                     },
                 },
@@ -89,14 +192,14 @@ class DocsHandler(app.basic.BaseHandler):
                 amentities... We don't offer joins across these two datasets,
                 so get creative! ;)""",
                 "endpoints" : {
-                    "housing/room" : {
-                        "request" : None,
-                        "response" : None,
+                    "housing/rooms" : {
+                        "request" : "http://data.adicu.com/housing/rooms?shared_bathroom=true&api_token=TOKEN",
+                        "response" : "",
                         "queries" : c(mem(room, func)),
                     },
-                    "housing/building" : {
-                        "request" : None,
-                        "response" : None,
+                    "housing/buildings" : {
+                        "request" : "http://data.adicu.com/housing/buildings?name=&api_token=TOKEN",
+                        "response" : "",
                         "queries" : c(mem(building, func)),
                 },
             },
@@ -108,8 +211,20 @@ class DocsHandler(app.basic.BaseHandler):
                 name query param, because its probably the richest one""",
                 "endpoints" : {
                     "uem" : {
-                        "request" : None,
-                        "response" : None,
+                        "request" : "http://data.adicu.com/uem?room=wien&pretty=true&api_token=API_TOKEN",
+                        "response" : """{
+    "status_code": 200,
+    "data": [
+        {
+            "Event Name": "Varsity Show - Rehearsal",
+            "End": "2013-02-28 23:00:00",
+            "Room": "Wien Lounge",
+            "Start": "2013-02-28 20:00:00",
+            "Date": "2013-02-28 00:00:00",
+            "id": "51302459c749140b2a2dc49b"
+        },
+    "status_txt": "OK",
+    }""",
                         "queries" : c(mem(uem, func)),
                     },
                 },
