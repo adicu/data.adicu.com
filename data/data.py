@@ -11,6 +11,7 @@ import app.affairs
 import app.dining
 import app.athletics
 import app.housing
+import app.uem
 
 
 class Application(tornado.web.Application):

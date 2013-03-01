@@ -1,4 +1,6 @@
 import re
+from datetime import datetime
+from bson.objectid import ObjectId
 
 def room(value):
     return "Room", re.compile(value, re.IGNORECASE)
@@ -22,6 +24,9 @@ def event_ends_after(value):
     value = datetime.strptime(value, "%Y-%m-%d %H:%M:%S")
     return "End", {"$gt": value}
 
-def event_on(vale):
+def event_on(value):
     value = datetime.strptime(value, "%Y-%m-%d")
     return "Date", value
+
+def id(value):
+    return "_id", ObjectId(value)
