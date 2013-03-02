@@ -54,13 +54,14 @@ class BaseHandler(tornado.web.RequestHandler, ArgumentMixin):
     def api_response(self, data, status_code=200, status_txt="OK",
             pretty=None, jsonp=None):
         """write an api response in json"""
-        self.set_header("Content-Type", "application/json; charset=utf-8")
         if pretty:
             pretty = 4 * ' '
         if jsonp:
+            self.set_header("Content-Type", "application/javascript")
             self.finish(jsonp + "(" + json.dumps(dict(data=data, status_code=status_code,
                 status_txt=status_txt)) + ")")
         else:
+            self.set_header("Content-Type", "application/json; charset=utf-8")
             self.finish(json.dumps(dict(data=data, status_code=status_code,
                 status_txt=status_txt), indent=pretty))
 
