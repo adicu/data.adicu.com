@@ -65,9 +65,11 @@ class PGQuery:
                 "query_fragments": " AND ".join(query_fragments),
                 "limit": "%(limit)s",
                 "page": "%(page)s",
+                "order_by" : model.ORDERBY,
         }
-        query = "SELECT %(select_body)s FROM %(table)s WHERE %(query_fragments)s LIMIT %(limit)s OFFSET %(page)s;" % sql_query_fragments
 
+        query = "SELECT %(select_body)s FROM %(table)s WHERE %(query_fragments)s ORDER BY %(order_by)s LIMIT %(limit)s OFFSET %(page)s;" % sql_query_fragments
+        
         return query, modified_arguments
     
     def attr_func_wrap(self, key, value):

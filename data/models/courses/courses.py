@@ -41,6 +41,7 @@ single_course_format = {
 time_format = ["StartTime1", "EndTime1", "StartTime2", "EndTime2"]
 SELECT = [key for key in single_course_format]
 TABLE = "courses_t"
+ORDERBY = "CallNumber"
 
 def build_response_dict(row):
     response = single_course_format.copy()

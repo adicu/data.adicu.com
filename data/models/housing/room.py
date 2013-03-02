@@ -27,6 +27,7 @@ single_room_format = {
 
 SELECT = [key for key in single_room_format]
 TABLE = "housing_t"
+ORDERBY = "Room"
 
 def build_response_dict(row):
     response = single_room_format.copy()

@@ -24,6 +24,7 @@ single_building_format = {
 
 SELECT = [key for key in single_building_format]
 TABLE = "housing_amenities_t"
+ORDERBY = "Building"
 
 def build_response_dict(row):
     response = single_building_format.copy()
