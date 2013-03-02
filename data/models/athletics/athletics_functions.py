@@ -1,6 +1,7 @@
 import re
 import athletics
 from datetime import datetime
+from datetime import timedelta
 
 def sport(value):
     """ """
@@ -35,11 +36,17 @@ def opponent(value):
     return "opponent", re.compile(value, re.IGNORECASE)
 
 def game_before(value):
-    """Format is Y-M-D H-M-S"""
+    """Format is Y-M-D H:M:S"""
     value = datetime.strptime(value, "%Y-%m-%d %H:%M:%S")
-    return "time", {"$lt": value}
+    return "time", {"$lte": value}
 
 def game_after(value):
-    """Format is Y-M-D H-M-S"""
+    """Format is Y-M-D H:M:S"""
     value = datetime.strptime(value, "%Y-%m-%d %H:%M:%S")
-    return "time", {"$gt" : value}
+    return "time", {"$gte" : value}
+
+def game_on(value):
+    """Format is Y-M-D"""
+    value = datetime.strptime(value, "%Y-%m-%d")
+    tomorrow = value + timedelta(days=1)
+    return "time", {"$gte":value, "$lte":tomorrow}
