@@ -46,13 +46,18 @@ class MongoQuery:
     def build_mongo_query(self, arguments):
         # slug is a list, each with (key, value)
         if [func for func in dir(self.model_functions) if not "__" in func]:
-            slug = dict([self.attr_func_wrap(key, value) for key, value in
-                arguments.iteritems()])
+            slug = {}
+            for key, value in arguments.iteritems():
+                new_key, new_value = self.attr_func_wrap(key, value)
+                if new_key in slug:
+                    slug[new_key].update(new_value)
+                else:
+                    slug[new_key] = new_value
+            print slug
             return slug
         return arguments
     
     def attr_func_wrap(self, key, value):
         func = getattr(self.model_functions, key)
         key, value = func(value)
-        print key, value
         return key, value
