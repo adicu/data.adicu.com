@@ -27,7 +27,7 @@ class Application(tornado.web.Application):
             "template_path" : os.path.join(os.path.dirname(__file__), "templates"),
             "static_path" : os.path.join(os.path.dirname(__file__), "static"),
             "autoescape" : None,
-            "login_url" : "/login",
+            "login_url" : "http://data.adicu.com/login",
         }
 
         handlers = [
