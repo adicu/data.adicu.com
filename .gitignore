@@ -9,6 +9,7 @@ lib-cov
 *.pyc
 *.swp
 *.json
+.DS_Store
 
 .Python
 pids
