@@ -40,13 +40,21 @@ def department(value):
     
 def ends_after(value):
     """time: HH:MM"""
-    ends_formatted = value[0:2] + ":" + value[2:4] + ":00"
+    ends = value.split(":")
+    ends_formatted = ends[0] + ":" + ends[1] + ":00"
     return ends_formatted, "EndTime1>%(ends_after)s"
     
 def ends_before(value):
     """time: HH:MM"""
-    ends_formatted = value[0:2] + ":" + value[2:4] + ":00"
+    ends = value.split(":")
+    ends_formatted = ends[0] + ":" + ends[1] + ":00"
     return ends_formatted, "EndTime1<%(ends_before)s"
+
+def ends_at(value):
+    """ time: HH:MM"""
+    ends = value.split(":")
+    ends_formatted = ends[0] + ":" + ends[1] + ":00"
+    return ends_formatted, "EndTime1=%(ends_at)s"
     
 def not_full(value):
     """boolean"""
@@ -65,25 +73,22 @@ def school(value):
     
 def starts_after(value):
     """time HH:MM"""
-    starts_formatted = value[0:2] + ":" + value[2:4] + ":00"
+    starts = value.split(":")
+    starts_formatted =  starts[0] + ":" + starts[1] + ":00"
     return starts_formatted, "StartTime1>%(starts_after)s"
     
 def starts_before(value):
     """time HH:MM"""
-    starts_formatted = value[0:2] + ":" + value[2:4] + ":00"
+    starts = value.split(":")
+    starts_formatted = starts[0] + ":" + starts[1] + ":00"
     return starts_formatted, "StartTime1<%(starts_before)s"
-    
+
 def starts_at(value):
-    """ time HH:MM """
-    starts_formatted = value[0:2] + ":" + value[2:4] + ":00"
-    return starts_formatted, "StartTime1 = %(starts_at)s"
-
-def ends_at(value):
-    """ time HH:MM """
-    ends_formatted = value[0:2] + ":" + value[2:4] + ":00"
-    return ends_formatted, "EndTime1 = %(ends_at)s"
-
-
+    """ time HH:MM"""
+    starts = value.split(":")
+    starts_formatted = starts[0] + ":" + starts[1] + ":00"
+    return starts_formatted, "StartTime1=%(starts_at)s"
+    
 def students_less_than(value):
     """int"""
     return value, "NumEnrolled<%(students_less_than)s"
