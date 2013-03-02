@@ -1,5 +1,5 @@
 import tornado.web
-
+import hashlib
 import app.basic
 
 import models.affairs.affairs_functions as affairs
@@ -17,6 +17,13 @@ from inspect import isfunction as func
 class MainHandler(app.basic.BaseHandler):
     def get(self):
         self.redirect("docs/Documentation")
+
+class ProfileHandler(app.basic.BaseHandler):
+    def get(self):
+        if self.get_secure_cookie("user"):
+            self.write(self.get_secure_cookie("_id"))
+        else:
+            self.write("You are not auth'd")
 
 class DocsHandler(app.basic.BaseHandler):
     pages = {
@@ -258,7 +265,14 @@ class DocsHandler(app.basic.BaseHandler):
     }
 
     def get(self, *arg):
-        user = None
+        user = {}
+        if not self.get_secure_cookie("name"):
+            user["name"] = self.get_secure_cookie("name")
+            user["photo_url"] = hashlib.md5(self.get_secure_cookie("email")).hexdigest()
+            user["token"] = self.get_secure_cookie("_id")
+        else:
+            user = None
+        print user
         current = arg[0]
         pages = self.pages
         if current not in self.pages and current not in self.main:

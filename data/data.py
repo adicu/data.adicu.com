@@ -10,13 +10,10 @@ import app.courses
 import app.affairs
 import app.dining
 import app.athletics
-<<<<<<< HEAD
 import app.housing
 import app.uem
 import app.docs
-=======
 import app.auth
->>>>>>> Add google auth, save user, show api_token, valid api_token works
 
 
 class Application(tornado.web.Application):
@@ -48,6 +45,8 @@ class Application(tornado.web.Application):
             (r"/docs/([^/]+)", app.main.DocsHandler),
             (r"/login$", app.auth.LoginHandler),
             (r"/logout$", app.auth.LogoutHandler),
+            (r"/profile$", app.main.ProfileHandler),
+
         ]
         debug = True
         tornado.web.Application.__init__(self, handlers, **app_settings)

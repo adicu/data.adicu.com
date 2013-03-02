@@ -1,4 +1,5 @@
 from app import basic
+import app
 import tornado.web
 import lib.mongo
 import functools
