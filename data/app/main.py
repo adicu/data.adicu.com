@@ -267,13 +267,13 @@ class DocsHandler(app.basic.BaseHandler):
 
     def get(self, *arg):
         user = {}
-        if not self.get_secure_cookie("name"):
-            user["name"] = self.get_secure_cookie("name")
-            #user["photo_url"] = hashlib.md5(self.get_secure_cookie("email")).hexdigest()
+        if self.get_secure_cookie("user"):
             user["token"] = self.get_secure_cookie("_id")
+            user["name"] = self.get_secure_cookie("name")
+            email_hash = hashlib.md5(self.get_secure_cookie("email")).hexdigest()
+            user["photo"] = "https://secure.gravatar.com/avatar/%s?s=50" % email_hash
         else:
             user = None
-        print user
         current = arg[0]
         pages = self.pages
         if current not in self.pages and current not in self.main:

@@ -24,18 +24,25 @@
     <div class="navbar navbar-inverse">
         <div class="navbar-inner">
             <div class="container">
-                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </a>
 
                 <a class="logo" href="#">ADI Data API Docs</a>
                 <div class="nav-collapse collapse">
                     <ul class="profileBar visible-desktop">
+                        {% if user %}
+                        <li class="user"><img src="{{escape(user['photo'])}}" alt=""></li>
+                        <li class="profile">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{escape(user['name'])}}<span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                <li><a tabindex="-1" href="/profile">API TOKEN</a></li>
+                                <li class="divider"></li>
+                                <li><a tabindex="-1" href="/logout">Log Out</a></li>
+                            </ul>
+                        </li>
+                        {% else %}
                         <li class="profile">
                             <a href="/login">Log In</a>
                         </li>
+                        {% end %}
                     </ul>
                 </div>
             </div>
@@ -64,7 +71,6 @@
             {% end %}
             ><a href="{{escape(page)}}">{{escape(page)}}</a></li>
         {% end %}
-        <li><a href="/profile">API TOKEN</a></li>
         </ul>
 </aside>
 
