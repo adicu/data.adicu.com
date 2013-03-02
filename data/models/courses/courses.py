@@ -11,6 +11,7 @@ if base_dir not in sys.path:
 single_course_format = {
     "CourseTitle": "",
     "CourseSubtitle": "",
+    "Course": "",
     "Term": "",
     "SchoolName" : "",
     "TypeName" : "",
@@ -20,6 +21,7 @@ single_course_format = {
     "MinUnits" : 0,
     "MaxUnits" : 0,
     "DepartmentName": "",
+    "DepartmentCode": "",
     "NumEnrolled": 0,
     "MaxSize" : 0,
     "CallNumber": "",
