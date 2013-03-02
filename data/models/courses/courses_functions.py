@@ -11,55 +11,70 @@
 #    raise Exception("Invalid query")
 
 def building(value):
+    """string"""
     return '%%%s%%' % value, "Building1~~*%(building)s"
     
 def call_number(value):
+    """int"""
     return value, "CallNumber=%(call_number)s"
     
 def campus(value):
+    """string"""
     return '%%%s%%' % value, "(CampusName~~*%(campus)s OR CampusCode~~*%(campus)s)"
     
 def class_type(value):
+    """string"""
     return '%%%s%%' % value, "(TypeCode~~*%(class_type)s OR TypeName~~*%(class_type)s)"
     
 def courseid(value):
+    """string"""
     return '%%%s%%' % value, "Course~~*%(courseid)s"
 
 def department(value):
+    """string"""
     return '%%%s%%' % value, "(DepartmentName~~*%(department)s OR DepartmentCode~~*%(department)s)"
     
 def ends_after(value):
+    """time: HH:MM"""
     ends_formatted = value[0:2] + ":" + value[2:4] + ":00"
     return ends_formatted, "EndTime1>%(ends_after)s"
     
 def ends_before(value):
+    """time: HH:MM"""
     ends_formatted = value[0:2] + ":" + value[2:4] + ":00"
     return ends_formatted, "EndTime1<%(ends_before)s"
     
 def not_full(value):
+    """boolean"""
     if __to_bool(value):
     	return value, "(NumEnrolled<MaxSize OR MaxSize=0)"
     else:
     	return value, "NumEnrolled>MaxSize"
     
 def professor(value):
+    """string"""
     return '%%%s%%' % value, "Instructor1Name~~*%(professor)s"
     
 def school(value):
+    """string"""
     return '%%%s%%' % value, "SchoolName~~*%(school)s"
     
 def starts_after(value):
+    """time HH:MM"""
     starts_formatted = value[0:2] + ":" + value[2:4] + ":00"
     return starts_formatted, "StartTime1>%(starts_after)s"
     
 def starts_before(value):
+    """time HH:MM"""
     starts_formatted = value[0:2] + ":" + value[2:4] + ":00"
     return starts_formatted, "StartTime1<%(starts_before)s"
     
 def students_less_than(value):
+    """int"""
     return value, "NumEnrolled<%(students_less_than)s"
     
 def term(value):
+    """string"""
     if "spring" in value.lower():
         term_formatted = value[6:]+"1"
         return term_formatted, "Term=%(term)s"
@@ -72,20 +87,18 @@ def term(value):
 
 
 def title(value):
+    """string"""
     return '%%%s%%' % value, "CourseTitle~~*%(title)s"
 
 def meets_on(value):
+    """string"""
     return '%%%s%%' % value, "MeetsOn1~~*%(meets_on)s"
 
 def description(value):
+    """string (be careful with this pretty please, it's an expensive query)"""
     return '%%%s%%' % value, "Description~~*%(description)s"
 
 def __to_bool(value):
-    """
-       Converts 'something' to boolean. Raises exception for invalid formats
-           Possible True  values: 1, True, "1", "True", "yes", "y", "t"
-           Possible False values: 0, False, None, [], {}, "", "0", "faLse", "no", "n", "f", 0.0, ...
-    """
     if str(value).lower() in ("yes", "y", "true",  "t", "1"): return True
     if str(value).lower() in ("no",  "n", "false", "f", "0", "0.0", "", "none", "[]", "{}"): return False
     raise Exception('Invalid value for boolean conversion: ' + str(value))
