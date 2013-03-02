@@ -34,17 +34,7 @@
                 <div class="nav-collapse collapse">
                     <ul class="profileBar visible-desktop">
                         <li class="profile">
-                            {% if user %}
-                                <a class="dropdown-toggle"
-                                    data-toggle="dropdown"
-                                    href="#">{{escape(user[photo])}}<span class="caret"></span></a>
-                                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                                    <li><a tabindex="-1" href="#">Log Out</a></li>
-                                    <li><a tabindex="-1" href="#">API Token</a></li>
-                                </ul>
-                            {% else %}
-                                <a href="/login">Log In</a>
-                            {% end %}
+                            <a href="/login">Log In</a>
                         </li>
                     </ul>
                 </div>
