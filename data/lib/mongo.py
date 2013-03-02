@@ -29,10 +29,12 @@ class MongoQuery:
         self.model_functions = model_functions
 
     @tornado.gen.engine
-    def execute(self, args, page=0, limit=0, callback=None):
+    def execute(self, args, page=0, limit=mongo_limit, callback=None):
 
         arguments = self.build_mongo_query(args)
         cursor = self.collection.find(arguments)
+        if limit < 0 or limit > mongo_limit:
+            limit = mongo_limit
         cursor.limit(limit).skip(limit * page)
         results = []
         # I don't like the generator model here ... It hides what
