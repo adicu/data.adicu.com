@@ -11,7 +11,7 @@ mongo_pass  = os.getenv('MONGO_PASSWORD')
 mongo_host  = os.getenv('MONGO_HOST')
 mongo_port  = os.getenv('MONGO_PORT')
 mongo_db    = os.getenv('MONGO_DB')
-mongo_limit = os.getenv('MONGO_LIMIT')
+mongo_limit = int(os.getenv('MONGO_LIMIT'))
 
 mongo_uri = "mongodb://%s:%s@%s:%s/%s" % (mongo_user, mongo_pass,
         mongo_host, mongo_port, mongo_db)
@@ -33,7 +33,7 @@ class MongoQuery:
 
         arguments = self.build_mongo_query(args)
         cursor = self.collection.find(arguments)
-        if limit < 0 or limit > mongo_limit:
+        if not 0 < limit < mongo_limit:
             limit = mongo_limit
         cursor.limit(limit).skip(limit * page)
         results = []
