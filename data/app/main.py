@@ -268,7 +268,7 @@ class DocsHandler(app.basic.BaseHandler):
         user = {}
         if not self.get_secure_cookie("name"):
             user["name"] = self.get_secure_cookie("name")
-            user["photo_url"] = hashlib.md5(self.get_secure_cookie("email")).hexdigest()
+            #user["photo_url"] = hashlib.md5(self.get_secure_cookie("email")).hexdigest()
             user["token"] = self.get_secure_cookie("_id")
         else:
             user = None
