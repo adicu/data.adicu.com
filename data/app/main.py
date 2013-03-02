@@ -210,9 +210,10 @@ class DocsHandler(app.basic.BaseHandler):
                         "request" : "http://data.adicu.com/housing/buildings?name=&api_token=TOKEN",
                         "response" : "",
                         "queries" : c(mem(building, func)),
+                    },
                 },
             },
-            "uem" : {
+            "UEM" : {
                 "lead" : """UEM, for University Events Management is a delayed
                 live feed of whats coming out UEM. Updated nightly, this
                 endpoint has all the confirmed booked space on campus that UEM
@@ -238,8 +239,8 @@ class DocsHandler(app.basic.BaseHandler):
                     },
                 },
             },
-        },
     }
+
     main = {
          "Authentication" : {
                 "lead" : """To use any of the API's you must have an api_token
