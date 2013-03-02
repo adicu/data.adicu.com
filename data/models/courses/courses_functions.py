@@ -73,6 +73,17 @@ def starts_before(value):
     starts_formatted = value[0:2] + ":" + value[2:4] + ":00"
     return starts_formatted, "StartTime1<%(starts_before)s"
     
+def starts_at(value):
+    """ time HH:MM """
+    starts_formatted = value[0:2] + ":" + value[2:4] + ":00"
+    return starts_formatted, "StartTime1 = %(starts_at)s"
+
+def ends_at(value):
+    """ time HH:MM """
+    ends_formatted = value[0:2] + ":" + value[2:4] + ":00"
+    return ends_formatted, "EndTime1 = %(ends_at)s"
+
+
 def students_less_than(value):
     """int"""
     return value, "NumEnrolled<%(students_less_than)s"
