@@ -22,7 +22,7 @@ class Application(tornado.web.Application):
 
         app_settings = {
             'debug': "dev",
-            "xsrf_cookies" : True,
+            "xsrf_cookies" : False,
             "cookie_secret" : "32oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o/Vo=",
             "template_path" : os.path.join(os.path.dirname(__file__), "templates"),
             "static_path" : os.path.join(os.path.dirname(__file__), "static"),
