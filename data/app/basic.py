@@ -51,14 +51,19 @@ class BaseHandler(tornado.web.RequestHandler, ArgumentMixin):
         """write an api error in the appropriate response format"""
         self.api_response(status_code=status_code, status_txt=status_txt, data=data)
 
-    def api_response(self, data, status_code=200, status_txt="OK", pretty=None):
+    def api_response(self, data, status_code=200, status_txt="OK",
+            pretty=None, jsonp=None):
         """write an api response in json"""
         self.set_header("Content-Type", "application/json; charset=utf-8")
         if pretty:
             pretty = 4 * ' '
-        print pretty
-        self.finish(json.dumps(dict(data=data, status_code=status_code,
-            status_txt=status_txt), indent=pretty))
+        if jsonp:
+            self.finish(jsonp + "(" + json.dumps(dict(data=data, status_code=status_code,
+                status_txt=status_txt)) + ")")
+        else:
+            self.finish(json.dumps(dict(data=data, status_code=status_code,
+                status_txt=status_txt), indent=pretty))
+
 
     def get_recognized_arguments(self, accepted_queries):
         queries = {query: self.get_argument(query)

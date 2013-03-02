@@ -18,13 +18,14 @@ class DiningHandler(app.basic.BaseHandler):
         limit = self.get_int_argument("limit", 0)
         page = self.get_int_argument("page", 0)
         pretty = self.get_bool_argument("pretty", None)
+        jsonp = self.get_argument("jsonp", None)
         if not queries:
             return self.error(status_code=400, status_txt="MISSING_QUERY_ARGUMENTS")
-        internal_callback = functools.partial(self._finish, pretty=pretty)
+        internal_callback = functools.partial(self._finish, pretty=pretty, jsonp=jsonp)
         self.mongo.execute(queries, page=page, limit=limit, callback=internal_callback)
 
-    def _finish(self, response, pretty=None):
+    def _finish(self, response, pretty=None, jsonp=None):
         if response:
-            return self.api_response(response, pretty=pretty)
+            return self.api_response(response, pretty=pretty, jsonp=jsonp)
         else:
             return self.error(status_code=204, status_txt="NO_CONTENT_FOR_REQUEST")
