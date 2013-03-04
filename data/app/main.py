@@ -1,6 +1,7 @@
 import tornado.web
 import hashlib
 import app.basic
+import collections
 
 import models.affairs.affairs_functions as affairs
 import models.athletics.athletics_functions as athletics
@@ -288,7 +289,7 @@ class DocsHandler(app.basic.BaseHandler):
 
         print page["endpoints"]
         self.render('temp.html',
-                pages=pages,
+                pages=collections.OrderedDict(sorted(pages.items())),
                 current=current,
                 lead=page["lead"],
                 endpoints=page["endpoints"],
