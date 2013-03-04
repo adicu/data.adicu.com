@@ -31,6 +31,14 @@ class UserAuth:
 
     def _on_mongo_find(self, response, error, user=None, callback=None):
         if not response:
-            self.collection.insert(user, callback=callback)
+            internal_callback = functools.partial(self._on_mongo_insert, callback=callback)
+            self.collection.insert(user, callback=internal_callback)
         else:
             callback(response, error)
+    
+    def _on_mongo_insert(self, response, error, callback):
+        if error:
+            callback(None, error)
+        else:
+            internal_callback = functools.partial(self._on_mongo_find, callback=callback)
+            self.collection.find_one({"_id":response}, callback=internal_callback)
