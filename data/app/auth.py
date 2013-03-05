@@ -19,7 +19,6 @@ class LoginHandler(app.basic.BaseHandler, tornado.auth.GoogleMixin):
         self.authenticate_redirect()
 
     def _on_auth(self, user):
-        print user
         if not user:
             raise tornado.web.HTTPError(500, "Google auth failed")
         self.auth_user.add_user(user, callback=self._on_save)

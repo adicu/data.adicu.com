@@ -42,7 +42,7 @@ class Application(tornado.web.Application):
             (r"/housing/rooms$", app.housing.RoomHandler),
             (r"/housing/buildings$", app.housing.BuildingHandler),
             (r"/docs$", app.main.MainHandler),
-            (r"/docs/([^/]+)", app.main.DocsHandler),
+            (r"/docs/([^/]+)", app.docs.DocsHandler),
             (r"/login$", app.auth.LoginHandler),
             (r"/logout$", app.auth.LogoutHandler),
             (r"/profile$", app.main.ProfileHandler),

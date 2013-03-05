@@ -55,7 +55,6 @@ class MongoQuery:
                     slug[new_key].update(new_value)
                 else:
                     slug[new_key] = new_value
-            print slug
             return slug
         return arguments
     
