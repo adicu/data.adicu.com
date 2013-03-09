@@ -55,19 +55,12 @@
 
 <aside class="visible-desktop">
     <ul class="sideMenu">
-        <li {% if current == "Documentation" %}
-            class="active"
-            {% end %}
-            ><a href="Documentation">Documentation</a></li>
-        <li {% if current == "Authentication" %}
-            class="active"
-            {% end %}
-            ><a href="Authentication">Authentication</a></li>
         {% for page in pages %}
         <li {% if current == page%}
             class="active"
             {% end %}
-            ><a href="{{escape(page)}}">{{escape(page)}}</a></li>
+            ><a href="{{escape(page)}}">{{escape(page)}}</a>
+        </li>
         {% end %}
         </ul>
 </aside>
@@ -78,6 +71,7 @@
           Javascripts
 ============================= -->
 
+<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js></script>
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script src="{{static_url("js/modernizr.js")}}"></script>
 <script src="{{static_url("js/menu.js")}}"></script>

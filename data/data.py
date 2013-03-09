@@ -12,8 +12,8 @@ import app.dining
 import app.athletics
 import app.housing
 import app.uem
-import app.docs
 import app.auth
+import app.documentation
 
 
 class Application(tornado.web.Application):
@@ -42,7 +42,7 @@ class Application(tornado.web.Application):
             (r"/housing/rooms$", app.housing.RoomHandler),
             (r"/housing/buildings$", app.housing.BuildingHandler),
             (r"/docs$", app.main.MainHandler),
-            (r"/docs/([^/]+)", app.docs.DocsHandler),
+            (r"/docs/([^/]+)", app.documentation.DocsHandler),
             (r"/login$", app.auth.LoginHandler),
             (r"/logout$", app.auth.LogoutHandler),
             (r"/profile$", app.main.ProfileHandler),
