@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data ADICU</title>
+
+    <link href="{{static_url("css/bootstrap.min.css")}}" rel="stylesheet">
+    <link href="{{static_url("css/bootstrap-responsive.min.css")}}" rel="stylesheet">
+    <link href="{{static_url("css/bootstrap-responsive-fluid.css")}}" rel="stylesheet">
+    <link href="{{static_url("css/preview.css")}}" rel="stylesheet">
+    <link href="{{static_url("css/prometheus.css")}}" rel="stylesheet">
+    <link href="{{static_url("css/menu.css")}}" rel="stylesheet">
+
+</head>
+<body>
+
+<!-- ========================
+            Header
+============================= -->
+
+<header>
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <div class="container">
+
+                <a class="logo" href="#">ADI Data API Docs</a>
+                <div class="nav-collapse collapse">
+                    <ul class="profileBar visible-desktop">
+                        {% if user %}
+                        <li class="user"><img src="{{escape(user['photo'])}}" alt=""></li>
+                        <li class="profile">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{escape(user['name'])}}<span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                <li><a tabindex="-1" href="/profile">API TOKEN</a></li>
+                                <li class="divider"></li>
+                                <li><a tabindex="-1" href="/logout">Log Out</a></li>
+                            </ul>
+                        </li>
+                        {% else %}
+                        <li class="profile">
+                            <a href="/login">Log In</a>
+                        </li>
+                        {% end %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+<!-- ========================
+            Sidebar
+============================= -->
+
+<aside class="visible-desktop">
+    <ul class="sideMenu">
+        <li {% if current == "Documentation" %}
+            class="active"
+            {% end %}
+            ><a href="Documentation">Documentation</a></li>
+        <li {% if current == "Authentication" %}
+            class="active"
+            {% end %}
+            ><a href="Authentication">Authentication</a></li>
+        {% for page in pages %}
+        <li {% if current == page%}
+            class="active"
+            {% end %}
+            ><a href="{{escape(page)}}">{{escape(page)}}</a></li>
+        {% end %}
+        </ul>
+</aside>
+
+{% block content %}
+{% end %}
+<!-- ========================
+          Javascripts
+============================= -->
+
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="{{static_url("js/modernizr.js")}}"></script>
+<script src="{{static_url("js/menu.js")}}"></script>
+<script src="{{static_url("js/bootstrap.min.js")}}"></script>
+
+</body>
+</html>
