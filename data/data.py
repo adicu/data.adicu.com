@@ -7,6 +7,7 @@ import os
 
 import app.main
 import app.courses
+import app.courses_v2
 import app.affairs
 import app.dining
 import app.athletics
@@ -34,6 +35,7 @@ class Application(tornado.web.Application):
             (r"/$", app.main.MainHandler),
             (r"/ping$", PingHandler),
             (r"/courses$", app.courses.CoursesHandler),
+            (r"/courses/v2/courses$", app.courses_v2.CoursesV2Handler),
             (r"/dining$", app.dining.DiningHandler),
             (r"/uem$", app.uem.UemHandler),
             (r"/affairs$", app.affairs.AffairsHandler),
