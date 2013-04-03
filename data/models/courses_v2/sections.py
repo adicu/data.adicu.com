@@ -8,7 +8,7 @@ base_dir = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__
 if base_dir not in sys.path:
     sys.path.append(base_dir)
 
-single_course_format = {
+single_section_format = {
     "Course": "",
     "Term": "",
     "TypeName" : "",
@@ -31,13 +31,13 @@ single_course_format = {
 }
 
 time_format = ["StartTime1", "EndTime1", "StartTime2", "EndTime2"]
-SELECT = [key for key in single_course_format]
-TABLE = "courses_t"
+SELECT = [key for key in single_section_format]
+TABLE = "sections_v2_t"
 ORDERBY = "CallNumber"
 
 def build_response_dict(row):
-    response = single_course_format.copy()
-    for i, key in enumerate(single_course_format):
+    response = single_section_format.copy()
+    for i, key in enumerate(single_section_format):
         if key in time_format:
             response[key] = str(row[i])
         else:
