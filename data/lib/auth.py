@@ -3,7 +3,7 @@ import motor
 import functools
 import mongo as m
 
-from bson.objectid import ObjectId
+from bson.objectid import ObjectId, InvalidId
 
 class TokenAuth:
     def __init__(self):
@@ -12,7 +12,11 @@ class TokenAuth:
     def validate_token(self, token, callback):
         internal_callback = functools.partial(self._on_mongo_response,
                 callback=callback)
-        self.collection.find_one({"_id":ObjectId(token)}, callback=internal_callback)
+        try:
+            object_id = ObjectId(token)
+        except InvalidId:
+            object_id = ObjectId()
+        self.collection.find_one({"_id": object_id }, callback=internal_callback)
 
     def _on_mongo_response(self, response, error, callback=None):
         if response:
