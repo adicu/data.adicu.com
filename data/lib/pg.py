@@ -49,6 +49,22 @@ class PGQuery:
         logging.info("Making SQL Query: %s %s" % (query, str(arguments)))
         self.pg.execute(query, arguments, callback=internal_callback)
 
+    def execute_many(self, argses, page=0, limit=0, callback=None):
+        internal_callback = functools.partial(self._on_multi_sql_response,
+                callback=callback)
+        query_pairs = [self.build_sql_query(args) for args in argses]
+
+        for (query, arguments) in query_pairs:
+            if limit and limit < pg_limit:
+                arguments["limit"] = limit
+            else:
+                arguments["limit"] = pg_limit
+            arguments["page"] = page * arguments["limit"]
+
+        logging.info("Making SQL Queries: %s" % (query_pairs))
+
+        self.pg.chain(query_pairs, callback=internal_callback)
+
     def build_sql_query(self, arguments):
         # We have a dict of query keys and values and call getattr with the key,
         # which returns a function pointer with the name of "key", which we call, which
@@ -76,6 +92,13 @@ class PGQuery:
         func = getattr(self.model_functions, key)
         value, fragment = func(value)
         return key, value, fragment
+
+    def _on_multi_sql_response(self, cursors, callback=None):
+        results = [cursor.fetchall() for cursor in cursors]
+        responses = [[self.model.build_response_dict(row) for row in row_set] for row_set in results]
+        print responses
+        # We call back to tornado to respond to the client
+        callback(responses)
 
     def _on_sql_response(self, cursor, callback=None):
         response = [self.model.build_response_dict(row) for row in cursor.fetchall()]
