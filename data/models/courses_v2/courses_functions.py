@@ -10,10 +10,6 @@
 #def raise_exception():    
 #    raise Exception("Invalid query")
 
-def call_number(value):
-    """int"""
-    return value, "CallNumber=%(call_number)s"
-    
 def courseid(value):
     """string"""
     return '%%%s%%' % value, "Course~~*%(courseid)s"

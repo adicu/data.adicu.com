@@ -36,6 +36,7 @@ class Application(tornado.web.Application):
             (r"/ping$", PingHandler),
             (r"/courses$", app.courses.CoursesHandler),
             (r"/courses/v2/courses$", app.courses_v2.CoursesV2Handler),
+            (r"/courses/v2/sections$", app.courses_v2.SectionsV2Handler),
             (r"/dining$", app.dining.DiningHandler),
             (r"/uem$", app.uem.UemHandler),
             (r"/affairs$", app.affairs.AffairsHandler),
