@@ -29,4 +29,6 @@ class CoursesHandler(basic.BaseHandler):
         if response:
             return self.api_response(response, pretty=pretty, jsonp=jsonp)
         else:
-            return self.error(status_code=204, status_txt="NO_CONTENT_FOR_REQUEST")
+            return self.error(status_code=204,
+                    status_txt="NO_CONTENT_FOR_REQUEST", pretty=pretty,
+                    jsonp=jsonp)

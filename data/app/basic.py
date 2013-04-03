@@ -47,9 +47,10 @@ class BaseHandler(tornado.web.RequestHandler, ArgumentMixin):
         # this should be overridden when a post is actually handled
         return self.error(405, 'HTTP_GET_REQUIRED')
     
-    def error(self, status_code, status_txt, data=None):
+    def error(self, status_code, status_txt, data=None, jsonp=None, pretty=None):
         """write an api error in the appropriate response format"""
-        self.api_response(status_code=status_code, status_txt=status_txt, data=data)
+        self.api_response(status_code=status_code, status_txt=status_txt,
+                data=data, jsonp=jsonp, pretty=pretty)
 
     def api_response(self, data, status_code=200, status_txt="OK",
             pretty=None, jsonp=None):
