@@ -10,6 +10,7 @@ import docs.athletics
 import docs.authentication
 import docs.documentation
 import docs.courses
+import docs.courses_v2
 import docs.dining
 import docs.housing
 import docs.uem
@@ -22,6 +23,7 @@ class DocsHandler(app.basic.BaseHandler):
                 "affairs"        : docs.affairs,
                 "athletics"      : docs.athletics,
                 "courses"        : docs.courses,
+                "courses (v2)"   : docs.courses_v2,
                 "dining"         : docs.dining,
                 "housing"        : docs.housing,
                 "uem"            : docs.uem,
