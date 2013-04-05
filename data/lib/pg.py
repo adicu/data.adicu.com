@@ -4,12 +4,13 @@ import psycopg2
 import functools
 import logging
 
-pg_host  = os.getenv('PG_HOST')
-pg_port  = int(os.getenv('PG_PORT'))
-pg_db    = os.getenv('PG_DB')
-pg_user  = os.getenv('PG_USER')
-pg_pass  = os.getenv('PG_PASSWORD')
-pg_limit = int(os.getenv('PG_LIMIT'))
+pg_host    = os.getenv('PG_HOST')
+pg_port    = int(os.getenv('PG_PORT'))
+pg_db      = os.getenv('PG_DB')
+pg_user    = os.getenv('PG_USER')
+pg_pass    = os.getenv('PG_PASSWORD')
+pg_limit   = int(os.getenv('PG_LIMIT'))
+pg_default = int(os.getenv('PG_DEFAULT'))
 dsn = 'dbname=%s user=%s password=%s host=%s port=%s' % (
             pg_db, pg_user, pg_pass, pg_host, pg_port)
 
@@ -40,10 +41,12 @@ class PGQuery:
         internal_callback = functools.partial(self._on_sql_response, callback=callback)
         query, arguments = self.build_sql_query(args)
         
-        if limit and limit < pg_limit:
-            arguments["limit"] = limit
-        else:
-            arguments["limit"] = pg_limit
+        arguments["limit"] = pg_default
+        if limit:
+            if 0 <= limit and limit <= pg_limit:
+                arguments["limit"] = limit
+            else:
+                arguments["limit"] = pg_limit
         arguments["page"] = page * arguments["limit"]
 
         logging.info("Making SQL Query: %s %s" % (query, str(arguments)))
