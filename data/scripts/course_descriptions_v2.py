@@ -8,7 +8,7 @@ import lib.pg
 
 def load_data(dump_file):
     pg = lib.pg.pg_sync()
-    db_query = """UPDATE courses_v2_t SET description=%s WHERE course~~*%s;"""
+    db_query = """UPDATE courses_v2_t SET description=%s WHERE course=%s"""
     query_queue = []
     doc = etree.parse(dump_file)
     courses = doc.findall('course')
@@ -17,7 +17,8 @@ def load_data(dump_file):
         number = course.findtext('course_number_1')
         description = course.findtext('course_description')
         description = description.replace('\'', '\'\'')
-        query_queue.append((description, '%%%s%%' % (department + str(number))))
+        query_queue.append((description, '%s' % (department + str(number))))
+        print query_queue[-1]
     if query_queue:
         print 'submitting a batch'
         cursor = pg.cursor()
