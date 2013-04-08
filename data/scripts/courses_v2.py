@@ -198,7 +198,7 @@ def drop_table():
 
 def _typify(value, data_type):
     if data_type.startswith('varchar'):
-        return '%s' % value.replace('\'','\\\'')
+        return '%s'# % value.replace('\'','\\\'')
     if data_type.startswith('int'):
         return str(int(value)) if value else 0
     if data_type.startswith('time'):
