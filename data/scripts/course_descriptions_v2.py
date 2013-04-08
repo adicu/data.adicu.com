@@ -2,6 +2,7 @@ import sys
 import argparse
 import os
 import time
+import HTMLParser
 from lxml import etree
 
 import lib.pg
@@ -17,8 +18,8 @@ def load_data(dump_file):
         number = course.findtext('course_number_1')
         description = course.findtext('course_description')
         description = description.replace('\'', '\'\'')
+        description = HTMLParser.HTMLParser().unescape(description)
         query_queue.append((description, '%s' % (department + str(number))))
-        print query_queue[-1]
     if query_queue:
         print 'submitting a batch'
         cursor = pg.cursor()
