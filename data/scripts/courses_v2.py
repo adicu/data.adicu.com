@@ -9,6 +9,7 @@ import lib.pg
 
 course_schema = [
     ("Course", "varchar(32) primary key"),
+    ("CourseFull", "varchar(32)"),
     ("PrefixName", "varchar(32)"),
     ("DivisionCode", "varchar(32)"),
     ("DivisionName", "varchar(64)"),
@@ -33,6 +34,7 @@ course_schema = [
 
 section_schema = [
     ("CallNumber", "int"),
+    ("SectionFull", "varchar(32)"),
     ("Course", "varchar(32) references courses_v2_t(course)"),
     ("Term", "varchar(32)"),
     ("NumEnrolled", "int"),
@@ -132,7 +134,9 @@ special_fields = [
     'ExamBuilding',
     'ExamRoom',
     'Description',
-    'Course'
+    'Course',
+    'CourseFull',
+    'SectionFull'
 ]
 # format for meeting string (ex. "TR     03:00P-05:10PPUP PUPIN LABORA1332")
 # these tuples are of the form (field, type, start_char, end_char)
@@ -143,6 +147,9 @@ meets_format = [
         ('Building', 'varchar(32)', 24, 36),
         ('Room', 'varchar(32)', 36, 42)
 ]
+
+def _format_course(course):
+    return course[:4] + course[8] + course[4:8]
 
 def _special_treatment(course, schema):
     num_meets = 6
@@ -165,7 +172,9 @@ def _special_treatment(course, schema):
             else:
                 pairs.append((prefix + item[0], None))
 
+    pairs.append(('SectionFull', course['Course']))
     pairs.append(('Course', course['Course'][:8]))
+    pairs.append(('CourseFull', _format_course(course['Course'])))
 
     columns = [name for (name, data_type) in schema]
     return [(name, value) for (name, value) in pairs if name in columns]

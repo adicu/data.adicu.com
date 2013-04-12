@@ -12,6 +12,7 @@ single_course_format = {
     "CourseTitle": "",
     "CourseSubtitle": "",
     "Course": "",
+    "CourseFull": "",
     "SchoolName" : "",
     "Approval" : "",
     "NumFixedUnits" : 0,

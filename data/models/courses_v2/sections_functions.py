@@ -5,6 +5,10 @@ def building(value):
 def call_number(value):
     """int"""
     return value, "CallNumber=%(call_number)s"
+
+def section_full(value):
+    """string"""
+    return value, "SectionFull~~*%(section_full)s"
     
 def campus(value):
     """string"""

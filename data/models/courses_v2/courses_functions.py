@@ -18,6 +18,10 @@ def course(value):
     """string"""
     return '%%%s%%' % value, "Course~~*%(course)s"
 
+def course_full(value):
+    """string"""
+    return '%%%s%%' % value, "CourseFull~~*%(course_full)s"
+
 def department(value):
     """string"""
     return '%%%s%%' % value, "(DepartmentName~~*%(department)s OR DepartmentCode~~*%(department)s)"

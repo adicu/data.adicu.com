@@ -10,6 +10,7 @@ if base_dir not in sys.path:
 
 single_section_format = {
     "Course": "",
+    "SectionFull": "",
     "Term": "",
     "TypeName" : "",
     "Instructor1Name": "",
