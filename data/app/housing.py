@@ -17,7 +17,7 @@ class RoomHandler(app.basic.BaseHandler):
     def get(self):
         recognized_arguments = self.valid_query_arguments(room_functions)
         queries = self.get_recognized_arguments(recognized_arguments)
-        limit = self.get_int_argument("limit", 0)
+        limit = self.get_int_argument("limit", None)
         page = self.get_int_argument("page", 0)
         pretty = self.get_bool_argument("pretty", None)
         jsonp = self.get_argument("jsonp", None)
@@ -41,7 +41,7 @@ class BuildingHandler(app.basic.BaseHandler):
     def get(self):
         recognized_arguments = self.valid_query_arguments(building_functions)
         queries = self.get_recognized_arguments(recognized_arguments)
-        limit = self.get_int_argument("limit", 0)
+        limit = self.get_int_argument("limit", None)
         page = self.get_int_argument("page", 0)
         pretty = self.get_bool_argument("pretty", None)
         jsonp = self.get_argument("jsonp", None)

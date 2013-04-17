@@ -37,40 +37,42 @@ class PGQuery:
         self.model = model
         self.model_functions = model_functions
     
-    def execute(self, args, page=0, limit=0, callback=None):
+    def execute(self, args, page=0, limit=pg_default, callback=None, unlimited=False):
         internal_callback = functools.partial(self._on_sql_response, callback=callback)
-        query, arguments = self.build_sql_query(args)
-        
-        arguments["limit"] = pg_default
-        if limit:
-            if 0 <= limit and limit <= pg_limit:
-                arguments["limit"] = limit
-            else:
-                arguments["limit"] = pg_limit
-        arguments["page"] = page * arguments["limit"]
 
+        if not unlimited:
+            if not limit:
+                limit = pg_default
+            if limit < 0 or limit > pg_limit:
+                limit = pg_limit
+            offset = page * limit
+        else:
+            limit = "ALL"
+            offset = 0
+
+        query, arguments = self.build_sql_query(args, limit, offset)
         logging.info("Making SQL Query: %s %s" % (query, str(arguments)))
         self.pg.execute(query, arguments, callback=internal_callback)
 
-    def execute_many(self, argses, page=0, limit=0, callback=None):
+    def execute_many(self, argses, page=0, limit=pg_default, callback=None, unlimited=False):
         internal_callback = functools.partial(self._on_multi_sql_response,
                 callback=callback)
-        query_pairs = [self.build_sql_query(args) for args in argses]
 
-        for (query, arguments) in query_pairs:
-            arguments["limit"] = pg_default
-            if limit:
-                if 0 <= limit and limit <= pg_limit:
-                    arguments["limit"] = limit
-                else:
-                    arguments["limit"] = pg_limit
-            arguments["page"] = page * arguments["limit"]
+        if not unlimited:
+            if not limit:
+                limit = pg_default
+            elif limit < 0 or limit > pg_limit:
+                limit = pg_limit
+            offset = page * limit
+        else:
+            limit = "ALL"
+            offset = 0
 
+        query_pairs = [self.build_sql_query(args, limit, offset) for args in argses]
         logging.info("Making SQL Queries: %s" % (query_pairs))
-
         self.pg.chain(query_pairs, callback=internal_callback)
 
-    def build_sql_query(self, arguments):
+    def build_sql_query(self, arguments, limit, offset):
         # We have a dict of query keys and values and call getattr with the key,
         # which returns a function pointer with the name of "key", which we call, which
         # provides a query fragment that function makes
@@ -84,12 +86,13 @@ class PGQuery:
                 "select_body": ", ".join(model.SELECT),
                 "table": model.TABLE,
                 "query_fragments": " AND ".join(query_fragments),
-                "limit": "%(limit)s",
-                "page": "%(page)s",
+                "limit": limit,
+                "page": offset,
                 "order_by" : model.ORDERBY,
         }
 
         query = "SELECT %(select_body)s FROM %(table)s WHERE %(query_fragments)s ORDER BY %(order_by)s LIMIT %(limit)s OFFSET %(page)s;" % sql_query_fragments
+        print query
         
         return query, modified_arguments
     

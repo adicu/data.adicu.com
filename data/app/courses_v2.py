@@ -18,7 +18,7 @@ class CoursesV2Handler(basic.BaseHandler):
     def get(self):
         recognized_arguments = self.valid_query_arguments(courses_functions)
         queries = self.get_recognized_arguments(recognized_arguments)
-        limit = self.get_int_argument("limit", 0)
+        limit = self.get_int_argument("limit", None)
         page = self.get_int_argument("page", 0)
         pretty = self.get_bool_argument("pretty", None)
         jsonp = self.get_argument("jsonp", None)
@@ -45,7 +45,7 @@ class CoursesV2Handler(basic.BaseHandler):
             internal_callback = functools.partial(self._section_finish,
                     courses=response, pretty=pretty, jsonp=jsonp)
             self.section_pgquery.execute_many(queries,
-                    callback=internal_callback)
+                    callback=internal_callback, unlimited=True)
         else:
             return self.error(status_code=204,
                     status_txt="NO_CONTENT_FOR_REQUEST", pretty=pretty,
@@ -69,7 +69,7 @@ class SectionsV2Handler(basic.BaseHandler):
     def get(self):
         recognized_arguments = self.valid_query_arguments(sections_functions)
         queries = self.get_recognized_arguments(recognized_arguments)
-        limit = self.get_int_argument("limit", 0)
+        limit = self.get_int_argument("limit", None)
         page = self.get_int_argument("page", 0)
         pretty = self.get_bool_argument("pretty", None)
         jsonp = self.get_argument("jsonp", None)
