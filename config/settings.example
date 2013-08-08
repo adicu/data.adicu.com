@@ -4,8 +4,8 @@ export PORT=3000
 # Postgres connection
 export PG_HOST=localhost
 export PG_PORT=5432
-export PG_USER=user
-export PG_PASSWORD=password
+export PG_USER=adicu
+export PG_PASSWORD=development
 export PG_DB=database
 export PG_LIMIT=250
 export PG_DEFAULT=20
@@ -13,11 +13,10 @@ export PG_DEFAULT=20
 # Redis connection
 export REDIS_HOST=localhost
 export REDIS_PORT=6379
-export REDIS_PASSWORD=password
+export REDIS_PASSWORD=development
 
 # Mongo connection
 export MONGO_HOST=localhost
 export MONGO_PORT=27017
-export MONGO_USER=mongo
-export MONGO_PASSWORD=password
-export MONGO_DB=database
+export MONGO_USER=adicu
+export MONGO_DB=data
