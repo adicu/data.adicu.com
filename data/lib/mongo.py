@@ -6,21 +6,18 @@ import tornado.gen
 from pymongo import MongoClient
 
 
-mongo_user  = os.getenv('MONGO_USER')
-mongo_pass  = os.getenv('MONGO_PASSWORD')
 mongo_host  = os.getenv('MONGO_HOST')
 mongo_port  = os.getenv('MONGO_PORT')
 mongo_db    = os.getenv('MONGO_DB')
 mongo_limit = int(os.getenv('MONGO_LIMIT'))
 
-mongo_uri = "mongodb://%s:%s@%s:%s/%s" % (mongo_user, mongo_pass,
-        mongo_host, mongo_port, mongo_db)
+mongo_uri = "mongodb://%s:%s" % (mongo_host, mongo_port)
 
 def mongo_aync():
-    return motor.MotorClient(host=mongo_uri).open_sync()[mongo_db]
+    return motor.MotorClient(mongo_uri).open_sync()[mongo_db]
 
 def mongo_sync():
-    return MongoClient(mongo_uri)[mongo_db]
+    return MongoClient(mongo_host, mongo_port)[mongo_db]
 
 class MongoQuery:
     def __init__(self, model=None, model_functions=None):
