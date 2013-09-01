@@ -16,10 +16,6 @@ node 'development.adicu.com' {
     require => Postgresql::Db['data']
   }
 
-  class { 'redis':
-    redis_password => 'development'
-  }
-
   include mongodb
 
   user { 'data':
