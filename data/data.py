@@ -65,7 +65,7 @@ if __name__ == "__main__":
     # this port should be unique system wide; all ports used should be listed in ~/services.py
     tornado.options.define("port", default=int(os.environ["PORT"]), help="Listen on port", type=int)
     tornado.options.parse_command_line()
-    logging.info("starting app on 0.0.0.0:%d" % tornado.options.options.port)
+    logging.info("starting app on 127.0.0.1:%d" % tornado.options.options.port)
     http_server = tornado.httpserver.HTTPServer(request_callback=Application())
-    http_server.listen(tornado.options.options.port, address="0.0.0.0")
+    http_server.listen(tornado.options.options.port, address="127.0.0.1")
     tornado.ioloop.IOLoop.instance().start()
