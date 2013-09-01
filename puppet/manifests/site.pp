@@ -1,4 +1,10 @@
 node 'development.adicu.com' {
+  exec { "apt-update":
+      command => "/usr/bin/apt-get update"
+  }
+
+  Exec["apt-update"] -> Package <| |>
+
   include postgresql::server
 
   postgresql::db { 'data':
