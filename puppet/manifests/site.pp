@@ -12,7 +12,8 @@ node 'development.adicu.com' {
     password => 'development'
   }
 
-  exec { '/usr/bin/sudo -u postgres psql data < /vagrant/development_dump.sql':
+  exec { "load_dev_data":
+	command => '/usr/bin/sudo -u postgres psql data < /vagrant/development_dump.sql',
     require => Postgresql::Db['data']
   }
 
