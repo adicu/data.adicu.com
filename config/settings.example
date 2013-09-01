@@ -11,11 +11,6 @@ export PG_DB=data
 export PG_LIMIT=250
 export PG_DEFAULT=20
 
-# Redis connection
-export REDIS_HOST=localhost
-export REDIS_PORT=6379
-export REDIS_PASSWORD=development
-
 # Mongo connection
 export MONGO_HOST=localhost
 export MONGO_PORT=27017
