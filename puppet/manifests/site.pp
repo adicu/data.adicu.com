@@ -64,7 +64,7 @@ node 'development.adicu.com' {
     command         => "/bin/bash /vagrant/start_server.sh example",
     directory       => "/vagrant",
     user            => "data",
-    stdout_logfile  => "/home/data/data_server.log",
+    stdout_logfile  => "/var/log/supervisor/data_server.log",
     redirect_stderr => true
   }
 
