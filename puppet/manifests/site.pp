@@ -12,6 +12,10 @@ node 'development.adicu.com' {
     password => 'development'
   }
 
+  exec { '/usr/bin/sudo -u postgres psql data < /vagrant/development_dump.sql':
+    require => Postgresql::Db['data']
+  }
+
   class { 'redis':
     redis_password => 'development'
   }
