@@ -27,18 +27,19 @@ node 'development.adicu.com' {
   }
 
   class { 'python':
-    virtualenv => true
+    virtualenv => true,
+    dev => true
   }
 
-  package { 'postgresql-server-dev-9.1':
-    ensure => present
-  }
-
-  package { 'libcurl3':
+  package { 'libcurl4-nss-dev':
     ensure => present
   }
 
   package { 'libxslt-dev':
+    ensure => present
+  }
+
+  package { 'postgresql-server-dev-9.1':
     ensure => present
   }
 
@@ -50,9 +51,9 @@ node 'development.adicu.com' {
     group => 'users',
     require => [
       User['data'],
+      Package['libcurl4-nss-dev'],
+      Package['libxslt-dev'],
       Package['postgresql-server-dev-9.1'],
-      Package['libcurl3'],
-      Package['libxslt-dev']
     ]
   }
 
