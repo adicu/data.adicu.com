@@ -68,5 +68,11 @@ node 'development.adicu.com' {
     redirect_stderr => true
   }
 
+  exec { "restart_supervisor":
+    command => "/usr/bin/sudo /etc/init.d/supervisor stop;
+        /bin/sleep 1 && /usr/bin/sudo /etc/init.d/supervisor start",
+    require => Supervisord::Program['data_server']
+  }
+
   Firewall <| |>
 }
