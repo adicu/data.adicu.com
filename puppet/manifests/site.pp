@@ -74,5 +74,12 @@ node 'development.adicu.com' {
     require => Supervisord::Program['data_server']
   }
 
+  class { 'nginx': }
+
+  nginx::resource::vhost { 'data.adicu.com':
+    ensure => 'present',
+    proxy  => 'http://localhost:3000'
+  }
+
   Firewall <| |>
 }
