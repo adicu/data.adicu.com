@@ -1,5 +1,6 @@
 # data.adicu.com
 export PORT=3000
+export DEBUG=true
 
 # Postgres connection
 export PG_HOST=localhost
