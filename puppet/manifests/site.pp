@@ -58,5 +58,15 @@ node 'development.adicu.com' {
     ]
   }
 
+  include supervisord
+
+  supervisord::program { 'data_server':
+    command         => "/vagrant/start_server.sh example",
+    directory       => "/vagrant",
+    user            => "data",
+    stdout_logfile  => "/home/data/data_server.log",
+    redirect_stderr => true
+  }
+
   Firewall <| |>
 }
