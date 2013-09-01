@@ -25,3 +25,6 @@
 [submodule "puppet/modules/wget"]
 	path = puppet/modules/wget
 	url = https://github.com/maestrodev/puppet-wget.git
+[submodule "puppet/modules/supervisord"]
+	path = puppet/modules/supervisord
+	url = https://github.com/adedommelin/puppet-supervisord
