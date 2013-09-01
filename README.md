@@ -1,44 +1,16 @@
 data.adicu.com
 ====================
 
-This is a suggested means of setting up data.adicu.com for development.
-First and foremost, make sure you are using [virtualenv](http://www.virtualenv.org/en/1.9.X/#installation).
-Then setup a directory as follows:
+This is the recommend means of setting up data.adicu.com for development.
+First, you will need to pull in all the git submodules.
 
-    mkdir data.adicu.com
-    cd data.adicu.com
-    virtualenv --no-site-packages .
-    source bin/activate
-    mkdir github
-    git clone git@github.com:adicu/data.adicu.com.git github
-    cd github
-    sudo pip install -r requirements.txt
+	git submodule init
+	git submodule update
 
-The purpose of this structure is to isolate the location of our source code from that
-of virtualenv.
-
-To set up your environment, we exclusively use environment variables. All of our connections
-to databases, and 99% of our settings rely on environment variables. You can see a full
-list of environment variables at
-
-        github/conf/settings.example
-
-It is left up to the developer to configure their development environment and include
-all necessary variables. We are currently using Postgres, Mongo, and Redis for this
-application, and it is left up to the developer to set theset databases up and configure
-them for development.
-
-From here on out, we will assume that we are in the github directory.
-
-------------
-
-Once you have your environment setup, to run the app all you need to do is:
-
-    source config/settings.example
-    python data/data.py
-
-This app is deployed on heroku. To get access to heroku, first off install
-heroku. :) Then ask Justin or Zach for access.
+Next, install [vagrant](http://www.vagrantup.com/). Once vagrant is installed,
+you can run `vagrant up`, and vagrant+puppet will provision the virtual
+machine for you and start the application. You can point your browser to
+[http://192.168.50.4](http://192.168.50.4) to see the running app.
 
 # app structure
 
