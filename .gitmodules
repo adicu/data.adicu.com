@@ -28,3 +28,6 @@
 [submodule "puppet/modules/supervisord"]
 	path = puppet/modules/supervisord
 	url = https://github.com/adicu/puppet-supervisord
+[submodule "puppet/modules/nginx"]
+	path = puppet/modules/nginx
+	url = https://github.com/puppetlabs/puppetlabs-nginx.git
