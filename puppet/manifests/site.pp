@@ -71,7 +71,12 @@ node 'development.adicu.com' {
   exec { "restart_supervisor":
     command => "/usr/bin/sudo /etc/init.d/supervisor stop;
         /bin/sleep 1 && /usr/bin/sudo /etc/init.d/supervisor start",
-    require => Supervisord::Program['data_server']
+    require => [
+      Supervisord::Program['data_server'], 
+      Python::Virtualenv['/home/data/venv'],
+      Postgresql::Db['data'],
+      Class['mongodb']
+    ]
   }
 
   class { 'nginx': }
