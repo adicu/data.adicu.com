@@ -61,7 +61,7 @@ node 'development.adicu.com' {
   include supervisord
 
   supervisord::program { 'data_server':
-    command         => "/bin/bash /vagrant/start_server.sh example",
+    command         => "/bin/bash ./start_server.sh ./config/settings.example",
     directory       => "/vagrant",
     user            => "data",
     stdout_logfile  => "/var/log/supervisor/data_server.log",

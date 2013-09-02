@@ -10,7 +10,7 @@ HOME=/home/$USER
 
 # start the python program in the background
 source $HOME/venv/bin/activate
-source config/settings.$1
+source $1
 python data/data.py &
 FIND_PID=$!
 
