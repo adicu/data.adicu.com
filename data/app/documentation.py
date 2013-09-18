@@ -4,16 +4,11 @@ import functools
 import collections
 import hashlib
 
-import docs.affairs
-import docs.athletics
 import docs.authentication
 import docs.documentation
 import docs.courses
 import docs.courses_v2
-import docs.dining
 import docs.housing
-import docs.uem
-
 
 class DocsHandler(app.basic.BaseHandler):
     pages = {

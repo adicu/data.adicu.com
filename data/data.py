@@ -8,11 +8,7 @@ import os
 import app.main
 import app.courses
 import app.courses_v2
-import app.affairs
-import app.dining
-import app.athletics
 import app.housing
-import app.uem
 import app.auth
 import app.documentation
 
