@@ -31,3 +31,6 @@
 [submodule "puppet/modules/nginx"]
 	path = puppet/modules/nginx
 	url = https://github.com/puppetlabs/puppetlabs-nginx.git
+[submodule "puppet/modules/elasticsearch"]
+	path = puppet/modules/elasticsearch
+	url = https://github.com/elasticsearch/puppet-elasticsearch.git
