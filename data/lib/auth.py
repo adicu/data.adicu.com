@@ -1,48 +1,47 @@
 import os
 import motor
 import functools
-import mongo as m
+import uuid
 
 from bson.objectid import ObjectId, InvalidId
+from lib.pg import pg_async
 
 class TokenAuth:
     def __init__(self):
-        self.collection = m.mongo_aync()["users"]
+        self.pg = pg_async()
 
     def validate_token(self, token, callback):
-        internal_callback = functools.partial(self._on_mongo_response,
+        internal_callback = functools.partial(self._on_pg_response,
                 callback=callback)
-        try:
-            object_id = ObjectId(token)
-        except InvalidId:
-            object_id = ObjectId()
-        self.collection.find_one({"_id": object_id }, callback=internal_callback)
+        query = "SELECT email FROM users_t WHERE token=%s"
+        self.pg.execute(query, (token,), callback=internal_callback)
 
-    def _on_mongo_response(self, response, error, callback=None):
-        if response:
-            callback(True)
-        else:
-            callback(False)
+    def _on_pg_response(self, cursor, callback=None):
+        result = cursor.fetchone()
+        callback(result is not None)
 
 class UserAuth:
     def __init__(self):
-        self.collection = m.mongo_aync()["users"]
+        self.pg = pg_async()
 
     def add_user(self, user, callback):
-        internal_callback = functools.partial(self._on_mongo_find,
+        internal_callback = functools.partial(self._on_pg_select,
                 user=user, callback=callback)
-        self.collection.find_one({"email":user["email"]}, callback=internal_callback)
+        query = "SELECT email, token FROM users_t WHERE email=%s" 
+        self.pg.execute(query, (user['email'],), callback=internal_callback)
 
-    def _on_mongo_find(self, response, error, user=None, callback=None):
-        if not response:
-            internal_callback = functools.partial(self._on_mongo_insert, callback=callback)
-            self.collection.insert(user, callback=internal_callback)
+    def _on_pg_select(self, cursor, user=None, callback=None):
+        result = cursor.fetchone()
+        if not result:
+            user['token'] = uuid.uuid1().get_hex()
+
+            internal_callback = functools.partial(self._on_pg_insert, 
+                    callback=callback, user=user)
+            query = "INSERT INTO users_t (email, token) VALUES (%s, %s)"
+            self.pg.execute(query, (user['email'], user['token']), 
+                    callback=internal_callback)
         else:
-            callback(response, error)
-    
-    def _on_mongo_insert(self, response, error, callback):
-        if error:
-            callback(None, error)
-        else:
-            internal_callback = functools.partial(self._on_mongo_find, callback=callback)
-            self.collection.find_one({"_id":response}, callback=internal_callback)
+            callback({'user': result[0], 'token': result[1]}, None)
+
+    def _on_pg_insert(self, cursor, user=None, callback=None):
+        callback(user, None)

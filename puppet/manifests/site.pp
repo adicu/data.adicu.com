@@ -17,8 +17,6 @@ node 'development.adicu.com' {
     require => Postgresql::Db['data']
   }
 
-  include mongodb
-
   user { 'data':
     ensure => present,
     gid => 'users',
@@ -74,8 +72,7 @@ node 'development.adicu.com' {
     require => [
       Supervisord::Program['data_server'], 
       Python::Virtualenv['/home/data/venv'],
-      Postgresql::Db['data'],
-      Class['mongodb']
+      Postgresql::Db['data']
     ]
   }
 

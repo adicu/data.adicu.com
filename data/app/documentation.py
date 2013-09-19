@@ -1,32 +1,22 @@
 import app.basic
 import tornado.web
-import lib.mongo
 import functools
 import collections
 import hashlib
 
-import docs.affairs
-import docs.athletics
 import docs.authentication
 import docs.documentation
 import docs.courses
 import docs.courses_v2
-import docs.dining
 import docs.housing
-import docs.uem
-
 
 class DocsHandler(app.basic.BaseHandler):
     pages = {
                 "Documentation"  : docs.documentation,
                 "Authentication" : docs.authentication,
-                "affairs"        : docs.affairs,
-                "athletics"      : docs.athletics,
                 "courses"        : docs.courses,
                 "courses (v2)"   : docs.courses_v2,
-                "dining"         : docs.dining,
                 "housing"        : docs.housing,
-                "uem"            : docs.uem,
             }
 
     def get(self, *arg):

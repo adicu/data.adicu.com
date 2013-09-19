@@ -15,7 +15,7 @@ dsn = 'dbname=%s user=%s password=%s host=%s port=%s' % (
             pg_db, pg_user, pg_pass, pg_host, pg_port)
 
 
-def pg_aync():
+def pg_async():
     return momoko.AsyncClient({
             'host': pg_host,
             'database': pg_db,
@@ -33,7 +33,7 @@ def pg_sync():
 
 class PGQuery:
     def __init__(self, model=None, model_functions=None):
-        self.pg = pg_aync()
+        self.pg = pg_async()
         self.model = model
         self.model_functions = model_functions
     

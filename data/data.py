@@ -8,11 +8,7 @@ import os
 import app.main
 import app.courses
 import app.courses_v2
-import app.affairs
-import app.dining
-import app.athletics
 import app.housing
-import app.uem
 import app.auth
 import app.documentation
 
@@ -37,11 +33,6 @@ class Application(tornado.web.Application):
             (r"/courses$", app.courses.CoursesHandler),
             (r"/courses/v2/courses$", app.courses_v2.CoursesV2Handler),
             (r"/courses/v2/sections$", app.courses_v2.SectionsV2Handler),
-            (r"/dining$", app.dining.DiningHandler),
-            (r"/uem$", app.uem.UemHandler),
-            (r"/affairs$", app.affairs.AffairsHandler),
-            (r"/affairs/([^/]+)", app.affairs.AffairsHandler),
-            (r"/athletics$", app.athletics.athleticsHandler),
             (r"/housing/rooms$", app.housing.RoomHandler),
             (r"/housing/buildings$", app.housing.BuildingHandler),
             (r"/docs$", app.main.MainHandler),
