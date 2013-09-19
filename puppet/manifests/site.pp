@@ -24,6 +24,33 @@ node 'development.adicu.com' {
     shell => '/bin/bash',
     managehome => true
   }
+  
+  $es_version = '0.90.3'
+
+  exec { "download_elasticsearch":
+    command => "/usr/bin/wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${es_version}.deb -O /tmp/elasticsearch-${es_version}.deb",
+    creates => "/tmp/elasticsearch-${es_version}.deb"
+  }
+
+  package { 'openjdk-6-jre-headless': ensure => present }
+
+  class { 'elasticsearch':
+    pkg_source  => "/tmp/elasticsearch-${es_version}.deb",
+    require     => [ 
+      Package['openjdk-6-jre-headless'], 
+      Exec['download_elasticsearch'] 
+    ],
+    autoupgrade => true,
+
+    config     => {
+      'node'   => {
+        'name' => 'elasticsearch'
+      },
+      'network' => {
+        'host'  => '127.0.0.1'
+      }
+    }
+  }
 
   class { 'python':
     virtualenv => true,
@@ -72,6 +99,7 @@ node 'development.adicu.com' {
     require => [
       Supervisord::Program['data_server'], 
       Python::Virtualenv['/home/data/venv'],
+      Class['elasticsearch'],
       Postgresql::Db['data']
     ]
   }
