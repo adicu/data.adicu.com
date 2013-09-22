@@ -52,6 +52,22 @@ node 'development.adicu.com' {
     }
   }
 
+  package { 'libpostgresql-jdbc-java': ensure => present }
+
+  elasticsearch::plugin { 'river-jdbc':
+    url => 'http://bit.ly/145e9Ly',
+    module_dir => 'river-jdbc'
+  }
+
+  exec { 'setup_es_postgres_river':
+    command => '/bin/bash /vagrant/scripts/setup_es_postgres_river.sh /vagrant/config/settings.example',
+    require => [
+      Postgresql::Db['data'],
+      Package['libpostgresql-jdbc-java'],
+      Elasticsearch::Plugin['river-jdbc']
+    ]
+  }
+
   class { 'python':
     virtualenv => true,
     dev => true
@@ -99,8 +115,7 @@ node 'development.adicu.com' {
     require => [
       Supervisord::Program['data_server'], 
       Python::Virtualenv['/home/data/venv'],
-      Class['elasticsearch'],
-      Postgresql::Db['data']
+      Exec['setup_es_postgres_river']
     ]
   }
 
