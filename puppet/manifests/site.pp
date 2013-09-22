@@ -26,10 +26,10 @@ node 'development.adicu.com' {
   }
   
   $es_version = '0.90.3'
-
-  exec { "download_elasticsearch":
-    command => "/usr/bin/wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${es_version}.deb -O /tmp/elasticsearch-${es_version}.deb",
-    creates => "/tmp/elasticsearch-${es_version}.deb"
+  
+  wget::fetch { 'elasticsearch':
+    source      => "https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${es_version}.deb",
+    destination => "/tmp/elasticsearch-${es_version}.deb"
   }
 
   package { 'openjdk-6-jre-headless': ensure => present }
@@ -38,7 +38,7 @@ node 'development.adicu.com' {
     pkg_source  => "/tmp/elasticsearch-${es_version}.deb",
     require     => [ 
       Package['openjdk-6-jre-headless'], 
-      Exec['download_elasticsearch'] 
+      Wget::Fetch['elasticsearch'] 
     ],
     autoupgrade => true,
 
