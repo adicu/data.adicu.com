@@ -13,7 +13,7 @@ node 'development.adicu.com' {
   }
 
   exec { "load_dev_data":
-    command => '/usr/bin/sudo -u postgres psql data < /vagrant/development_dump.sql',
+    command => '/usr/bin/sudo -u postgres psql data < /vagrant/scripts/development_dump.sql',
     require => Postgresql::Db['data']
   }
 
@@ -86,7 +86,7 @@ node 'development.adicu.com' {
   include supervisord
 
   supervisord::program { 'data_server':
-    command         => "/bin/bash ./start_server.sh ./config/settings.example",
+    command         => "/bin/bash ./scripts/start_server.sh ./config/settings.example",
     directory       => "/vagrant",
     user            => "data",
     stdout_logfile  => "/var/log/supervisor/data_server.log",
