@@ -1,9 +1,7 @@
 import os
-import motor
 import functools
 import uuid
 
-from bson.objectid import ObjectId, InvalidId
 from lib.pg import pg_async
 
 class TokenAuth:
