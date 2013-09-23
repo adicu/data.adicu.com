@@ -33,6 +33,7 @@ class Application(tornado.web.Application):
             (r"/courses$", app.courses.CoursesHandler),
             (r"/courses/v2/courses$", app.courses_v2.CoursesV2Handler),
             (r"/courses/v2/sections$", app.courses_v2.SectionsV2Handler),
+            (r"/courses/v2/search$", app.courses_v2.FullTextSearchHandler),
             (r"/housing/rooms$", app.housing.RoomHandler),
             (r"/housing/buildings$", app.housing.BuildingHandler),
             (r"/docs$", app.main.MainHandler),

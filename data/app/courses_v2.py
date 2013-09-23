@@ -2,11 +2,35 @@ from app import basic
 import tornado.web
 import lib.pg
 import functools
+from lib.elasticsearch import es_async
 
 from models.courses_v2 import courses
 from models.courses_v2 import courses_functions
 from models.courses_v2 import sections
 from models.courses_v2 import sections_functions
+
+class FullTextSearchHandler(basic.BaseHandler):
+    es_client = es_async()
+
+    @tornado.web.asynchronous
+    @basic.format_api_errors
+    @basic.validate_token
+    def get(self):
+        query = self.get_argument('q')
+        pretty = self.get_bool_argument("pretty", None)
+        jsonp = self.get_argument("jsonp", None)
+        if not query:
+            return self.error(status_code=400, status_txt="MISSING_QUERY_ARGUMENTS")
+        
+        internal_callback = functools.partial(self._ft_finish, 
+                pretty=pretty, jsonp=jsonp)
+        self.es_client.search('courses', query, internal_callback)
+
+    def _ft_finish(self, result, pretty=None, jsonp=None):
+        if 'hits' not in result:
+            return self.error(status_code=404, status_txt="RESULTS NOT FOUND")
+        norm_result = [hit['_source'] for hit in result['hits']['hits']]
+        return self.api_response(norm_result, pretty=pretty, jsonp=jsonp)
 
 class CoursesV2Handler(basic.BaseHandler):
     course_pgquery = lib.pg.PGQuery(courses, courses_functions)
