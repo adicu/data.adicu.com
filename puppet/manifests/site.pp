@@ -84,10 +84,11 @@ node 'development.adicu.com' {
   }
 
   exec { 'pg_es_import':
-    command => '/bin/bash /vagrant/scripts/pg_es_import.sh /vagrant/config/settings.example',
+    command   => '/bin/bash /vagrant/scripts/pg_es_import.sh /vagrant/config/settings.example',
+    user      => "data",
     require => [
       Python::Virtualenv['/home/data/venv'],
-      Postgresql::Db['data'],
+      Exec['load_dev_data'],
       Class['elasticsearch']
     ]
   }
