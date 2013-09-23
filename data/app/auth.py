@@ -26,8 +26,6 @@ class LoginHandler(app.basic.BaseHandler, tornado.auth.GoogleMixin):
     def _on_save(self, response, error):
         if error:
              raise tornado.web.HTTPError(500, "Saving your info failed")
-        for key in response:
-            self.set_secure_cookie(key, response[key])
         self.set_secure_cookie("user", json.dumps(response))
         self.redirect("/")
 

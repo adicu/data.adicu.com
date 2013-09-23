@@ -3,6 +3,7 @@ import tornado.web
 import functools
 import collections
 import hashlib
+import json
 
 import docs.authentication
 import docs.documentation
@@ -20,11 +21,10 @@ class DocsHandler(app.basic.BaseHandler):
             }
 
     def get(self, *arg):
-        user = {}
-        if self.get_secure_cookie("user"):
-            user["token"] = self.get_secure_cookie("_id")
-            user["name"] = self.get_secure_cookie("name")
-            email_hash = hashlib.md5(self.get_secure_cookie("email")).hexdigest()
+        userstr = self.get_secure_cookie("user")
+        if userstr:
+            user = json.loads(userstr)
+            email_hash = hashlib.md5(user['email']).hexdigest()
             user["photo"] = "https://secure.gravatar.com/avatar/%s?s=50" % email_hash
         else:
             user = None

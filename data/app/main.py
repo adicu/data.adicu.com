@@ -1,6 +1,6 @@
 import tornado.web
 import app.basic
-
+import json
 
 class MainHandler(app.basic.BaseHandler):
     def get(self):
@@ -8,9 +8,9 @@ class MainHandler(app.basic.BaseHandler):
 
 class ProfileHandler(app.basic.BaseHandler):
     def get(self):
-        if self.get_secure_cookie("user"):
-            self.write(self.get_secure_cookie("_id"))
+        userstr = self.get_secure_cookie('user')
+        if userstr:
+            user = json.loads(userstr)
+            self.write(user['token'])
         else:
             self.write("You are not auth'd")
-
-
