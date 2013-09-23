@@ -25,7 +25,7 @@ class UserAuth:
     def add_user(self, user, callback):
         internal_callback = functools.partial(self._on_pg_select,
                 user=user, callback=callback)
-        query = "SELECT email, token FROM users_t WHERE email=%s" 
+        query = "SELECT email, token, name FROM users_t WHERE email=%s" 
         self.pg.execute(query, (user['email'],), callback=internal_callback)
 
     def _on_pg_select(self, cursor, user=None, callback=None):
@@ -35,11 +35,11 @@ class UserAuth:
 
             internal_callback = functools.partial(self._on_pg_insert, 
                     callback=callback, user=user)
-            query = "INSERT INTO users_t (email, token) VALUES (%s, %s)"
-            self.pg.execute(query, (user['email'], user['token']), 
+            query = "INSERT INTO users_t (email, token, name) VALUES (%s, %s, %s)"
+            self.pg.execute(query, (user['email'], user['token'], user['name']), 
                     callback=internal_callback)
         else:
-            callback({'user': result[0], 'token': result[1]}, None)
+            callback({'email': result[0], 'token': result[1], 'name': result[2]}, None)
 
     def _on_pg_insert(self, cursor, user=None, callback=None):
         callback(user, None)
