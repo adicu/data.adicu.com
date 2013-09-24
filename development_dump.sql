@@ -37,7 +37,8 @@ SET default_with_oids = false;
 
 CREATE TABLE users_t (
     email character varying(64) NOT NULL UNIQUE,
-    token character varying(32) NOT NULL
+    token character varying(32) NOT NULL,
+    name character varying(64) NOT NULL
 );
 
 ALTER TABLE public.users_t OWNER TO adicu;
