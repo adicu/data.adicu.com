@@ -19,31 +19,31 @@ class ElasticSearchClient(object):
         self.http_client = http.AsyncHTTPClient()
 
     def index(self, dtype, docid, document, callback = None):
-        internal_callback = functools.partial(self._wrap_callback, 
+        internal_callback = functools.partial(self._wrap_callback,
                 callback = callback)
         url = self.base_url + dtype + '/' + docid
-        self.http_client.fetch(url, internal_callback, 
+        self.http_client.fetch(url, internal_callback,
                 method = 'PUT', body = json.dumps(document))
 
     def get(self, dtype, docid, callback = None):
-        internal_callback = functools.partial(self._wrap_callback, 
+        internal_callback = functools.partial(self._wrap_callback,
                 callback = callback)
         url = self.base_url + dtype + '/' + docid
         self.http_client.fetch(url, internal_callback)
 
     def delete(self, dtype, docid, callback = None):
-        internal_callback = functools.partial(self._wrap_callback, 
+        internal_callback = functools.partial(self._wrap_callback,
                 callback = callback)
         url = self.base_url + dtype + '/' + docid
-        self.http_client.fetch(url, internal_callback, 
+        self.http_client.fetch(url, internal_callback,
                 method = 'DELETE')
 
     def search(self, dtype, query, callback = None):
-        internal_callback = functools.partial(self._wrap_callback, 
+        internal_callback = functools.partial(self._wrap_callback,
                 callback = callback)
         url = self.base_url + dtype + '/_search?' + urlencode({'q': query})
         self.http_client.fetch(url, internal_callback)
-    
+
     def _wrap_callback(self, response, callback):
         if callback is None:
             return
