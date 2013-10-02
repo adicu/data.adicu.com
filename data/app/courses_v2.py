@@ -21,8 +21,8 @@ class FullTextSearchHandler(basic.BaseHandler):
         jsonp = self.get_argument("jsonp", None)
         if not query:
             return self.error(status_code=400, status_txt="MISSING_QUERY_ARGUMENTS")
-        
-        internal_callback = functools.partial(self._ft_finish, 
+
+        internal_callback = functools.partial(self._ft_finish,
                 pretty=pretty, jsonp=jsonp)
         self.es_client.search('courses', query, internal_callback)
 
