@@ -26,6 +26,8 @@ def add_bulk_item(batch, pgrow, es_index, es_type):
     source = {}
     for i, key in enumerate(COURSE_COLUMNS):
         source[key] = pgrow[i]
+    source['Term'] = pgrow[len(COURSE_COLUMNS)]
+    source['Instructor'] = pgrow[len(COURSE_COLUMNS) + 1]
 
     batch.append(action)
     batch.append(source)
@@ -37,7 +39,7 @@ def submit_batch(base_url, batch):
     resp = http.fetch(url, method = 'POST', body = body)
     resp.rethrow()
 
-def import_data(pgtable, es_type):
+def import_data():
     pg = pg_sync()
 
     es_index = os.getenv('ES_INDEX')
@@ -45,10 +47,15 @@ def import_data(pgtable, es_type):
         raise Exception("ES_INDEX variable not set")
     es_host = os.getenv('ES_HOST', 'localhost')
     es_port = os.getenv('ES_PORT', '9200')
+    es_type = 'courses'
     base_url = 'http://' + es_host + ':' + es_port + '/'
     
     batch = []
-    query = 'SELECT %s FROM %s' % (', '.join(COURSE_COLUMNS), pgtable)
+    query = ('SELECT %s, array_agg(DISTINCT s.term) AS \"term\", '
+             'array_agg(DISTINCT s.instructor1name) as \"instructor\" '
+             'FROM courses_v2_t c JOIN sections_v2_t s '
+             'ON c.course = s.course GROUP BY c.course'
+            ) % ', '.join('c.' + colname for colname in COURSE_COLUMNS)
     cursor = pg.cursor()
     cursor.execute(query)
 
@@ -63,4 +70,4 @@ def import_data(pgtable, es_type):
         submit_batch(base_url, batch)
 
 if __name__ == '__main__':
-    import_data('courses_v2_t', 'courses')
+    import_data()
