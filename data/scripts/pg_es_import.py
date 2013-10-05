@@ -33,6 +33,7 @@ def add_bulk_item(batch, pgrow, es_index, es_type):
     batch.append(source)
 
 def submit_batch(base_url, batch):
+    print("Submitting a batch")
     http = HTTPClient()
     url = base_url + '_bulk'
     body = '\n'.join(json.dumps(doc) for doc in batch)
