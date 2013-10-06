@@ -21,14 +21,11 @@ class FullTextSearchHandler(basic.BaseHandler):
         pretty = self.get_bool_argument("pretty", None)
         jsonp = self.get_argument("jsonp", None)
 
-        if not query:
-            return self.error(status_code=400, status_txt="MISSING_QUERY_ARGUMENTS")
-        if term:
-            query += '+AND+Term:' + term
+        actual_query = '%s AND Term:%s' % (query, term)
 
         internal_callback = functools.partial(self._ft_finish,
                 pretty=pretty, jsonp=jsonp)
-        self.es_client.search('courses', query, internal_callback)
+        self.es_client.search('courses', actual_query, internal_callback)
 
     def _ft_finish(self, result, pretty=None, jsonp=None):
         if 'hits' not in result:
