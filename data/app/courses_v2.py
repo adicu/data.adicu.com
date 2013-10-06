@@ -17,10 +17,14 @@ class FullTextSearchHandler(basic.BaseHandler):
     @basic.validate_token
     def get(self):
         query = self.get_argument('q')
+        term = self.get_argument('term')
         pretty = self.get_bool_argument("pretty", None)
         jsonp = self.get_argument("jsonp", None)
+
         if not query:
             return self.error(status_code=400, status_txt="MISSING_QUERY_ARGUMENTS")
+        if term:
+            query += '+AND+Term:' + term
 
         internal_callback = functools.partial(self._ft_finish,
                 pretty=pretty, jsonp=jsonp)
