@@ -10,16 +10,43 @@ import models.courses.courses_functions as model_functions
 class CoursesHandler(basic.BaseHandler):
     pgquery = lib.pg.PGQuery(model, model_functions)
 
+    config = {
+        'GET': {
+            'params': basic.pg_function_params(model_functions, {
+                'limit': {
+                    'type': 'int',
+                    'default': None
+                },
+                'page': {
+                    'type': 'int',
+                    'default': 0
+                },
+                'pretty': {
+                    'type': 'bool',
+                    'default': None
+                },
+                'jsonp': {
+                    'type': 'bool',
+                    'default': None
+                },
+            }),
+            'function': 'process_get'
+        }
+    }
+
     @tornado.web.asynchronous
     @basic.format_api_errors
     @app.basic.validate_token
-    def get(self):
+    def process_get(self, params):
         recognized_arguments = self.valid_query_arguments(model_functions)
-        queries = self.get_recognized_arguments(recognized_arguments)
-        limit = self.get_int_argument("limit", None)
-        page = self.get_int_argument("page", 0)
-        pretty = self.get_bool_argument("pretty", None)
-        jsonp = self.get_argument("jsonp", None)
+
+        limit = params['limit']
+        page = params['page']
+        pretty = params['pretty']
+        jsonp = params['jsonp']
+
+        queries = {query: params[query] for query in recognized_arguments if params[query]}
+
         if not queries:
             return self.error(status_code=400, status_txt="MISSING_QUERY_ARGUMENTS")
         internal_callback = functools.partial(self._finish, pretty=pretty, jsonp=jsonp)
