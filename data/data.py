@@ -12,6 +12,7 @@ import app.housing
 import app.auth
 import app.documentation
 
+import api.config as apiconfig
 
 class Application(tornado.web.Application):
     def __init__(self, debug=False):
@@ -29,29 +30,17 @@ class Application(tornado.web.Application):
 
         handlers = [
             (r"/$", app.main.MainHandler),
-            (r"/ping$", PingHandler),
-            (r"/courses$", app.courses.CoursesHandler),
-            (r"/courses/v2/courses$", app.courses_v2.CoursesV2Handler),
-            (r"/courses/v2/sections$", app.courses_v2.SectionsV2Handler),
-            (r"/courses/v2/search$", app.courses_v2.FullTextSearchHandler),
-            (r"/housing/rooms$", app.housing.RoomHandler),
-            (r"/housing/buildings$", app.housing.BuildingHandler),
+            ]
+        handlers = handlers + apiconfig.api_handlers()
+        handlers = handlers + [
             (r"/docs$", app.main.MainHandler),
             (r"/docs/([^/]+)", app.documentation.DocsHandler),
             (r"/login$", app.auth.LoginHandler),
             (r"/logout$", app.auth.LogoutHandler),
             (r"/profile$", app.main.ProfileHandler),
-
         ]
         debug = True
         tornado.web.Application.__init__(self, handlers, **app_settings)
-
-class PingHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.finish('OK')
-    def head(self):
-        self.finish('OK')
-
 
 if __name__ == "__main__":
     # this port should be unique system wide; all ports used should be listed in ~/services.py

@@ -16,6 +16,68 @@ class BaseHandler(tornado.web.RequestHandler, ArgumentMixin):
     http = tornado.httpclient.AsyncHTTPClient()
 
     token_auth = auth.TokenAuth()
+
+    def dispatch_func(self, method, *args, **kwargs):
+        params = dict()
+        if method in self.config:
+            verb_conf = self.config[method]
+            valid_params = verb_conf['params']
+
+            if valid_params:
+                for param in valid_params:
+                    param_config = valid_params[param]
+                    param_type = param_config['type']
+
+                    try:
+                        required = False
+                        param_default = param_config['default']
+                    except:
+                        # parameter is required
+                        required = True
+                        param_default = None
+
+                    if param_type == 'bool':
+                        get_func = self.get_bool_argument
+                    elif param_type == 'int':
+                        get_func = self.get_int_argument
+                    elif param_type == 'string':
+                        get_func = self.get_argument
+                    else:
+                        raise 'Unrecognized param type'
+
+                    if required:
+                        value = get_func(param)
+                    else:
+                        value = get_func(param, param_default)
+
+                    # store parameter
+                    params[param] = value
+
+            showhelp = self.get_bool_argument('help', None)
+
+            if showhelp:
+                jsonp = params.get('jsonp')
+                pretty = params.get('pretty')
+                return self.api_response(data=valid_params, jsonp=jsonp, pretty=pretty)
+
+            func = getattr(self, verb_conf['function'])
+            try:
+                return func(params)
+            except tornado.web.HTTPError as e:
+                return self.error(400, str(e))
+            except Exception as e:
+                return self.error(500, 'We blew something up, sorry\n' + str(e))
+        else:
+            return self.error(405, 'HTTP_%s_FORBIDDEN' % method)
+
+    def get(self, *args, **kwargs):
+        return self.dispatch_func('GET', *args, **kwargs)
+
+    def head(self, *args, **kwargs):
+        return self.dispatch_func('HEAD', *args, **kwargs)
+
+    def post(self, *args, **kwargs):
+        return self.dispatch_func('POST', *args, **kwargs)
     
     @property
     def pg(self):
@@ -43,10 +105,6 @@ class BaseHandler(tornado.web.RequestHandler, ArgumentMixin):
         logging.debug("finished %d %s %s %0.2fms", response.code, response.request.method, response.request.url, response.request_time * 1000)
         callback(response)
 
-    def post(self, *args, **kwargs):
-        # this should be overridden when a post is actually handled
-        return self.error(405, 'HTTP_GET_REQUIRED')
-    
     def error(self, status_code, status_txt, data=None, jsonp=None, pretty=None):
         """write an api error in the appropriate response format"""
         self.api_response(status_code=status_code, status_txt=status_txt,
@@ -111,3 +169,11 @@ def validate_token(method):
         self.token_auth.validate_token(api_token, callback=internal_callback)
     return wrapper
 
+def pg_function_params(model_functions, other_params):
+    return dict({
+            func: {
+                'type': 'string',
+                'default': None
+                }
+                for func in dir(model_functions) if not "__" in func
+            }, **other_params)

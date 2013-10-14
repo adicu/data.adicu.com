@@ -12,14 +12,37 @@ from models.courses_v2 import sections_functions
 class FullTextSearchHandler(basic.BaseHandler):
     es_client = es_async()
 
+    config = {
+        'GET': {
+            'params': {
+                'q': {
+                    'type': 'string',
+                },
+                'term': {
+                    'type': 'string',
+                    'default': None
+                },
+                'pretty': {
+                    'type': 'bool',
+                    'default': None
+                },
+                'jsonp': {
+                    'type': 'bool',
+                    'default': None
+                }
+            },
+            'function': 'process_get'
+        }
+    }
+
     @tornado.web.asynchronous
     @basic.format_api_errors
     @basic.validate_token
-    def get(self):
-        query = self.get_argument('q')
-        term = self.get_argument('term', None)
-        pretty = self.get_bool_argument("pretty", None)
-        jsonp = self.get_argument("jsonp", None)
+    def process_get(self, params):
+        query = params['q']
+        term = params['term']
+        pretty = params['pretty']
+        jsonp = params['jsonp']
 
         if term:
             actual_query = '%s AND Term:%s' % (query, term)
@@ -40,16 +63,43 @@ class CoursesV2Handler(basic.BaseHandler):
     course_pgquery = lib.pg.PGQuery(courses, courses_functions)
     section_pgquery = lib.pg.PGQuery(sections, sections_functions)
 
+    config = {
+        'GET': {
+            'params': basic.pg_function_params(courses_functions, {
+                'limit': {
+                    'type': 'int',
+                    'default': None
+                },
+                'page': {
+                    'type': 'int',
+                    'default': 0
+                },
+                'pretty': {
+                    'type': 'bool',
+                    'default': None
+                },
+                'jsonp': {
+                    'type': 'bool',
+                    'default': None
+                },
+            }),
+            'function': 'process_get'
+        }
+    }
+
     @tornado.web.asynchronous
     @basic.format_api_errors
     @basic.validate_token
-    def get(self):
+    def process_get(self, params):
         recognized_arguments = self.valid_query_arguments(courses_functions)
-        queries = self.get_recognized_arguments(recognized_arguments)
-        limit = self.get_int_argument("limit", None)
-        page = self.get_int_argument("page", 0)
-        pretty = self.get_bool_argument("pretty", None)
-        jsonp = self.get_argument("jsonp", None)
+
+        limit = params['limit']
+        page = params['page']
+        pretty = params['pretty']
+        jsonp = params['jsonp']
+
+        queries = {query: params[query] for query in recognized_arguments if params[query]}
+
         if not queries:
             return self.error(status_code=400, status_txt="MISSING_QUERY_ARGUMENTS")
         internal_callback = functools.partial(self._course_finish,
@@ -91,16 +141,43 @@ class CoursesV2Handler(basic.BaseHandler):
 class SectionsV2Handler(basic.BaseHandler):
     pgquery = lib.pg.PGQuery(sections, sections_functions)
 
+    config = {
+        'GET': {
+            'params': basic.pg_function_params(sections_functions, {
+                'limit': {
+                    'type': 'int',
+                    'default': None
+                },
+                'page': {
+                    'type': 'int',
+                    'default': 0
+                },
+                'pretty': {
+                    'type': 'bool',
+                    'default': None
+                },
+                'jsonp': {
+                    'type': 'bool',
+                    'default': None
+                },
+            }),
+            'function': 'process_get'
+        }
+    }
+
     @tornado.web.asynchronous
     @basic.format_api_errors
     @basic.validate_token
-    def get(self):
+    def process_get(self, params):
         recognized_arguments = self.valid_query_arguments(sections_functions)
-        queries = self.get_recognized_arguments(recognized_arguments)
-        limit = self.get_int_argument("limit", None)
-        page = self.get_int_argument("page", 0)
-        pretty = self.get_bool_argument("pretty", None)
-        jsonp = self.get_argument("jsonp", None)
+
+        limit = params['limit']
+        page = params['page']
+        pretty = params['pretty']
+        jsonp = params['jsonp']
+
+        queries = {query: params[query] for query in recognized_arguments if params[query]}
+
         if not queries:
             return self.error(status_code=400, status_txt="MISSING_QUERY_ARGUMENTS")
         internal_callback = functools.partial(self._finish, pretty=pretty, jsonp=jsonp)
