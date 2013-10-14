@@ -27,7 +27,7 @@ class RoomHandler(app.basic.BaseHandler):
                     'default': None
                 },
                 'jsonp': {
-                    'type': 'bool',
+                    'type': 'string',
                     'default': None
                 },
             }),
@@ -78,7 +78,7 @@ class BuildingHandler(app.basic.BaseHandler):
                     'default': None
                 },
                 'jsonp': {
-                    'type': 'bool',
+                    'type': 'string',
                     'default': None
                 },
             }),

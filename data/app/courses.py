@@ -26,7 +26,7 @@ class CoursesHandler(basic.BaseHandler):
                     'default': None
                 },
                 'jsonp': {
-                    'type': 'bool',
+                    'type': 'string',
                     'default': None
                 },
             }),

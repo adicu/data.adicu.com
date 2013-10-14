@@ -27,7 +27,7 @@ class FullTextSearchHandler(basic.BaseHandler):
                     'default': None
                 },
                 'jsonp': {
-                    'type': 'bool',
+                    'type': 'string',
                     'default': None
                 }
             },
@@ -79,7 +79,7 @@ class CoursesV2Handler(basic.BaseHandler):
                     'default': None
                 },
                 'jsonp': {
-                    'type': 'bool',
+                    'type': 'string',
                     'default': None
                 },
             }),
@@ -157,7 +157,7 @@ class SectionsV2Handler(basic.BaseHandler):
                     'default': None
                 },
                 'jsonp': {
-                    'type': 'bool',
+                    'type': 'string',
                     'default': None
                 },
             }),
