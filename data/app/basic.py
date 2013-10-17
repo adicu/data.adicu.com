@@ -19,6 +19,9 @@ class BaseHandler(tornado.web.RequestHandler, ArgumentMixin):
 
     def dispatch_func(self, method, *args, **kwargs):
         params = dict()
+        jsonp = params.get('jsonp')
+        pretty = params.get('pretty')
+
         if method in self.config:
             verb_conf = self.config[method]
             valid_params = verb_conf['params']
@@ -56,19 +59,19 @@ class BaseHandler(tornado.web.RequestHandler, ArgumentMixin):
             showhelp = self.get_bool_argument('help', None)
 
             if showhelp:
-                jsonp = params.get('jsonp')
-                pretty = params.get('pretty')
                 return self.api_response(data=valid_params, jsonp=jsonp, pretty=pretty)
 
             func = getattr(self, verb_conf['function'])
             try:
                 return func(params)
             except tornado.web.HTTPError as e:
-                return self.error(400, str(e))
+                return self.error(400, str(e), jsonp=jsonp, pretty=pretty)
             except Exception as e:
-                return self.error(500, 'We blew something up, sorry\n' + str(e))
+                return self.error(500, 'We blew something up, sorry\n' + str(e),
+                        jsonp=jsonp, pretty=pretty)
         else:
-            return self.error(405, 'HTTP_%s_FORBIDDEN' % method)
+            return self.error(405, 'HTTP_%s_FORBIDDEN' % method,
+                    jsonp=jsonp, pretty=pretty)
 
     def get(self, *args, **kwargs):
         return self.dispatch_func('GET', *args, **kwargs)
@@ -138,7 +141,11 @@ class BaseHandler(tornado.web.RequestHandler, ArgumentMixin):
         if valid:
             return method(self, *args, **kwargs)
         else:
-            return self.error(status_code=401, status_txt="INVALID_API_TOKEN")
+            params = args[0]
+            jsonp = params.get('jsonp')
+            pretty = params.get('pretty')
+            return self.error(status_code=401, status_txt="INVALID_API_TOKEN",
+                    jsonp=jsonp, pretty=pretty)
     def get_current_user(self):
         user_json = self.get_secure_cookie("user")
         if not user_json: return None
@@ -147,18 +154,30 @@ class BaseHandler(tornado.web.RequestHandler, ArgumentMixin):
 def format_api_errors(method):
     @functools.wraps(method)
     def wrapper(self, *args, **kwargs):
+        params = args[0]
+        jsonp = params.get('jsonp')
+        pretty = params.get('pretty')
         try:
             return method(self, *args, **kwargs)
         except tornado.web.HTTPError, e:
             logging.info(e)
             if e.log_message and e.log_message.startswith("Missing argument "):
-                return self.error(status_code=e.status_code, status_txt='MISSING_ARG_%s' % (e.log_message.split()[-1].upper()))
+                return self.error(status_code=e.status_code,
+                        status_txt='MISSING_ARG_%s' % (
+                            e.log_message.split()[-1].upper()),
+                        jsonp=jsonp, pretty=pretty)
             if e.log_message and e.log_message.startswith("Invalid argument "):
-                return self.error(status_code=e.status_code, status_txt='INVALID_ARG_%s' % (e.log_message.split()[-1].upper()))
-            return self.error(status_code=e.status_code, status_txt=e.log_message or 'UNKNOWN_ERROR')
+                return self.error(status_code=e.status_code,
+                        status_txt='INVALID_ARG_%s' % (
+                            e.log_message.split()[-1].upper()),
+                        jsonp=jsonp, pretty=pretty)
+            return self.error(status_code=e.status_code,
+                    status_txt=e.log_message or 'UNKNOWN_ERROR',
+                    jsonp=jsonp, pretty=pretty)
         except:
             logging.exception('UNKNOWN API ERROR')
-            return self.error(status_code=500, status_txt='UNKNOWN_ERROR')
+            return self.error(status_code=500, status_txt='UNKNOWN_ERROR',
+                    jsonp=jsonp, pretty=pretty)
     return wrapper
 
 def validate_token(method):
