@@ -49,7 +49,8 @@ class RoomHandler(app.basic.BaseHandler):
         queries = {query: params[query] for query in recognized_arguments if params[query]}
 
         if not queries:
-            return self.error(status_code=400, status_txt="MISSING_QUERY_ARGUMENTS")
+            return self.error(status_code=400, status_txt="MISSING_QUERY_ARGUMENTS",
+                    pretty=pretty, jsonp=jsonp)
         internal_callback = functools.partial(self._finish, pretty=pretty, jsonp=jsonp)
         self.pgquery.execute(queries, page=page, limit=limit, callback=internal_callback)
 
@@ -57,7 +58,8 @@ class RoomHandler(app.basic.BaseHandler):
         if response:
             return self.api_response(response, pretty=pretty, jsonp=jsonp)
         else:
-            return self.error(status_code=204, status_txt="NO_CONTENT_FOR_REQUEST")
+            return self.error(status_code=204, status_txt="NO_CONTENT_FOR_REQUEST",
+                    pretty=pretty, jsonp=jsonp)
 
 class BuildingHandler(app.basic.BaseHandler):
     pgquery = lib.pg.PGQuery(building, building_functions)
@@ -100,7 +102,8 @@ class BuildingHandler(app.basic.BaseHandler):
         queries = {query: params[query] for query in recognized_arguments if params[query]}
 
         if not queries:
-            return self.error(status_code=400, status_txt="MISSING_QUERY_ARGUMENTS")
+            return self.error(status_code=400, status_txt="MISSING_QUERY_ARGUMENTS"
+                    pretty=pretty, jsonp=jsonp)
         internal_callback = functools.partial(self._finish, pretty=pretty, jsonp=jsonp)
         self.pgquery.execute(queries, page=page, limit=limit, callback=internal_callback)
 

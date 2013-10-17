@@ -55,7 +55,8 @@ class FullTextSearchHandler(basic.BaseHandler):
 
     def _ft_finish(self, result, pretty=None, jsonp=None):
         if 'hits' not in result:
-            return self.error(status_code=404, status_txt="RESULTS NOT FOUND")
+            return self.error(status_code=404, status_txt="RESULTS NOT FOUND",
+                    pretty=pretty, jsonp=jsonp)
         norm_result = [hit['_source'] for hit in result['hits']['hits']]
         return self.api_response(norm_result, pretty=pretty, jsonp=jsonp)
 
@@ -101,7 +102,8 @@ class CoursesV2Handler(basic.BaseHandler):
         queries = {query: params[query] for query in recognized_arguments if params[query]}
 
         if not queries:
-            return self.error(status_code=400, status_txt="MISSING_QUERY_ARGUMENTS")
+            return self.error(status_code=400, status_txt="MISSING_QUERY_ARGUMENTS",
+                    pretty=pretty, jsonp=jsonp)
         internal_callback = functools.partial(self._course_finish,
                 pretty=pretty, jsonp=jsonp)
         self.course_pgquery.execute(queries, page=page, limit=limit,
@@ -126,8 +128,8 @@ class CoursesV2Handler(basic.BaseHandler):
                     callback=internal_callback, unlimited=True)
         else:
             return self.error(status_code=204,
-                    status_txt="NO_CONTENT_FOR_REQUEST", pretty=pretty,
-                    jsonp=jsonp)
+                    status_txt="NO_CONTENT_FOR_REQUEST",
+                    pretty=pretty, jsonp=jsonp)
 
     def _section_finish(self, response, courses=None, pretty=None, jsonp=None):
         if response:
@@ -135,8 +137,8 @@ class CoursesV2Handler(basic.BaseHandler):
             return self.api_response(response, pretty=pretty, jsonp=jsonp)
         else:
             return self.error(status_code=204,
-                    status_txt="NO_CONTENT_FOR_REQUEST", pretty=pretty,
-                    jsonp=jsonp)
+                    status_txt="NO_CONTENT_FOR_REQUEST",
+                    pretty=pretty, jsonp=jsonp)
 
 class SectionsV2Handler(basic.BaseHandler):
     pgquery = lib.pg.PGQuery(sections, sections_functions)
@@ -179,7 +181,8 @@ class SectionsV2Handler(basic.BaseHandler):
         queries = {query: params[query] for query in recognized_arguments if params[query]}
 
         if not queries:
-            return self.error(status_code=400, status_txt="MISSING_QUERY_ARGUMENTS")
+            return self.error(status_code=400, status_txt="MISSING_QUERY_ARGUMENTS",
+                    pretty=pretty, jsonp = jsonp)
         internal_callback = functools.partial(self._finish, pretty=pretty, jsonp=jsonp)
         self.pgquery.execute(queries, page=page, limit=limit, callback=internal_callback)
 
@@ -188,5 +191,5 @@ class SectionsV2Handler(basic.BaseHandler):
             return self.api_response(response, pretty=pretty, jsonp=jsonp)
         else:
             return self.error(status_code=204,
-                    status_txt="NO_CONTENT_FOR_REQUEST", pretty=pretty,
-                    jsonp=jsonp)
+                    status_txt="NO_CONTENT_FOR_REQUEST",
+                    pretty=pretty, jsonp=jsonp)
