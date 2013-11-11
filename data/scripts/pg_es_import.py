@@ -17,6 +17,12 @@ COURSE_COLUMNS = [
     "Description"
 ]
 
+SECTION_COLUMNS = [
+    'Term',
+    'Instructor',
+    'CallNumber'
+]
+
 def add_bulk_item(batch, pgrow, es_index, es_type):
     action = { 'index' : {
         "_index" : es_index,
@@ -24,10 +30,8 @@ def add_bulk_item(batch, pgrow, es_index, es_type):
         "_id" : pgrow[0]
     }}
     source = {}
-    for i, key in enumerate(COURSE_COLUMNS):
+    for i, key in enumerate(COURSE_COLUMNS + SECTION_COLUMNS):
         source[key] = pgrow[i]
-    source['Term'] = pgrow[len(COURSE_COLUMNS)]
-    source['Instructor'] = pgrow[len(COURSE_COLUMNS) + 1]
 
     batch.append(action)
     batch.append(source)
@@ -61,7 +65,8 @@ def import_data():
 
     batch = []
     query = ('SELECT %s, array_agg(DISTINCT s.term) AS \"term\", '
-             'array_agg(DISTINCT s.instructor1name) as \"instructor\" '
+             'array_agg(DISTINCT s.instructor1name) as \"instructor\", '
+             'array_agg(DISTINCT s.callnumber) as \"callnumber\" '
              'FROM courses_v2_t c JOIN sections_v2_t s '
              'ON c.course = s.course GROUP BY c.course'
             ) % ', '.join('c.' + colname for colname in COURSE_COLUMNS)
