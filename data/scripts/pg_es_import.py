@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from lib.pg import pg_sync
-from tornado.httpclient import HTTPClient
+from tornado.httpclient import HTTPClient, HTTPError
 import os
 import json
 
@@ -50,7 +50,15 @@ def import_data():
     es_port = os.getenv('ES_PORT', '9200')
     es_type = 'courses'
     base_url = 'http://' + es_host + ':' + es_port + '/'
-    
+
+    http = HTTPClient()
+    try:
+        resp = http.fetch(base_url + es_index, method = 'DELETE')
+    except HTTPError:
+        pass
+    resp = http.fetch(base_url + es_index, method = 'PUT', body='')
+    resp.rethrow()
+
     batch = []
     query = ('SELECT %s, array_agg(DISTINCT s.term) AS \"term\", '
              'array_agg(DISTINCT s.instructor1name) as \"instructor\" '
