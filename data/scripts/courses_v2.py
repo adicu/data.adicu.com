@@ -219,11 +219,21 @@ def load_data(dump_file):
             pairs = [(name, _typify(course[name], data_type)) for (name,
                     data_type) in course_schema if name not in special_fields]
             pairs += _special_treatment(course, course_schema)
+
             [columns, values] = zip(*pairs)
-            db_query = 'INSERT INTO courses_v2_t (%s) SELECT %s WHERE NOT EXISTS (SELECT course FROM courses_v2_t WHERE course = %%s);' % (
-                    ', '.join(columns), ', '.join(["%s"] * len(values)))
-            query_queue.append(values + (course['Course'][:8],))
-            if len(query_queue) == 1000:
+
+            cols = ', '.join(columns)
+            vals = ', '.join(["%s"] * len(values))
+            insert = 'INSERT INTO courses_v2_t (%s) SELECT %s' % (cols, vals)
+           
+            colmapping = ', '.join(colstr + '=%s' for colstr in columns)
+            update = 'UPDATE courses_v2_t SET %s WHERE course=%%s' % colmapping
+
+            db_query = 'WITH upsert AS (%s RETURNING *) %s WHERE NOT EXISTS (SELECT * FROM UPSERT);' % (update, insert)
+
+            query_queue.append(values + (course['Course'][:8],) + values)
+
+            if len(query_queue) >= 1000:
                 print 'submitting a batch'
                 cursor = pg.cursor()
                 cursor.executemany(db_query, query_queue)
