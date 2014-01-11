@@ -12,10 +12,9 @@ def build_where_statement(attr_converter):
     statements = []
     values = []
     for attr, val in request.args.iteritems():
-        print attr, val
         try:
-            # use LIKE for fuzzy string match
-            statements.append(attr_converter[attr]+' LIKE %s')
+            statements.append(attr_converter[attr]['converter'](
+                attr_converter[attr]['column']))
             values.append(val)  # add after the possible keyerror
         except KeyError:
             pass
@@ -33,11 +32,10 @@ def build_query(table, attr_converter):
     """
     where_statement, values = build_where_statement(attr_converter)
     query = """ SELECT DISTINCT {} FROM {} {} LIMIT {};""".format(
-        ', '.join(attr_converter.values()),
+        ', '.join([attr_converter[x]['column'] for x in attr_converter]),
         table,
         where_statement,
         PG_LIMIT,
     )
-    print query
     g.cursor.execute(query, values)
     return g.cursor.fetchall()
