@@ -1,0 +1,16 @@
+#!bin/sh
+
+export PORT=5000
+export HOST=0.0.0.0
+export DEBUG=TRUE
+
+
+# Postgres connection
+export PG_HOST=localhost
+export PG_PORT=5432
+export PG_USER=adi
+export PG_PASS=adi
+export PG_DB=data2
+export PG_LIMIT=250
+export PG_DEFAULT=20
+

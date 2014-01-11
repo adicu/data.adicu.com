@@ -20,7 +20,6 @@ include
 share
 lib/python2.7
 
-config/settings.dev
 config/settings.prod
 config/settings.test
 config/settings.local
