@@ -9,9 +9,15 @@ First, you will need to pull in all the git submodules.
   git submodule update
 
 Next, install [vagrant](http://www.vagrantup.com/).
-Once vagrant is installed, you can run `vagrant up`, and vagrant+puppet will provision the virtual
-machine for you and start the application.
+Once vagrant is installed, you can run `vagrant up`, and vagrant will provision the virtual machine for you.
+Then you can ssh into vagrant and start the app.
 You can point your browser to [http://localhost:5000](http://localhost:5000) to see the running app.
+
+  vagrant ssh
+  cd /vagrant
+  source config/settings.dev
+  cd data
+  python data.py
 
 # app structure
 

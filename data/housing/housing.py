@@ -1,5 +1,5 @@
 
-from flask import Blueprint, json, make_response
+from flask import Blueprint, json, make_response, g
 from os import path
 import sys
 
@@ -86,9 +86,19 @@ def options(attr):
             'message': 'bad_query, {} is not a valid attribute'.format(attr)
         }), 400)
     relevant_values = {attr: room_attributes[attr]}
+    pg_query, values = query.build_query(TABLE, room_attributes)
+    g.cursor.execute(pg_query, values)
+    results = g.cursor.fetchall()
     return json.dumps(query.build_query(TABLE, relevant_values))
 
 
 @housing.route('/rooms')
 def rooms():
-    return json.dumps(query.build_query(TABLE, room_attributes))
+    pg_query, values = query.build_query(TABLE, room_attributes)
+    g.cursor.execute(pg_query, values)
+    results = g.cursor.fetchall()
+    if not len(results):    # no results
+        return make_response(json.dumps({
+            'message': 'No results'
+        }), 400)
+    return json.dumps(results)
