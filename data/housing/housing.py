@@ -1,5 +1,5 @@
 
-from flask import Blueprint, json, make_response, g
+from flask import Blueprint, json, g
 from os import path
 import sys
 
@@ -9,6 +9,7 @@ if base_dir not in sys.path:
     sys.path.append(base_dir)
 from lib import query
 from lib import converters
+from errors import errors
 
 
 housing = Blueprint('housing_blueprint', __name__)
@@ -79,26 +80,32 @@ room_attributes = {
 
 
 @housing.route('/rooms/options/<string:attr>')
+@errors.catch_error
 def options(attr):
-    """ Returns all options found in the database for this attribute """
+    """
+    Returns all options found in the database for this attribute
+
+    @param attr: an attribute of the room objects
+    """
     if attr not in room_attributes:
-        return make_response(json.dumps({
-            'message': 'bad_query, {} is not a valid attribute'.format(attr)
-        }), 400)
+        raise errors.AppError('INVALID_ATTRIBUTE')
+    # strip the dictionary down to the releveant attribute
     relevant_values = {attr: room_attributes[attr]}
     pg_query, values = query.build_query(TABLE, relevant_values)
     g.cursor.execute(pg_query, values)
     results = g.cursor.fetchall()
+    if not len(results):    # no results, shouldn't be called
+        raise errors.AppError('NO_RESULTS')
     return json.dumps(results)
 
 
 @housing.route('/rooms')
+@errors.catch_error
 def rooms():
+    """ Returns all rooms that match the given querystring """
     pg_query, values = query.build_query(TABLE, room_attributes)
     g.cursor.execute(pg_query, values)
     results = g.cursor.fetchall()
     if not len(results):    # no results
-        return make_response(json.dumps({
-            'message': 'No results'
-        }), 400)
+        raise errors.AppError('NO_RESULTS')
     return json.dumps(results)
