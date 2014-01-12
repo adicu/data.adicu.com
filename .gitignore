@@ -8,7 +8,6 @@ lib-cov
 *.gz
 *.pyc
 *.swp
-*.json
 .DS_Store
 .vagrant
 

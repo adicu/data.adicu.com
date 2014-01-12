@@ -1,0 +1,22 @@
+{
+  "DEFAULT": {
+      "status": 400,
+      "message": "there was an error processing your request"
+  },
+  "DATABASE_ERROR": {
+      "status": 500,
+      "message": "error with our database"
+  },
+  "SERVER_ERROR": {
+      "status": 500,
+      "message": "error with our server"
+  },
+  "NO_RESULTS": {
+      "status": 400,
+      "message": "no results were found"
+  },
+  "INVALID_ATTRIBUTE": {
+      "status": 400,
+      "message": "that attribute is invalid"
+  }
+}
