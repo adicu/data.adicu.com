@@ -1,26 +1,34 @@
 {
-  "DEFAULT": {
-      "status": 400,
-      "message": "there was an error processing your request"
-  },
-  "PAGE/ENDPOINT_NOT_FOUND": {
-      "status": 404,
-      "message": "we could not find the endpoint you were looking for"
-  },
-  "DATABASE_ERROR": {
-      "status": 500,
-      "message": "error with our database"
-  },
-  "SERVER_ERROR": {
-      "status": 500,
-      "message": "error with our server"
-  },
-  "NO_RESULTS": {
-      "status": 400,
-      "message": "no results were found"
-  },
-  "INVALID_ATTRIBUTE": {
-      "status": 400,
-      "message": "that attribute is invalid"
-  }
+    "DEFAULT": {
+        "status": 400,
+        "message": "there was an error processing your request",
+        "default_options": {}
+    },
+    "PAGE/ENDPOINT_NOT_FOUND": {
+        "status": 404,
+        "message": "we could not find the endpoint you were looking for",
+        "default_options": {}
+    },
+    "DATABASE_ERROR": {
+        "status": 500,
+        "message": "error with our database",
+        "default_options": {}
+    },
+    "SERVER_ERROR": {
+        "status": 500,
+        "message": "error with our server",
+        "default_options": {}
+    },
+    "NO_RESULTS": {
+        "status": 400,
+        "message": "no results were found",
+        "default_options": {}
+    },
+    "INVALID_ATTRIBUTE": {
+        "status": 400,
+        "message": "{attr_name} is an invalid attribute",
+        "default_options": {
+            "attr_name": "Your parameter"
+        }
+    }
 }

@@ -1,6 +1,13 @@
 
+from os import environ, path
+import sys
+# add the parent directory for in-project imports
+base_dir = path.abspath(path.join(path.dirname(path.abspath(__file__)), '..'))
+if base_dir not in sys.path:
+    sys.path.append(base_dir)
+
+from errors import errors
 from flask import request
-from os import environ
 
 PG_LIMIT = environ['PG_LIMIT']
 
@@ -20,8 +27,7 @@ def build_where_statement(attr_converter):
                 attr_converter[attr]['column']))
             values.append(val)  # add after the possible keyerror
         except KeyError:
-            # TODO: handle invalid params somehow or continue to ignore
-            pass
+            raise errors.AppError('INVALID_ATTRIBUTE', attr_name=attr)
     if statements:
         return 'WHERE '+' AND '.join(statements), values
     return '', []

@@ -11,40 +11,37 @@ with open(err_file) as f:
 class AppError(Exception):
     """ A error class for defined app errors. """
 
-    def __init__(self, name):
+    def __init__(self, name, **kwargs):
         self.name = name
+        if kwargs:
+            self.options = kwargs
 
 
-def handle_app_error(error):
+def handle_app_error(err):
     """ Catches AppError when thrown and forms the defined err to responsed """
-    return make_error(err=getattr(error, 'name', DEFAULT_ERROR))
+    return make_error(err)
 
 
-def handle_404_error(error):
+def handle_404_error(err):
     """ Catches 404 errors and forms the defined err to responsed """
-    return make_error(err="PAGE/ENDPOINT_NOT_FOUND")
+    return make_error(AppError("PAGE/ENDPOINT_NOT_FOUND"))
 
 
-def make_error(err='DEFAULT'):
-    """ Forms a response object based off of the passed in error name. """
-    json_data, code = construct_err(err_name=err)
-    return make_response(json_data, code)
+def make_error(err):
+    """ Forms a response object based off of the passed in error.
 
-
-def construct_err(err_name='DEFAULT'):
+    @param err: error that usually has a definition in definitions.json
+    @return: flask response object
     """
-    Forms a json object based off of the passed in error name.
+    err_name = getattr(err, 'name', DEFAULT_ERROR)
 
-    @param err_name: name of the error that should match an error defined in
-        definitions.json
-    @return: (json, status_code)
-    """
     if err_name not in error_definitions:
         err_name = 'DEFAULT'
-
     error_obj = error_definitions[err_name]
+    err_options = getattr(err, 'options', error_obj['default_options'])
 
-    return json.dumps({
-        'message': error_obj['message'],
+    return make_response(json.dumps({
+        # formats error message with options
+        'message': error_obj['message'].format(**err_options),
         'status': error_obj['status']
-    }), error_obj['status']
+    }), error_obj['status'])

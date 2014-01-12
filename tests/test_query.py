@@ -2,6 +2,7 @@
 import unittest
 import flask
 from data.lib import query, converters
+from data.errors import errors
 
 """ Attribute converter for testing purposes """
 attr_converter = {
@@ -27,12 +28,12 @@ class TestQueryBuilder(unittest.TestCase):
                          'WHERE test_column LIKE %s AND foo_column LIKE %s')
         self.assertEqual(values, ['foo', 'bar'])
 
-    def test_build_where_statement_one_invalid_attr(self):
-        """ test that statement is correct with 1 valid, 1 invalid params """
-        statement, values = self.__test_where_statement_builder(
-            '/?test=foo&wrong=bar')
-        self.assertEqual(statement, 'WHERE test_column LIKE %s')
-        self.assertEqual(values, ['foo'])
+    def test_build_where_statement_fails_one_invalid_attr(self):
+        """ test that builder fails with with 1 valid, 1 invalid params """
+        with self.assertRaises(Exception) as err_context:
+            self.__test_where_statement_builder('/?test=foo&wrong=bar')
+        self.assertEqual(err_context.exception.name, 'INVALID_ATTRIBUTE')
+        self.assertEqual(err_context.exception.options, {'attr_name': 'wrong'})
 
     def test_build_where_statement_no_query(self):
         """ test that statement is correct with no querystring """
@@ -60,19 +61,12 @@ class TestQueryBuilder(unittest.TestCase):
         self.assertEqual(query, expected_query)
         self.assertEqual(values, ['foo', 'bar'])
 
-    def test_build_query_one_invalid(self):
-        """ test that query is correct with 1 valid, 1 invalid attributes """
-        query, values = self.__test_query_builder(
-            '/?test=foo&wrong=bar', 0)
-
-        expected_query = (
-            'SELECT DISTINCT test_column, foo_column '
-            'FROM test_table '
-            'WHERE test_column LIKE %s '
-            'LIMIT 250 '
-            'OFFSET 0;')
-        self.assertEqual(query, expected_query)
-        self.assertEqual(values, ['foo'])
+    def test_build_query_fails_one_invalid(self):
+        """ test that query fails to build with 1 valid, 1 invalid attr """
+        with self.assertRaises(Exception) as err_context:
+            self.__test_query_builder('/?test=foo&wrong=bar', 0)
+        self.assertEqual(err_context.exception.name, 'INVALID_ATTRIBUTE')
+        self.assertEqual(err_context.exception.options, {'attr_name': 'wrong'})
 
     def test_build_query_no_attr(self):
         """ test that query is correct with no querystring attributes """
