@@ -1,14 +1,8 @@
 
-from os import path
-import sys
-base_dir = path.abspath(path.join(path.dirname(path.abspath(__file__)), '..'))
-if base_dir not in sys.path:
-    sys.path.append(base_dir)
-
 import unittest
 import json
-from data import app
-from errors import errors
+from data import data
+from data.errors import errors
 
 
 class TestingTemplate(unittest.TestCase):
@@ -16,7 +10,7 @@ class TestingTemplate(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         """ Instantiates a test instance of the app before each test """
-        self.app = app.test_client()
+        self.app = data.app.test_client()
 
     def check_error(self, resp, error_name):
         """ Tests that the resp is equal to the specified error """

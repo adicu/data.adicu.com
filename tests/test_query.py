@@ -1,13 +1,7 @@
 
-from os import path
-import sys
-base_dir = path.abspath(path.join(path.dirname(path.abspath(__file__)), '..'))
-if base_dir not in sys.path:
-    sys.path.append(base_dir)
-
 import unittest
 import flask
-from lib import query, converters
+from data.lib import query, converters
 
 """ Attribute converter for testing purposes """
 attr_converter = {
