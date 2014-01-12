@@ -3,6 +3,7 @@ from functools import wraps
 from flask import make_response, json
 from os import path
 
+DEFAULT_ERROR = 'SERVER_ERROR'
 err_file = '{}/definitions.json'.format(path.dirname(path.abspath(__file__)))
 with open(err_file) as f:
     error_definitions = json.load(f)
@@ -30,7 +31,7 @@ def catch_error(f):
         except AppError as e:
             return make_error(err=e.name)
         except Exception:
-            return make_error(err='SERVER_ERROR')
+            return make_error(err=DEFAULT_ERROR)
     return decorated_endpoint
 
 

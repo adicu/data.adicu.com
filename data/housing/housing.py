@@ -1,5 +1,5 @@
 
-from flask import Blueprint, json, g
+from flask import Blueprint, json, g, make_response
 from os import path
 import sys
 
@@ -96,16 +96,23 @@ def options(attr):
     results = g.cursor.fetchall()
     if not len(results):    # no results, shouldn't be called
         raise errors.AppError('NO_RESULTS')
-    return json.dumps(results)
+    return make_response(json.dumps({
+        'results': results,
+        'status': 200
+    }), 200)
 
 
 @housing.route('/rooms')
+@housing.route('/rooms/<int:page>')
 @errors.catch_error
-def rooms():
+def rooms(page=0):
     """ Returns all rooms that match the given querystring """
-    pg_query, values = query.build_query(TABLE, room_attributes)
+    pg_query, values = query.build_query(TABLE, room_attributes, page=page)
     g.cursor.execute(pg_query, values)
     results = g.cursor.fetchall()
     if not len(results):    # no results
         raise errors.AppError('NO_RESULTS')
-    return json.dumps(results)
+    return make_response(json.dumps({
+        'results': results,
+        'status': 200
+    }), 200)
