@@ -10,7 +10,7 @@ import unittest
 from errors import errors
 
 
-class TestErrorGenerator(unittest.TestCase):
+class TestErrors(unittest.TestCase):
 
     def test_generator_default(self):
         """ test that the generator correctly creates a default error """
@@ -45,7 +45,7 @@ class TestErrorGenerator(unittest.TestCase):
         self.__check_error(resp, errors.DEFAULT_ERROR)
 
     def test_catch_error_decorator_not_used(self):
-        """ test that the decorator correctly catches """
+        """ test that the decorator doesn't interfere with valid requests """
         test_app = app.test_client()
 
         # test that nothing is interfered with valid requests
