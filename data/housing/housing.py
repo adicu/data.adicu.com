@@ -86,10 +86,10 @@ def options(attr):
             'message': 'bad_query, {} is not a valid attribute'.format(attr)
         }), 400)
     relevant_values = {attr: room_attributes[attr]}
-    pg_query, values = query.build_query(TABLE, room_attributes)
+    pg_query, values = query.build_query(TABLE, relevant_values)
     g.cursor.execute(pg_query, values)
     results = g.cursor.fetchall()
-    return json.dumps(query.build_query(TABLE, relevant_values))
+    return json.dumps(results)
 
 
 @housing.route('/rooms')

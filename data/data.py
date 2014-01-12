@@ -3,6 +3,7 @@
 from flask import Flask, g
 import psycopg2
 import psycopg2.pool
+import psycopg2.extras
 
 # blueprint imports
 from housing import housing_blueprint
@@ -25,7 +26,8 @@ pg_pool = psycopg2.pool.SimpleConnectionPool(
 def get_connections():
     """ Get a connection from the Postgres connection pool. """
     g.conn = pg_pool.getconn()
-    g.cursor = g.conn.cursor()
+    # return python dictionaries from the cursor
+    g.cursor = g.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 
 
 @app.teardown_request
@@ -37,7 +39,6 @@ def return_connections(*args, **kwargs):
 
 """ Housing blueprint """
 app.register_blueprint(housing_blueprint, url_prefix='/housing')
-
 
 if __name__ == '__main__':
     app.run(host=app.config['HOST'])
