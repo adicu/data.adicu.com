@@ -23,7 +23,7 @@ def build_where_statement(attr_converter):
             # TODO: handle invalid params somehow or continue to ignore
             pass
     if statements:
-        return ' WHERE '+' AND '.join(statements), values
+        return 'WHERE '+' AND '.join(statements), values
     return '', []
 
 
@@ -37,7 +37,7 @@ def build_query(table, attr_converter, page=0):
         > PG_LIMIT results)
     """
     where_statement, values = build_where_statement(attr_converter)
-    query = """ SELECT DISTINCT {} FROM {} {} LIMIT {} OFFSET {};""".format(
+    query = "SELECT DISTINCT {} FROM {} {} LIMIT {} OFFSET {};".format(
         ', '.join([attr_converter[x]['column'] for x in attr_converter]),
         table,                  # db table
         where_statement,        # various statements to narrow search results
