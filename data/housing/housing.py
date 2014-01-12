@@ -80,7 +80,6 @@ room_attributes = {
 
 
 @housing.route('/rooms/options/<string:attr>')
-@errors.catch_error
 def options(attr):
     """
     Returns all options found in the database for this attribute
@@ -104,7 +103,6 @@ def options(attr):
 
 @housing.route('/rooms')
 @housing.route('/rooms/<int:page>')
-@errors.catch_error
 def rooms(page=0):
     """ Returns all rooms that match the given querystring """
     pg_query, values = query.build_query(TABLE, room_attributes, page=page)

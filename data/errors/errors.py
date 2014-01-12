@@ -1,5 +1,4 @@
 
-from functools import wraps
 from flask import make_response, json
 from os import path
 
@@ -16,23 +15,14 @@ class AppError(Exception):
         self.name = name
 
 
-def catch_error(f):
-    """
-    Meant to wrap wrap flask routes and listen for app errors.
+def handle_app_error(error):
+    """ Catches AppError when thrown and forms the defined err to responsed """
+    return make_error(err=getattr(error, 'name', DEFAULT_ERROR))
 
-    Catches AppError when thrown and forms the defined error for the response.
-    If the exception thrown is not defined as an AppError, a 500 error is
-    returned.
-    """
-    @wraps(f)
-    def decorated_endpoint(*args, **kwargs):
-        try:
-            return f(*args, **kwargs)
-        except AppError as e:
-            return make_error(err=e.name)
-        except Exception:
-            return make_error(err=DEFAULT_ERROR)
-    return decorated_endpoint
+
+def handle_404_error(error):
+    """ Catches 404 errors and forms the defined err to responsed """
+    return make_error(err="PAGE/ENDPOINT_NOT_FOUND")
 
 
 def make_error(err='DEFAULT'):

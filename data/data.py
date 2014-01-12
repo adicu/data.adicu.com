@@ -5,6 +5,8 @@ import psycopg2
 import psycopg2.pool
 import psycopg2.extras
 
+
+from errors import errors
 # blueprint imports
 from housing import housing_blueprint
 
@@ -37,8 +39,20 @@ def return_connections(*args, **kwargs):
     pg_pool.putconn(g.conn)
 
 
+# register error handlers
+app.errorhandler(errors.AppError)(errors.handle_app_error)
+app.errorhandler(404)(errors.handle_404_error)
+app.errorhandler(Exception)(errors.handle_app_error)
+
+
 """ Housing blueprint """
 app.register_blueprint(housing_blueprint, url_prefix='/housing')
+
+
+@app.route('/')
+def home():
+    with open('static/index.html') as f:
+        return f.read()
 
 if __name__ == '__main__':
     app.run(host=app.config['HOST'])

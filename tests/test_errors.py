@@ -62,18 +62,20 @@ app = Flask(__name__)
 
 
 @app.route('/apperror')
-@errors.catch_error
 def apperror_raiser():
     raise errors.AppError('DEFAULT')
 
 
 @app.route('/exception')
-@errors.catch_error
 def exception_raiser():
     raise Exception('DEFAULT')
 
 
 @app.route('/safe')
-@errors.catch_error
 def hello():
     return 'hello world'
+
+# register error handlers
+app.errorhandler(errors.AppError)(errors.handle_app_error)
+app.errorhandler(404)(errors.handle_404_error)
+app.errorhandler(Exception)(errors.handle_app_error)

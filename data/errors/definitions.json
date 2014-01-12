@@ -3,6 +3,10 @@
       "status": 400,
       "message": "there was an error processing your request"
   },
+  "PAGE/ENDPOINT_NOT_FOUND": {
+      "status": 404,
+      "message": "we could not find the endpoint you were looking for"
+  },
   "DATABASE_ERROR": {
       "status": 500,
       "message": "error with our database"
