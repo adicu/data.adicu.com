@@ -12,15 +12,19 @@ First, you will need to pull in all the git submodules.
 
 Next, install [vagrant](http://www.vagrantup.com/).
 Once vagrant is installed, you can run `vagrant up`, and vagrant will provision the virtual machine for you.
-Then you can ssh into vagrant and start the app.
+The app will run automatically under [Supervisor](http://supervisord.org/).
 You can point your browser to [http://localhost:5000](http://localhost:5000) to see the running app.
 
-  vagrant ssh
-  cd /vagrant
-  source config/settings.dev
-  cd data
-  python data.py
+If anything is wrong, the following commands will help you diagnose the app:
 
+    vagrant ssh
+    sudo service supervisor stop
+    cd /vagrant
+    source config/settings.dev
+    cd data
+    python data.py
+
+Take a look at the logs, in `/var/log/supervisor` as well.
 
 ##Importing Dev Data
 

@@ -4,13 +4,10 @@
 trap : SIGTERM
 
 # set up the environmental variables
+source $1
 # supervisord will not do this for us
-USER=$(id -un)
-HOME=/home/$USER
 
 # start the python program in the background
-source $HOME/venv/bin/activate
-source $1
 python data/data.py &
 FIND_PID=$!
 
