@@ -1,8 +1,10 @@
 
 
 #`/housing/rooms< querystring >`
+#`/housing/rooms/< page >< querystring >`
 
 This endpoint allows you to get a subset of the rooms available in Columbia housing.
+Also allows you to query for pages when they encounter the postgres limit.
 
 ###Query String parameters
 
@@ -22,6 +24,7 @@ This endpoint allows you to get a subset of the rooms available in Columbia hous
   'lottery_number'
 
 
+#`/housing/rooms/options/< parameter >`
 #`/housing/rooms/options/< parameter >`
 
 This endpoint returns all possible values for a given parameter.
