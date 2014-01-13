@@ -1,0 +1,30 @@
+language: python
+
+python:
+    - "2.7"
+
+env:
+  global:
+    - PORT=5000
+    - HOST=0.0.0.0
+    - DEBUG=TRUE
+    - PG_HOST=127.0.0.1
+    - PG_PORT=5432
+    - PG_USER=adi
+    - PG_PASSWORD=adi
+    - PG_DB=travis_test
+    - PG_LIMIT=250
+    - PG_DEFAULT=20
+
+install: "pip install -r config/requirements.txt"
+
+services: postgresql
+
+before_script:
+    - psql -c "CREATE USER adi WITH PASSWORD 'adi';" -U postgres
+    - psql -c 'CREATE DATABASE travis_test WITH OWNER "adi";' -U postgres
+    - psql travis_test -c 'GRANT CONNECT ON DATABASE travis_test TO adi;' -U postgres
+    - psql travis_test < dev/dev_dump.sql -U postgres
+
+script:
+    - cd data && nosetests -sv tests/

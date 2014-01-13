@@ -1,56 +1,58 @@
-import tornado.options
-import tornado.httpserver
-import tornado.ioloop
 
-import logging
-import os
+# library imports
+from flask import Flask, g
+import psycopg2
+import psycopg2.pool
+import psycopg2.extras
 
-import app.main
-import app.courses
-import app.courses_v2
-import app.housing
-import app.auth
-import app.documentation
 
-import api.config as apiconfig
+from errors import errors
+# blueprint imports
+from housing import housing_blueprint
 
-class Application(tornado.web.Application):
-    def __init__(self, debug=False):
-        logging.getLogger().setLevel(logging.DEBUG)
+app = Flask(__name__)
+app.config.from_object('config.flask_config')
 
-        app_settings = {
-            "debug": debug,
-            "xsrf_cookies" : False,
-            "cookie_secret" : "32oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o/Vo=",
-            "template_path" : os.path.join(os.path.dirname(__file__), "templates"),
-            "static_path" : os.path.join(os.path.dirname(__file__), "static"),
-            "autoescape" : None,
-            "login_url" : "http://data.adicu.com/login",
-        }
+pg_pool = psycopg2.pool.SimpleConnectionPool(
+    5,      # min connections
+    20,     # max connections
+    database=app.config['PG_DB'],
+    user=app.config['PG_USER'],
+    password=app.config['PG_PASSWORD'],
+    host=app.config['PG_HOST'],
+    port=app.config['PG_PORT'],
+)
 
-        handlers = [
-            (r"/$", app.main.MainHandler),
-            ]
-        handlers = handlers + apiconfig.api_handlers()
-        handlers = handlers + [
-            (r"/docs$", app.main.MainHandler),
-            (r"/docs/([^/]+)", app.documentation.DocsHandler),
-            (r"/login$", app.auth.LoginHandler),
-            (r"/logout$", app.auth.LogoutHandler),
-            (r"/profile$", app.main.ProfileHandler),
-        ]
-        debug = True
-        tornado.web.Application.__init__(self, handlers, **app_settings)
 
-if __name__ == "__main__":
-    # this port should be unique system wide; all ports used should be listed in ~/services.py
-    tornado.options.define("port", default=int(os.environ.get("PORT", "8080")), 
-                            help="Port to listen on", type=int)
-    tornado.options.define("debug", default=bool(os.environ.get("DEBUG")), 
-                            help="Put app in debug mode", type=bool)
-    tornado.options.parse_command_line()
-    logging.info("starting app on 127.0.0.1:%d" % tornado.options.options.port)
-    application = Application(debug=tornado.options.options.debug)
-    http_server = tornado.httpserver.HTTPServer(request_callback=application)
-    http_server.listen(tornado.options.options.port, address="127.0.0.1")
-    tornado.ioloop.IOLoop.instance().start()
+@app.before_request
+def get_connections():
+    """ Get a connection from the Postgres connection pool. """
+    g.conn = pg_pool.getconn()
+    # return python dictionaries from the cursor
+    g.cursor = g.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+
+
+@app.teardown_request
+def return_connections(*args, **kwargs):
+    """ Return the connection to the Postgres connection pool. """
+    g.cursor.close()
+    pg_pool.putconn(g.conn)
+
+
+# register error handlers
+app.register_error_handler(errors.AppError, errors.handle_app_error)
+app.register_error_handler(404, errors.handle_404_error)
+app.register_error_handler(Exception, errors.handle_app_error)
+
+
+""" Housing blueprint """
+app.register_blueprint(housing_blueprint, url_prefix='/housing')
+
+
+@app.route('/')
+def home():
+    with open('static/index.html') as f:
+        return f.read()
+
+if __name__ == '__main__':
+    app.run(host=app.config['HOST'])

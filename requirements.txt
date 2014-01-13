@@ -1,5 +1,0 @@
-Momoko==0.5.0
-psycopg2==2.4.6
-simplejson==3.1.0
-tornado==2.4.1
-lxml==3.1.0

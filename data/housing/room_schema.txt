@@ -1,0 +1,18 @@
+                   Table "public.housing_t"
+          Column          |         Type          | Modifiers
+--------------------------+-----------------------+-----------
+ roomlocationarea         | character varying(32) |
+ residentialarea          | character varying(32) |
+ roomlocation             | character varying(32) |
+ roomlocationsection      | character varying(32) |
+ roomlocationfloorsuite   | character varying(32) |
+ issuite                  | boolean               |
+ floorsuitewebdescription | character varying(32) |
+ room                     | character varying(32) |
+ roomarea                 | integer               |
+ roomspace                | character varying(32) |
+ roomtype                 | character varying(32) |
+ ay1213rsstatus           | character varying(32) |
+ pointvalue               | double precision      |
+ lotterynumber            | integer               |
+

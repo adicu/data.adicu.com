@@ -1,0 +1,15 @@
+           Table "public.housing_amenities_t"
+       Column        |         Type          | Modifiers
+---------------------+-----------------------+-----------
+ building            | character varying(32) |
+ apartmentstyle      | boolean               |
+ suitestyle          | boolean               |
+ corridorstyle       | boolean               |
+ privatebathroom     | boolean               |
+ semiprivatebathroom | boolean               |
+ sharedbathroom      | boolean               |
+ privatekitchen      | boolean               |
+ semiprivatekitchen  | boolean               |
+ sharedkitchen       | boolean               |
+ lounge              | character varying(32) |
+
