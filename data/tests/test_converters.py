@@ -1,6 +1,6 @@
 
 import unittest
-from data.lib import converters
+from lib import converters
 
 
 class TestConverters(unittest.TestCase):

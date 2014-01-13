@@ -27,4 +27,4 @@ before_script:
     - psql travis_test < dev/dev_dump.sql -U postgres
 
 script:
-    - nosetests -sv tests/
+    - cd data && nosetests -sv tests/

@@ -39,10 +39,11 @@ def return_connections(*args, **kwargs):
     pg_pool.putconn(g.conn)
 
 
+print type(errors.AppError('DEFAULT'))
 # register error handlers
-app.errorhandler(errors.AppError)(errors.handle_app_error)
-app.errorhandler(404)(errors.handle_404_error)
-app.errorhandler(Exception)(errors.handle_app_error)
+app.register_error_handler(errors.AppError, errors.handle_app_error)
+app.register_error_handler(404, errors.handle_404_error)
+app.register_error_handler(Exception, errors.handle_app_error)
 
 
 """ Housing blueprint """

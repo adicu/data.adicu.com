@@ -18,7 +18,7 @@ class TestHousingRoutes(template.TestingTemplate):
         resp = self.app.get('/housing/rooms/5?is_suite=false&point_value=10')
         self.check_error(resp, 'NO_RESULTS')
 
-        resp = self.app.get('/housing/rooms/10')
+        resp = self.app.get('/housing/rooms/100')
         self.check_error(resp, 'NO_RESULTS')
 
     def test_rooms_options_valid_attribute(self):

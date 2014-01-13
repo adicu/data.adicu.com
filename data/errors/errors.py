@@ -12,36 +12,46 @@ class AppError(Exception):
     """ A error class for defined app errors. """
 
     def __init__(self, name, **kwargs):
+        """
+        Define the error message and status
+
+        @param name: error name that should match a definition in
+            definitions.json, if a match is not found the default error will
+            be returned.
+        @param kwargs: named arguments are used in formatting error messages,
+            if no arguments are passed the default arguments will be used.
+        """
         self.name = name
+        if self.name not in error_definitions:
+            self.name = 'DEFAULT'
+        error_obj = error_definitions[self.name]
         if kwargs:
-            self.options = kwargs
+            msg_options = kwargs
+        else:
+            msg_options = error_obj['default_options']
+
+        self.message = error_obj['message'].format(**msg_options)
+        self.status = error_obj['status']
+
+    def response(self):
+        """
+        Builds a flask response object for the error
+
+        @return: json w/ ['message', 'status'] & http status code
+        """
+        return make_response(json.dumps({
+            'message': self.message,
+            'status': self.status
+        }), self.status)
 
 
 def handle_app_error(err):
     """ Catches AppError when thrown and forms the defined err to responsed """
-    return make_error(err)
+    if not isinstance(err, AppError):  # only called w/ regular Exceptions
+        err = AppError(DEFAULT_ERROR)
+    return err.response()
 
 
 def handle_404_error(err):
     """ Catches 404 errors and forms the defined err to responsed """
-    return make_error(AppError("PAGE/ENDPOINT_NOT_FOUND"))
-
-
-def make_error(err):
-    """ Forms a response object based off of the passed in error.
-
-    @param err: error that usually has a definition in definitions.json
-    @return: flask response object
-    """
-    err_name = getattr(err, 'name', DEFAULT_ERROR)
-
-    if err_name not in error_definitions:
-        err_name = 'DEFAULT'
-    error_obj = error_definitions[err_name]
-    err_options = getattr(err, 'options', error_obj['default_options'])
-
-    return make_response(json.dumps({
-        # formats error message with options
-        'message': error_obj['message'].format(**err_options),
-        'status': error_obj['status']
-    }), error_obj['status'])
+    return AppError("PAGE/ENDPOINT_NOT_FOUND").response()

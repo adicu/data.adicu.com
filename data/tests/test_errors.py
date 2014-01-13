@@ -1,6 +1,13 @@
 
+# add the parent directory for in-project imports
+from os import path
+import sys
+base_dir = path.abspath(path.join(path.dirname(path.abspath(__file__)), '..'))
+if base_dir not in sys.path:
+    sys.path.append(base_dir)
+
 import flask
-from data.errors import errors
+from errors import errors
 import template
 
 
@@ -8,18 +15,18 @@ class TestErrors(template.TestingTemplate):
 
     def test_generator_default(self):
         """ test that the generator correctly creates a default error """
-        err_resp = self.__make_error(errors.AppError('DEFAULT'))
+        err_resp = self.__make_error('DEFAULT')
         self.check_error(err_resp, 'DEFAULT')
 
     def test_generator_name_fail(self):
         """ test that the generator correctly defaults with a bad err name """
-        err_resp = self.__make_error(errors.AppError('IMAGINARY_ERROR'))
+        err_resp = self.__make_error('IMAGINARY_ERROR')
         self.check_error(err_resp, 'DEFAULT')
 
     def test_generator_success(self):
         """ test that the generator correctly creates an error """
         test_error = 'NO_RESULTS'
-        err_resp = self.__make_error(errors.AppError(test_error))
+        err_resp = self.__make_error(test_error)
         self.check_error(err_resp, test_error)
 
     def test_catch_error_used(self):
@@ -60,11 +67,11 @@ class TestErrors(template.TestingTemplate):
         resp = test_app.get('/safe')
         self.assertEqual('hello world', resp.data)
 
-    def __make_error(self, err):
+    def __make_error(self, err_name):
         """ Constructs an error in the request_context """
         app = flask.Flask(__name__)
         with app.test_request_context('/'):
-            return errors.make_error(err)
+            return errors.AppError(err_name).response()
 
 
 """ Test app for the purpose of testing the decorator """
@@ -89,7 +96,7 @@ def apperror_raiser():
 
 @app.route('/exception')
 def exception_raiser():
-    raise Exception('DEFAULT')
+    raise Exception()
 
 
 @app.route('/safe')

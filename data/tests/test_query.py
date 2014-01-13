@@ -1,8 +1,14 @@
 
+# add the parent directory for in-project imports
+from os import path
+import sys
+base_dir = path.abspath(path.join(path.dirname(path.abspath(__file__)), '..'))
+if base_dir not in sys.path:
+    sys.path.append(base_dir)
+
 import unittest
 import flask
-from data.lib import query, converters
-from data.errors import errors
+from lib import query, converters
 
 """ Attribute converter for testing purposes """
 attr_converter = {
@@ -33,7 +39,6 @@ class TestQueryBuilder(unittest.TestCase):
         with self.assertRaises(Exception) as err_context:
             self.__test_where_statement_builder('/?test=foo&wrong=bar')
         self.assertEqual(err_context.exception.name, 'INVALID_ATTRIBUTE')
-        self.assertEqual(err_context.exception.options, {'attr_name': 'wrong'})
 
     def test_build_where_statement_no_query(self):
         """ test that statement is correct with no querystring """
@@ -66,7 +71,6 @@ class TestQueryBuilder(unittest.TestCase):
         with self.assertRaises(Exception) as err_context:
             self.__test_query_builder('/?test=foo&wrong=bar', 0)
         self.assertEqual(err_context.exception.name, 'INVALID_ATTRIBUTE')
-        self.assertEqual(err_context.exception.options, {'attr_name': 'wrong'})
 
     def test_build_query_no_attr(self):
         """ test that query is correct with no querystring attributes """
