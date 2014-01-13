@@ -58,7 +58,7 @@ class TestQueryBuilder(unittest.TestCase):
             '/?test=foo&foo=bar', 0)
 
         expected_query = (
-            'SELECT DISTINCT test_column, foo_column '
+            'SELECT DISTINCT test_column AS test, foo_column AS foo '
             'FROM test_table '
             'WHERE test_column LIKE %s AND foo_column LIKE %s '
             'LIMIT 250 '
@@ -77,7 +77,7 @@ class TestQueryBuilder(unittest.TestCase):
         query, values = self.__test_query_builder('/', 0)
 
         expected_query = (
-            'SELECT DISTINCT test_column, foo_column '
+            'SELECT DISTINCT test_column AS test, foo_column AS foo '
             'FROM test_table '
             ' '
             'LIMIT 250 '
@@ -90,7 +90,7 @@ class TestQueryBuilder(unittest.TestCase):
         query, values = self.__test_query_builder('/', 1)
 
         expected_query = (
-            'SELECT DISTINCT test_column, foo_column '
+            'SELECT DISTINCT test_column AS test, foo_column AS foo '
             'FROM test_table '
             ' '
             'LIMIT 250 '
@@ -98,8 +98,22 @@ class TestQueryBuilder(unittest.TestCase):
         self.assertEqual(query, expected_query)
         self.assertEqual(values, [])
 
-    def __test_query_builder(self, querystring, page):
+    def test_build_query_for_options(self):
+        """ test that the query is built correctly for options queries """
+        # create single option attribute converter
+        attr_conv = {'test': attr_converter['test']}
+        query, values = self.__test_query_builder('/', 0, ac=attr_conv)
+
+        expected_query = (
+            'SELECT DISTINCT test_column AS test '
+            'FROM test_table  '
+            'LIMIT 250 '
+            'OFFSET 0;')
+        self.assertEqual(query, expected_query)
+        self.assertEqual(values, [])
+
+    def __test_query_builder(self, querystring, page, ac=attr_converter):
         """ mocks a flask app in a request with the given querystring """
         app = flask.Flask(__name__)
         with app.test_request_context(querystring):
-            return query.build_query(test_table, attr_converter, page)
+            return query.build_query(test_table, ac, page)

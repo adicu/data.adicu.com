@@ -44,7 +44,8 @@ def build_query(table, attr_converter, page=0):
     """
     where_statement, values = build_where_statement(attr_converter)
     query = "SELECT DISTINCT {} FROM {} {} LIMIT {} OFFSET {};".format(
-        ', '.join([attr_converter[x]['column'] for x in attr_converter]),
+        ', '.join(['{} AS {}'.format(attr_converter[col]['column'], col)
+            for col in attr_converter]),
         table,                  # db table
         where_statement,        # various statements to narrow search results
         PG_LIMIT,               # number of rows to return

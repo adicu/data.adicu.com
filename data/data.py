@@ -39,7 +39,6 @@ def return_connections(*args, **kwargs):
     pg_pool.putconn(g.conn)
 
 
-print type(errors.AppError('DEFAULT'))
 # register error handlers
 app.register_error_handler(errors.AppError, errors.handle_app_error)
 app.register_error_handler(404, errors.handle_404_error)
