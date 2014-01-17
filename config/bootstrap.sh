@@ -23,15 +23,17 @@ sudo pip install -r /vagrant/config/requirements.txt
 apt-get -y install vim
 
 # install supervisord
-apt-get -y install supervisor
-cat > /etc/supervisor/conf.d/data.conf << EOF
+command -v supervisord > /dev/null
+if [ $? -ne 0 ]; then
+    apt-get -y install supervisor
+    cat > /etc/supervisor/conf.d/data.conf << EOF
 [program:data]
 directory=/vagrant/
-command=/vagrant/scripts/start_server.sh /vagrant/config/settings.dev
+command=/vagrant/scripts/start_server_supervisor.sh /vagrant/config/settings.dev
 autostart=true
 autorestart=true
 EOF
-service supervisor stop
-sleep 2
-service supervisor start
-
+    service supervisor stop
+    sleep 3
+    service supervisor start
+fi
