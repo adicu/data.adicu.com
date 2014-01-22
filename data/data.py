@@ -4,6 +4,7 @@ from flask import Flask, g
 import psycopg2
 import psycopg2.pool
 import psycopg2.extras
+import redis
 
 
 from errors import errors
@@ -23,26 +24,33 @@ pg_pool = psycopg2.pool.SimpleConnectionPool(
     port=app.config['PG_PORT'],
 )
 
+redis_pool = redis.ConnectionPool(
+    host=app.config['REDIS_HOST'],
+    port=app.config['REDIS_PORT'],
+    db=app.config['REDIS_DB'],
+)
+
 
 @app.before_request
 def get_connections():
-    """ Get a connection from the Postgres connection pool. """
-    g.conn = pg_pool.getconn()
+    """ Get connections from the Postgres and redis pools. """
+    g.pg_conn = pg_pool.getconn()
     # return python dictionaries from the cursor
-    g.cursor = g.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    g.cursor = g.pg_conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+
+    g.redis = redis.Redis(connection_pool=redis_pool)
 
 
 @app.teardown_request
 def return_connections(*args, **kwargs):
     """ Return the connection to the Postgres connection pool. """
     g.cursor.close()
-    pg_pool.putconn(g.conn)
+    pg_pool.putconn(g.pg_conn)
 
 
 # register error handlers
 app.register_error_handler(errors.AppError, errors.handle_app_error)
 app.register_error_handler(404, errors.handle_404_error)
-app.register_error_handler(Exception, errors.handle_app_error)
 
 
 """ Housing blueprint """

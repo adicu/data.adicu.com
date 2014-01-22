@@ -15,10 +15,15 @@ env:
     - PG_DB=travis_test
     - PG_LIMIT=250
     - PG_DEFAULT=20
+    - REDIS_HOST=0.0.0.0
+    - REDIS_PORT=6379
+    - REDIS_DB=1
 
 install: "pip install -r config/requirements.txt"
 
-services: postgresql
+services:
+    - postgresql
+    - redis-server
 
 before_script:
     - psql -c "CREATE USER adi WITH PASSWORD 'adi';" -U postgres

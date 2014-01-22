@@ -25,6 +25,10 @@ try:
     PG_LIMIT = environ['PG_LIMIT']
     PG_DEFAULT = environ['PG_DEFAULT']
 
+    REDIS_HOST = environ['REDIS_HOST']
+    REDIS_PORT = int(environ['REDIS_PORT'])
+    REDIS_DB = environ['REDIS_DB']
+
 except KeyError:
     """ Throw an error if a setting is missing """
     print ("Some of your settings aren't in the environment."
