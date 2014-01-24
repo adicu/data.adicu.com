@@ -10,6 +10,8 @@ import redis
 from errors import errors
 # blueprint imports
 from housing import housing_blueprint
+from auth import auth_blueprint
+
 
 app = Flask(__name__)
 app.config.from_object('config.flask_config')
@@ -53,8 +55,9 @@ app.register_error_handler(errors.AppError, errors.handle_app_error)
 app.register_error_handler(404, errors.handle_404_error)
 
 
-""" Housing blueprint """
+""" Blueprints """
 app.register_blueprint(housing_blueprint, url_prefix='/housing')
+app.register_blueprint(auth_blueprint, url_prefix='')
 
 
 @app.route('/')

@@ -2,3 +2,4 @@ Flask
 psycopg2
 nose
 redis
+Flask_OAuth

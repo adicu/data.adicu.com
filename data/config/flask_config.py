@@ -14,6 +14,7 @@ try:
     # flask settings
     HOST = environ['HOST']
     PORT = environ['PORT']
+    SECRET_KEY = environ['SECRET_KEY']
     DEBUG = True if environ['DEBUG'] == 'TRUE' else False
 
     # postgres settings
