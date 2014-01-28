@@ -49,4 +49,5 @@ def login():
 def authorized(resp):
     access_token = resp['access_token']
     session['google_token'] = access_token
+    # Create DB record here
     return redirect('/')
