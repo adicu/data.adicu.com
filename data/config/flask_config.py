@@ -14,6 +14,7 @@ try:
     # flask settings
     HOST = environ['HOST']
     PORT = environ['PORT']
+    SECRET_KEY = environ['SECRET_KEY']
     DEBUG = True if environ['DEBUG'] == 'TRUE' else False
 
     # postgres settings
@@ -24,6 +25,10 @@ try:
     PG_PORT = environ['PG_PORT']
     PG_LIMIT = environ['PG_LIMIT']
     PG_DEFAULT = environ['PG_DEFAULT']
+
+    REDIS_HOST = environ['REDIS_HOST']
+    REDIS_PORT = int(environ['REDIS_PORT'])
+    REDIS_DB = environ['REDIS_DB']
 
 except KeyError:
     """ Throw an error if a setting is missing """

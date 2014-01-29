@@ -31,8 +31,12 @@ class TestHousingRoutes(template.TestingTemplate):
 
     def test_rooms_options_invalid_attribute(self):
         """ test that an error is returned with an invalid attribute """
-        resp = self.app.get('/housing/rooms/options/fake_attr')
-        self.check_error(resp, 'INVALID_ATTRIBUTE')
+        attr = 'fake_attr'
+        resp = self.app.get('/housing/rooms/options/{}'.format(attr))
+        self.check_error(resp, 'INVALID_ATTRIBUTE',
+                         options={'attr_name': attr})
 
-        resp = self.app.get('/housing/rooms/options/another_fake_attr')
-        self.check_error(resp, 'INVALID_ATTRIBUTE')
+        attr = 'another_fake_attr'
+        resp = self.app.get('/housing/rooms/options/{}'.format(attr))
+        self.check_error(resp, 'INVALID_ATTRIBUTE',
+                         options={'attr_name': attr})
