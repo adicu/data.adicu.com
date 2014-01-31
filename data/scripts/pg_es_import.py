@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from lib.pg import pg_sync
-from tornado.httpclient import HTTPClient, HTTPError
+import requests
 import os
 import json
 
@@ -10,10 +10,10 @@ BATCH_SIZE = 500
 COURSE_COLUMNS = [
     "Course",
     "CourseFull",
-    "DepartmentCode", 
-    "DepartmentName", 
-    "CourseTitle", 
-    "CourseSubtitle", 
+    "DepartmentCode",
+    "DepartmentName",
+    "CourseTitle",
+    "CourseSubtitle",
     "Description"
 ]
 
@@ -53,15 +53,13 @@ def import_data():
     es_host = os.getenv('ES_HOST', 'localhost')
     es_port = os.getenv('ES_PORT', '9200')
     es_type = 'courses'
-    base_url = 'http://' + es_host + ':' + es_port + '/'
+    base_url = "http://%s:%s/" % (es_host, es_port)
 
     http = HTTPClient()
-    try:
-        resp = http.fetch(base_url + es_index, method = 'DELETE')
-    except HTTPError:
-        pass
-    resp = http.fetch(base_url + es_index, method = 'PUT', body='')
-    resp.rethrow()
+    # Delete the old ES index
+    resp = requests.delete(base_url + es_index)
+    # Create a new ES index
+    resp = requests.put(base_url + es_index)
 
     batch = []
     query = ('SELECT %s, array_agg(DISTINCT s.term) AS \"term\", '

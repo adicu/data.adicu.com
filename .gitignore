@@ -29,3 +29,5 @@ bin/pip*
 bin/python*
 local
 
+venv/
+
