@@ -1,4 +1,4 @@
-flask
+Flask
 psycopg2
 nose
 redis
