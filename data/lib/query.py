@@ -12,19 +12,19 @@ from flask import request
 PG_LIMIT = environ['PG_LIMIT']
 
 
-def build_where_statement(attr_converter):
+def build_where_statement(config_dict):
     """
     Combines the querystring params into a WHERE statement for the sql query.
 
-    @param attr_converter: dict with column names and converter functions
+    @param config_dict: dict with column names and converter functions
     """
     statements = []
     values = []
     # iterate over the querystring params
     for attr, val in request.args.iteritems():
         try:
-            statements.append(attr_converter[attr]['converter'](
-                attr_converter[attr]['column']))
+            statements.append(config_dict[attr]['converter'](
+                config_dict[attr]['column']))
             values.append(val)  # add after the possible keyerror
         except KeyError:
             raise errors.AppError('INVALID_ATTRIBUTE', attr_name=attr)
@@ -33,22 +33,29 @@ def build_where_statement(attr_converter):
     return '', []
 
 
-def build_query(table, attr_converter, page=0):
+def build_query(table, config_dict, option=None, page=0):
     """
     Constructs a pg sql query based on the table and given querystring.
 
     @param table: string name of the queried table
-    @param attr_converter: dictionary of (querystring key -> database column)
+    @param config_dict: dictionary of (querystring key -> database column)
     @param page: page of the results to return (only used when a query has
         > PG_LIMIT results)
     """
-    where_statement, values = build_where_statement(attr_converter)
+    if option:
+        select_statement = '{} AS {}'.format(config_dict[option]['column'], option)
+    else:
+        select_statement = ', '.join(['{} AS {}'.format(config_dict[col]['column'], col)
+            for col in config_dict])
+
+    where_statement, values = build_where_statement(config_dict)
+    print where_statement
     query = "SELECT DISTINCT {} FROM {} {} LIMIT {} OFFSET {};".format(
-        ', '.join(['{} AS {}'.format(attr_converter[col]['column'], col)
-            for col in attr_converter]),
+        select_statement,       # columns to select
         table,                  # db table
         where_statement,        # various statements to narrow search results
         PG_LIMIT,               # number of rows to return
         int(PG_LIMIT)*page      # number or rows to skip
     )
+    print query
     return query, values

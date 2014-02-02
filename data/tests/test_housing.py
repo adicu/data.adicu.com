@@ -40,3 +40,13 @@ class TestHousingRoutes(template.TestingTemplate):
         resp = self.app.get('/housing/rooms/options/{}'.format(attr))
         self.check_error(resp, 'INVALID_ATTRIBUTE',
                          options={'attr_name': attr})
+
+    def test_rooms_options_valid_query_parameter(self):
+        """ test that the response is valid for an options request with query parameter """
+        resp = self.app.get('/housing/rooms/options/room_type?room_area=200')
+        json_resp = json.loads(resp.data)
+        self.assertEqual(200, resp.status_code)
+        self.assertEqual(200, json_resp['status'])
+        self.assertEqual(len(json_resp['results']), 9)
+
+
