@@ -6,7 +6,8 @@ import models.courses.courses_functions as courses
 lead = """This endpoint is hiding a whole bunch of data! Make
                 sure you use the different query parameters effectively to see
                 its all done behind.  Think of it as one giant sql table
-                you're making requests against."""
+                you're making requests against. You may want to take a look at
+                the courses_v2 API instead of this version."""
 
 endpoints = {
                     "courses" : {
