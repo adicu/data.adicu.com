@@ -11,7 +11,7 @@ lead = """This endpoint is hiding a whole bunch of data! Make
 
 endpoints = {
                     "courses" : {
-                        "request" : "http://data.adicu.com/courses?building=pupin&limit=1&pretty=true&api_token=API_TOKEN",
+                        "request" : "{HOST}/courses?building=pupin&limit=1&pretty=true&api_token={API_TOKEN}",
                         "response" : """{
     "status_code": 200,
     "data": [

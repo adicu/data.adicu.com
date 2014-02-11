@@ -13,7 +13,7 @@ some point."""
 
 endpoints = {
                     "courses" : {
-                        "request" : "http://data.adicu.com/courses/v2/courses?api_token=API_TOKEN&department=coms&pretty=true&limit=1",
+                        "request" : "{HOST}/courses/v2/courses?api_token={API_TOKEN}&department=coms&pretty=true&limit=1",
                         "response" : """{
     "status_code": 200,
     "data": [
@@ -60,7 +60,7 @@ endpoints = {
                         "queries" : c(mem(courses, func)),
                     },
                     "sections" : {
-                        "request" : "http://data.adicu.com/courses/v2/sections?api_token=API_TOKEN&not_full=false&pretty=true&limit=1",
+                        "request" : "{HOST}/courses/v2/sections?api_token={API_TOKEN}&not_full=false&pretty=true&limit=1",
                         "response" : """{
     "status_code": 200,
     "data": [

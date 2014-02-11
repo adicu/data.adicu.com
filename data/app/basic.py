@@ -19,8 +19,8 @@ class BaseHandler(tornado.web.RequestHandler, ArgumentMixin):
 
     def dispatch_func(self, method, *args, **kwargs):
         params = dict()
-        jsonp = params.get('jsonp')
-        pretty = params.get('pretty')
+        jsonp = kwargs.get('jsonp')
+        pretty = kwargs.get('pretty')
 
         if method in self.config:
             verb_conf = self.config[method]
