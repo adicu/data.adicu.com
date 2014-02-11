@@ -37,10 +37,12 @@ class DocsHandler(app.basic.BaseHandler):
 
         lead = pages[current].get_lead()
         endpoints = pages[current].get_endpoints()
+
         formatter = {
-            "API_TOKEN": user["token"],
+            "API_TOKEN": user["token"] if user else "API_TOKEN",
             "HOST": 'http://' + self.request.host
         }
+
         if endpoints:
             for endpoint, meta in endpoints.iteritems():
                 meta['request'] = meta['request'].format(**formatter)
