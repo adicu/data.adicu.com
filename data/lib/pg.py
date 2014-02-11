@@ -51,7 +51,7 @@ class PGQuery:
             offset = 0
 
         query, arguments = self.build_sql_query(args, limit, offset)
-        logging.info("Making SQL Query: %s %s" % (query, str(arguments)))
+        logging.info("Making SQL Query: %s" % (query % arguments))
         self.pg.execute(query, arguments, callback=internal_callback)
 
     def execute_many(self, argses, page=0, limit=pg_default, callback=None, unlimited=False):
@@ -69,7 +69,8 @@ class PGQuery:
             offset = 0
 
         query_pairs = [self.build_sql_query(args, limit, offset) for args in argses]
-        logging.info("Making SQL Queries: %s" % (query_pairs))
+        sql = [(pair[0] % pair[1]) for pair in query_pairs]
+        logging.info("Making SQL Queries: %s" % (sql))
         self.pg.chain(query_pairs, callback=internal_callback)
 
     def build_sql_query(self, arguments, limit, offset):
