@@ -26,7 +26,9 @@ env:
     - GOOGLE_CLIENT_SECRET=client_secret_here
     - REDIRECT_URI=authorized
 
-install: "pip install -r config/requirements.txt"
+install:
+    - pip install -r config/requirements.txt
+    - pip install flake8
 
 services:
     - postgresql
@@ -39,4 +41,9 @@ before_script:
     - psql travis_test < dev/dev_dump.sql -U postgres
 
 script:
+    - flake8 data/auth
+    - flake8 data/errors
+    - flake8 data/housing
+    - flake8 data/tests
+    - flake8 data/data.py
     - cd data && nosetests -sv tests/
