@@ -1,6 +1,5 @@
 
 [![Build Status](https://travis-ci.org/adicu/data.adicu.com.png?branch=travis)](https://travis-ci.org/adicu/data.adicu.com)
-[![Coverage Status](https://coveralls.io/repos/natebrennand/data.adicu.com/badge.png)](https://coveralls.io/r/natebrennand/data.adicu.com)
 
 data.adicu.com
 ---
