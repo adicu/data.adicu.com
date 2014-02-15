@@ -18,8 +18,6 @@ def build_select_statemnt(config_dict, option=None):
     option is instantiated then only that column will be returned.
     """
     if option:
-        print 'OPTION', option
-        print config_dict
         stmnt = '{} AS {}'.format(config_dict[option]['column'], option)
     else:
         stmnt = ', '.join(['{} AS {}'.format(
@@ -83,5 +81,4 @@ def build_query(table, config_dict, option=None, page=0):
         limit=PG_LIMIT,
         offset=PG_LIMIT*page
     )
-    print query
     return query, values
