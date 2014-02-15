@@ -88,9 +88,7 @@ def options(attr):
     """
     if attr not in room_attributes:
         raise errors.AppError('INVALID_ATTRIBUTE', attr_name=attr)
-    # strip the dictionary down to the releveant attribute
-    relevant_values = {attr: room_attributes[attr]}
-    pg_query, values = query.build_query(TABLE, relevant_values)
+    pg_query, values = query.build_query(TABLE, room_attributes, option=attr)
     g.cursor.execute(pg_query, values)
     results = g.cursor.fetchall()
     if not len(results):    # no results, shouldn't be called
