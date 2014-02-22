@@ -9,8 +9,8 @@ import redis
 
 from errors import errors
 # blueprint imports
-from housing import housing_blueprint
-from auth import auth_blueprint
+from housing.housing import housing as housing_blueprint
+from auth.auth import auth_blueprint
 
 
 app = Flask(__name__)

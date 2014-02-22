@@ -9,7 +9,27 @@ if base_dir not in sys.path:
 from errors import errors
 from flask import request
 
-PG_LIMIT = environ['PG_LIMIT']
+PG_LIMIT = int(environ['PG_LIMIT'])
+
+
+def build_select_statemnt(config_dict, option=None):
+    """
+    Buildings the select statement based on the config_dict passed in. If 
+    option is instantiated then only that column will be returned.
+    """
+    if option:
+        stmnt = '{} AS {}'.format(config_dict[option]['column'], option)
+    else:
+        stmnt = ', '.join(['{} AS {}'.format(
+            config_dict[col]['column'], col) for col in config_dict])
+    return 'SELECT DISTINCT ' + stmnt
+
+
+def build_from_statement(table):
+    """
+    Builds the from statement based on the configuration for the query
+    """
+    return "FROM {}".format(table)
 
 
 def build_where_statement(config_dict):
@@ -33,6 +53,14 @@ def build_where_statement(config_dict):
     return '', []
 
 
+def build_order_by_statement(config_dict):
+    """
+    Builds the from statement based on the configuration for the query
+    """
+    # TODO: implement when config is switched to objects
+    return ""
+
+
 def build_query(table, config_dict, option=None, page=0):
     """
     Constructs a pg sql query based on the table and given querystring.
@@ -42,20 +70,15 @@ def build_query(table, config_dict, option=None, page=0):
     @param page: page of the results to return (only used when a query has
         > PG_LIMIT results)
     """
-    if option:
-        select_statement = '{} AS {}'.format(config_dict[option]['column'], option)
-    else:
-        select_statement = ', '.join(['{} AS {}'.format(config_dict[col]['column'], col)
-            for col in config_dict])
-
     where_statement, values = build_where_statement(config_dict)
-    print where_statement
-    query = "SELECT DISTINCT {} FROM {} {} LIMIT {} OFFSET {};".format(
-        select_statement,       # columns to select
-        table,                  # db table
-        where_statement,        # various statements to narrow search results
-        PG_LIMIT,               # number of rows to return
-        int(PG_LIMIT)*page      # number or rows to skip
+    query = (
+        "{select_stmnt} {from_stmnt} {where_stmnt} "
+        "LIMIT {limit} OFFSET {offset};"
+    ).format(
+        select_stmnt=build_select_statemnt(config_dict, option),
+        from_stmnt=build_from_statement(table),
+        where_stmnt=where_statement,
+        limit=PG_LIMIT,
+        offset=PG_LIMIT*page
     )
-    print query
     return query, values

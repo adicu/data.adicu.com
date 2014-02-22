@@ -26,6 +26,33 @@ test_table = 'test_table'
 
 class TestQueryBuilder(unittest.TestCase):
 
+    def test_select_statement_with_option(self):
+        """
+        Test that select statment is constructed properly with an option
+        query.
+        """
+        stmnt = query.build_select_statemnt(attr_converter, option='test')
+        self.assertEqual(stmnt, 'SELECT DISTINCT test_column AS test')
+
+        stmnt = query.build_select_statemnt(attr_converter, option='foo')
+        self.assertEqual(stmnt, 'SELECT DISTINCT foo_column AS foo')
+
+    def test_select_statement(self):
+        """
+        Test that select statment is constructed properly without option
+        parameters.
+        """
+        stmnt = query.build_select_statemnt(attr_converter)
+        self.assertEqual(
+            stmnt,
+            'SELECT DISTINCT test_column AS test, foo_column AS foo'
+        )
+
+    def test_from_statement(self):
+        """ Test that the from statement is constructed properly """
+        stmnt = query.build_from_statement(test_table)
+        self.assertEqual(stmnt, "FROM {}".format(test_table))
+
     def test_build_where_statement_two_valid_attr(self):
         """ test that statement is correct with two attributes """
         statement, values = self.__test_where_statement_builder(
@@ -45,12 +72,6 @@ class TestQueryBuilder(unittest.TestCase):
         statement, values = self.__test_where_statement_builder('/')
         self.assertEqual(statement, '')
         self.assertEqual(values, [])
-
-    def __test_where_statement_builder(self, querystring):
-        """ mocks a flask app in a request with the given querystring """
-        app = flask.Flask(__name__)
-        with app.test_request_context(querystring):
-            return query.build_where_statement(attr_converter)
 
     def test_build_query_two_valid(self):
         """ test that query is correct with two attributes """
@@ -106,14 +127,23 @@ class TestQueryBuilder(unittest.TestCase):
 
         expected_query = (
             'SELECT DISTINCT test_column AS test '
-            'FROM test_table  '
+            'FROM test_table '
+            ' '
             'LIMIT 250 '
             'OFFSET 0;')
         self.assertEqual(query, expected_query)
         self.assertEqual(values, [])
 
-    def __test_query_builder(self, querystring, page, ac=attr_converter):
+    """ Helper methods for testing """
+    def __test_query_builder(self, querystring, page, ac=attr_converter,
+                             optn=None):
         """ mocks a flask app in a request with the given querystring """
         app = flask.Flask(__name__)
         with app.test_request_context(querystring):
-            return query.build_query(test_table, ac, page)
+            return query.build_query(test_table, ac, page=page, option=optn)
+
+    def __test_where_statement_builder(self, querystring):
+        """ mocks a flask app in a request with the given querystring """
+        app = flask.Flask(__name__)
+        with app.test_request_context(querystring):
+            return query.build_where_statement(attr_converter)
