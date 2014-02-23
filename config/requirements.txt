@@ -2,3 +2,5 @@ Flask
 psycopg2
 nose
 elasticsearch
+redis
+Flask_OAuth

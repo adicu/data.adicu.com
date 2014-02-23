@@ -26,10 +26,32 @@ If anything is wrong, the following commands will help you diagnose the app:
 
 Take a look at the logs, in `/var/log/supervisor` as well.
 
-##Importing Dev Data
+## Importing Dev Data
 
-    cd dev
-    sh load_dev_dump.sh
+We use a partial dump of our data for quick-and-easy development. This gets
+loaded on VM provision by our Vagrant setup scripts. It contains a small subset
+and is not updated frequently, but is sufficient for most feature development
+and bug squashing.
+
+## Data Sources
+
+We have 3 data sources currently:
+
+1. Registrar data on courses (this does not include course descriptions). This
+   is provided in JSON and XML formats, updated daily at 8am. Ask
+   <infrastructure@adicu.com> for URLs if you need them.
+
+2. Course descriptions, from CCIT. These we have a one-time dump of; we should
+   negotiate with CCIT to get regular updates.
+
+3. Housing data, from housing. These we have a one-time dump of; we should
+   negotiate with CCIT to get regular updates.
+
+If you need access to any of these data sources, email
+<infrastructure@adicu.com>. We cannot give them out freely due to our current
+agreement with the school, but if you have a good reason, we can work something
+out. Otherwise, we prefer that all data access be done through the ADI API; we
+can work with you to provide any features you need in most cases.
 
 # app structure
 

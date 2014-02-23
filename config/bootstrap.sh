@@ -11,6 +11,9 @@ sudo apt-get -y install postgresql postgresql-contrib
 sudo -u postgres psql -c "CREATE USER adi WITH PASSWORD 'adi'";
 /vagrant/dev/load_dev_dump.sh
 
+# install redis
+sudo apt-get -y install redis-server
+
 # install python
 apt-get -y install python
 apt-get -y install python-pip

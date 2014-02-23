@@ -8,6 +8,8 @@ env:
     - PORT=5000
     - HOST=0.0.0.0
     - DEBUG=TRUE
+    - SECRET_KEY=abc123
+
     - PG_HOST=127.0.0.1
     - PG_PORT=5432
     - PG_USER=adi
@@ -16,9 +18,21 @@ env:
     - PG_LIMIT=250
     - PG_DEFAULT=20
 
-install: "pip install -r config/requirements.txt"
+    - REDIS_HOST=0.0.0.0
+    - REDIS_PORT=6379
+    - REDIS_DB=1
 
-services: postgresql
+    - GOOGLE_CLIENT_ID=client_id_here
+    - GOOGLE_CLIENT_SECRET=client_secret_here
+    - REDIRECT_URI=authorized
+
+install:
+    - pip install -r config/requirements.txt
+    - pip install flake8
+
+services:
+    - postgresql
+    - redis-server
 
 before_script:
     - psql -c "CREATE USER adi WITH PASSWORD 'adi';" -U postgres
@@ -27,4 +41,9 @@ before_script:
     - psql travis_test < dev/dev_dump.sql -U postgres
 
 script:
+    - flake8 data/auth
+    - flake8 data/errors
+    - flake8 data/housing
+    - flake8 data/tests
+    - flake8 data/data.py
     - cd data && nosetests -sv tests/
