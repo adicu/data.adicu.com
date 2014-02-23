@@ -1,3 +1,4 @@
 Flask
 psycopg2
 nose
+elasticsearch
