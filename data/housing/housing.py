@@ -79,8 +79,55 @@ room_attributes = {
 }
 
 
+building_attributes = {
+    'building': {
+        'column': 'building',
+        'converter': converters.where_string
+    }, 'apartment_style': {
+        'column': 'apartment_style',
+        'converter': converters.where_bool
+    },
+    'suite_style': {
+        'column': 'suite_style',
+        'converter': converters.where_bool
+    },
+    'corridor_style': {
+        'column': 'corridor_style',
+        'converter': converters.where_bool
+    },
+    'private_bathroom': {
+        'column': 'private_bathroom',
+        'converter': converters.where_bool
+    },
+    'semi_private_bathroom': {
+        'column': 'semi_private_bathroom',
+        'converter': converters.where_bool
+    },
+    'shared_bathroom': {
+        'column': 'shared_bathroom',
+        'converter': converters.where_bool
+    },
+    'private_kitchen': {
+        'column': 'private_kitchen',
+        'converter': converters.where_bool
+    },
+    'semi_private_kitchen': {
+        'column': 'semi_private_kitchen',
+        'converter': converters.where_bool
+    },
+    'shared_kitchen': {
+        'column': 'shared_kitchen',
+        'converter': converters.where_bool
+    },
+    'lounge': {
+        'column': 'lounge',
+        'converter': converters.where_string
+    }
+}
+
+
 @housing.route('/rooms/options/<string:attr>')
-def options(attr):
+def room_options(attr):
     """
     Returns all options found in the database for this attribute
 
@@ -104,6 +151,42 @@ def options(attr):
 @housing.route('/rooms')
 @housing.route('/rooms/<int:page>')
 def rooms(page=0):
+    """ Returns all rooms that match the given querystring """
+    pg_query, values = query.build_query(TABLE, room_attributes, page=page)
+    g.cursor.execute(pg_query, values)
+    results = g.cursor.fetchall()
+    if not len(results):    # no results
+        raise errors.AppError('NO_RESULTS')
+    return make_response(json.dumps({
+        'results': results,
+        'status': 200
+    }), 200)
+
+
+@housing.route('/buildings/options/<string:attr>')
+def building_options(attr):
+    """ 
+    Returns all options found in the database for this attribute
+
+    @param attr: an attribute of the room objects
+    """
+    if attr not in building_attributes:
+        raise errors.AppError('INVALID_ATTRIBUTE', attr_name=attr)
+    # strip the dictionary down to the relevant attribute
+    relevant_values = {attr: room_attributes[attr]}
+    pg_query, values = query.build_query(TABLE, relevant_values)
+    g.cursor.execute(pg_query, values)
+    results = g.cursor.fetchall()
+    if not len(results): #no results, shouldn't be called
+        raise errors.AppError("NO_RESULTS")
+    return make_response(json.dumps({
+        'results': results,
+        'status': 200
+        }), 200)
+
+@housing.route('/buildings')
+@housing.route('/buildings/<int:page>')
+def buildings(page=0):
     """ Returns all rooms that match the given querystring """
     pg_query, values = query.build_query(TABLE, room_attributes, page=page)
     g.cursor.execute(pg_query, values)
