@@ -16,7 +16,7 @@ class TestErrors(template.TestingTemplate):
     def test_generator_default(self):
         """ test that the generator correctly creates a default error """
         err_resp = self.__make_error('DEFAULT')
-        self.check_error(err_resp, 'DEFAULT')
+        self.check_error(err_resp, 'DEFAUT')
 
     def test_generator_name_fail(self):
         """ test that the generator correctly defaults with a bad err name """
