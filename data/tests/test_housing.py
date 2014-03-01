@@ -62,3 +62,29 @@ class TestHousingRoutes(template.TestingTemplate):
         self.assertEqual(200, resp.status_code)
         self.assertEqual(200, json_resp['status'])
         self.assertEqual(len(json_resp['results']), 2)
+
+
+    def test_buildings_two_valid_attr(self):
+        """ test query for /rooms with 2 valid attr """
+        resp = self.app.get('/housing/buildings?corridorstyle=false&semiprivatekitchen=true')
+        json_resp = json.loads(resp.data)
+        self.assertEqual(200, resp.status_code)
+        self.assertEqual(200, json_resp['status'])
+        self.assertEqual(100, len(json_resp['results']))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
