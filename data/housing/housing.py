@@ -1,4 +1,3 @@
-
 from flask import Blueprint, json, g, make_response
 from os import path
 import sys
@@ -13,7 +12,9 @@ from errors import errors
 
 
 housing = Blueprint('housing_blueprint', __name__)
-TABLE = 'housing_t'
+ROOMS_TABLE = 'housing_t'
+BUILDINGS_TABLE = 'housing_amenities_t'
+
 
 """
 Dictionary of querystring parameters tied to their column names and a function
@@ -83,40 +84,41 @@ building_attributes = {
     'building': {
         'column': 'building',
         'converter': converters.where_string
-    }, 'apartment_style': {
-        'column': 'apartment_style',
+    },
+    'apartment_style': {
+        'column': 'apartmentstyle',
         'converter': converters.where_bool
     },
     'suite_style': {
-        'column': 'suite_style',
+        'column': 'suitestyle',
         'converter': converters.where_bool
     },
     'corridor_style': {
-        'column': 'corridor_style',
+        'column': 'corridorstyle',
         'converter': converters.where_bool
     },
     'private_bathroom': {
-        'column': 'private_bathroom',
+        'column': 'privatebathroom',
         'converter': converters.where_bool
     },
     'semi_private_bathroom': {
-        'column': 'semi_private_bathroom',
+        'column': 'semiprivatebathroom',
         'converter': converters.where_bool
     },
     'shared_bathroom': {
-        'column': 'shared_bathroom',
+        'column': 'sharedbathroom',
         'converter': converters.where_bool
     },
     'private_kitchen': {
-        'column': 'private_kitchen',
+        'column': 'privatekitchen',
         'converter': converters.where_bool
     },
     'semi_private_kitchen': {
-        'column': 'semi_private_kitchen',
+        'column': 'semiprivatekitchen',
         'converter': converters.where_bool
     },
     'shared_kitchen': {
-        'column': 'shared_kitchen',
+        'column': 'sharedkitchen',
         'converter': converters.where_bool
     },
     'lounge': {
@@ -135,7 +137,8 @@ def room_options(attr):
     """
     if attr not in room_attributes:
         raise errors.AppError('INVALID_ATTRIBUTE', attr_name=attr)
-    pg_query, values = query.build_query(TABLE, room_attributes, option=attr)
+    pg_query, values = query.build_query(ROOMS_TABLE, room_attributes,
+                                         option=attr)
     g.cursor.execute(pg_query, values)
     results = g.cursor.fetchall()
     if not len(results):    # no results, shouldn't be called
@@ -149,8 +152,11 @@ def room_options(attr):
 @housing.route('/rooms')
 @housing.route('/rooms/<int:page>')
 def rooms(page=0):
-    """ Returns all rooms that match the given querystring """
-    pg_query, values = query.build_query(TABLE, room_attributes, page=page)
+    """
+    Returns all rooms that match the given querystring
+    """
+    pg_query, values = query.build_query(ROOMS_TABLE, room_attributes,
+                                         page=page)
     g.cursor.execute(pg_query, values)
     results = g.cursor.fetchall()
     if not len(results):    # no results
@@ -163,7 +169,7 @@ def rooms(page=0):
 
 @housing.route('/buildings/options/<string:attr>')
 def building_options(attr):
-    """ 
+    """
     Returns all options found in the database for this attribute
 
     @param attr: an attribute of the room objects
@@ -171,22 +177,24 @@ def building_options(attr):
     if attr not in building_attributes:
         raise errors.AppError('INVALID_ATTRIBUTE', attr_name=attr)
     # strip the dictionary down to the relevant attribute
-    relevant_values = {attr: room_attributes[attr]}
-    pg_query, values = query.build_query(TABLE, relevant_values)
+    pg_query, values = query.build_query(BUILDINGS_TABLE, building_attributes,
+                                         option=attr)
     g.cursor.execute(pg_query, values)
     results = g.cursor.fetchall()
-    if not len(results): #no results, shouldn't be called
+    if not len(results):  # no results, shouldn't be called
         raise errors.AppError("NO_RESULTS")
     return make_response(json.dumps({
         'results': results,
         'status': 200
         }), 200)
 
+
 @housing.route('/buildings')
 @housing.route('/buildings/<int:page>')
 def buildings(page=0):
     """ Returns all rooms that match the given querystring """
-    pg_query, values = query.build_query(TABLE, room_attributes, page=page)
+    pg_query, values = query.build_query(BUILDINGS_TABLE, building_attributes,
+                                         page=page)
     g.cursor.execute(pg_query, values)
     results = g.cursor.fetchall()
     if not len(results):    # no results
