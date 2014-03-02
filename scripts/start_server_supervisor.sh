@@ -4,3 +4,6 @@
 # supervisord will not do this for us
 source $1
 python data/data.py # &
+
+# start elasticsearch
+sudo /etc/init.d/elasticsearch start

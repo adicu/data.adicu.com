@@ -22,6 +22,10 @@ apt-get -y install python-software-properties
 apt-get -y install libpq-dev
 sudo pip install -r /vagrant/config/requirements.txt
 
+# install elasticsearch
+wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.0.1.deb
+sudo dpkg -i elasticsearch-1.0.1.deb
+
 # install vim
 apt-get -y install vim
 
