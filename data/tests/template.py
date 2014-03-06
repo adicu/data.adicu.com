@@ -28,11 +28,10 @@ class MockingTemplate(unittest.TestCase):
 
     def check_query(self, obj, expected_query, expected_values):
         """ check a mocked query was called correctly """
-        query, values =  obj.call_args[0]
+        query, values = obj.call_args[0]
         self.assertEqual(query, expected_query)
         for i, val in enumerate(expected_values):
             self.assertEqual(values[i], val)
-
 
     def check_queries(self, obj, expected_queries, expected_values):
         """ check a mocked query was called correctly """
