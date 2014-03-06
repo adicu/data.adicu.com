@@ -6,8 +6,9 @@ import psycopg2.pool
 import psycopg2.extras
 import redis
 
-
+# project libraries
 from errors import errors
+
 # blueprint imports
 from housing.housing import housing as housing_blueprint
 from auth.auth import auth_blueprint
