@@ -22,8 +22,14 @@ def generate_token():
 def create_user(email, name):
     """ creates a new API consumer """
     user_token = generate_token()
+    while g.redis.exists(user_token):   # loop until unique
+        user_token = generate_token()
+
+    g.redis.hmset(user_token, {'email': email, 'name': name})
+
     g.cursor.execute(INSERT_USER, [email, user_token, name])
     g.pg_conn.commit()
+
     return user_token
 
 
@@ -34,7 +40,7 @@ def get_user(email, name):
     """
     g.cursor.execute(GET_USER, [email])
     user = g.cursor.fetchone()
-    if user:
+    if user and g.redis.exists(user['token']):
         return user['token']
     else:
         return create_user(email, name)

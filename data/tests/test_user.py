@@ -23,6 +23,7 @@ class TestUser(MockingTemplate):
     def test_create_user(self, mock_g, mock_token):
         """ test that create_user() calls the db correctly """
         mock_token.return_value = test_token
+        mock_g.redis.exists.return_value = False
         outcome = user.create_user(test_email, test_user)
 
         # check return token
@@ -61,8 +62,9 @@ class TestUser(MockingTemplate):
     def test_get_new_user(self, mock_g, mock_token):
         """ test that get_user() operates correctly with new users """
         mock_token.return_value = test_token
-
         mock_g.cursor.fetchone.return_value = None
+        mock_g.redis.exists.return_value = False
+
         outcome = user.get_user(test_email, test_user)
 
         # check return val
