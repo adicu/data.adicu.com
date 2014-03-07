@@ -1,7 +1,14 @@
 
 from struct import unpack
-from flask import g
-from os import urandom
+from flask import g, request
+from os import urandom, path
+import sys
+
+# add the parent directory for in-project imports
+base_dir = path.abspath(path.join(path.dirname(path.abspath(__file__)), '..'))
+if base_dir not in sys.path:
+    sys.path.append(base_dir)
+from errors import errors
 
 
 GET_USER = "SELECT * FROM users_t WHERE email = %s;"
@@ -44,3 +51,13 @@ def get_user(email, name):
         return user['token']
     else:
         return create_user(email, name)
+
+
+def valid_token():
+    """ decorator for authenticated endpoints """
+    if 'token' not in request.args:
+        raise errors.AppError("NO_TOKEN")
+
+    req_token = request.args['token']
+    if not g.redis.exists(req_token):
+        raise errors.AppError("INVALID_TOKEN")
