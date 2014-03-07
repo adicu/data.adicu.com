@@ -1,16 +1,28 @@
 
 import unittest
 import json
-from data import app
+import data
 from errors import errors
+import redis
 
+
+test_email, test_user, test_token = 'test@test.com', 'tester', '12345'
+test_record = {
+    'email': test_email,
+    'token': test_token,
+    'name': test_user
+}
 
 class TestingTemplate(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):
         """ Instantiates a test instance of the app before each test """
-        self.app = app.test_client()
+        self.app = data.app.test_client()
+        r = redis.Redis(connection_pool=data.redis_pool)
+        r.hmset(test_token, {
+                           'email': test_email,
+                           'name': test_user})
 
     def check_error(self, resp, error_name, options=None):
         """ Tests that the resp is equal to the specified error """
