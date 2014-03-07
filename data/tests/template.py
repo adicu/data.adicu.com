@@ -13,6 +13,7 @@ test_record = {
     'name': test_user
 }
 
+
 class TestingTemplate(unittest.TestCase):
 
     @classmethod
@@ -21,8 +22,8 @@ class TestingTemplate(unittest.TestCase):
         self.app = data.app.test_client()
         r = redis.Redis(connection_pool=data.redis_pool)
         r.hmset(test_token, {
-                           'email': test_email,
-                           'name': test_user})
+                'email': test_email,
+                'name': test_user})
 
     def check_error(self, resp, error_name, options=None):
         """ Tests that the resp is equal to the specified error """
