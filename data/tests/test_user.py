@@ -1,8 +1,10 @@
 
 from mock import patch
-from template import MockingTemplate
+import flask
 
+from template import MockingTemplate
 from auth import user
+from errors import errors
 
 test_email, test_user, test_token = 'test@test.com', 'tester', '12345'
 test_record = {
@@ -82,3 +84,23 @@ class TestUser(MockingTemplate):
 
         # check that commit() was called
         self.assertTrue(mock_g.cursor.fetchone.called)
+
+    @patch.object(user, 'g')
+    def test_valid_token_dec(self, mock_g):
+        """ test that the decorator throws errors appropriately """
+        app = flask.Flask(__name__)
+        #app.before_request(user.valid_token)
+
+        with self.assertRaises(errors.AppError):
+            with app.test_request_context('/'):
+                user.valid_token()
+
+        mock_g.redis.exists.return_value = False
+        with app.test_request_context('/?token=123'):
+            with self.assertRaises(errors.AppError):
+                user.valid_token()
+
+        mock_g.redis.exists.return_value = True
+        with app.test_request_context('/?token=123'):
+            # don't try to catch error
+            user.valid_token()
