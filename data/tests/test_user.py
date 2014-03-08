@@ -34,7 +34,7 @@ class TestUser(MockingTemplate):
         # check that the correct query was called
         self.check_query(
             mock_g.cursor.execute,
-            ('INSERT INTO users_t (email, token, name, limit) '
+            ('INSERT INTO users_t (email, token, name, rate_limit) '
              'VALUES (%s, %s, %s, %s);'),
             [test_email, test_token, test_user]
         )
@@ -76,7 +76,7 @@ class TestUser(MockingTemplate):
         self.check_queries(
             mock_g.cursor.execute,
             ['SELECT * FROM users_t WHERE email = %s;',
-             ('INSERT INTO users_t (email, token, name, limit) '
+             ('INSERT INTO users_t (email, token, name, rate_limit) '
               'VALUES (%s, %s, %s, %s);')],
             [[test_email], [test_email, test_token, test_user]]
         )

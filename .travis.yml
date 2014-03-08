@@ -17,6 +17,7 @@ env:
     - PG_DB=travis_test
     - PG_LIMIT=250
     - PG_DEFAULT=20
+    - RATE_LIMIT=200
 
     - REDIS_HOST=0.0.0.0
     - REDIS_PORT=6379
