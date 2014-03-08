@@ -269,7 +269,8 @@ ALTER TABLE public.sections_v2_t OWNER TO postgres;
 CREATE TABLE users_t (
     email character varying(64) NOT NULL,
     token character varying(32) NOT NULL,
-    name character varying(64) NOT NULL
+    name character varying(64) NOT NULL,
+    limit integer
 );
 
 

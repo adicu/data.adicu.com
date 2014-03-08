@@ -1,7 +1,7 @@
 
 from struct import unpack
 from flask import g, request
-from os import urandom, path
+from os import urandom, path, environ
 import sys
 
 # add the parent directory for in-project imports
@@ -12,9 +12,10 @@ from errors import errors
 
 
 GET_USER = "SELECT * FROM users_t WHERE email = %s;"
-INSERT_USER = ('INSERT INTO users_t (email, token, name) '
-               'VALUES (%s, %s, %s);')
+INSERT_USER = ('INSERT INTO users_t (email, token, name, limit) '
+               'VALUES (%s, %s, %s, %s);')
 TOKENS = 'tokens'
+DEFAULT_LIMIT = environ['RATE_LIMIT']
 
 
 def generate_token():
@@ -34,7 +35,7 @@ def create_user(email, name):
         user_token = generate_token()
 
     g.redis.sadd(TOKENS, user_token)
-    g.cursor.execute(INSERT_USER, [email, user_token, name])
+    g.cursor.execute(INSERT_USER, [email, user_token, name, DEFAULT_LIMIT])
     g.pg_conn.commit()
 
     return user_token
