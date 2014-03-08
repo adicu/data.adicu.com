@@ -6,8 +6,10 @@ import psycopg2.pool
 import psycopg2.extras
 import redis
 
-
+# project libraries
 from errors import errors
+from auth import user
+
 # blueprint imports
 from housing.housing import housing as housing_blueprint
 from auth.auth import auth_blueprint
@@ -56,6 +58,7 @@ app.register_error_handler(404, errors.handle_404_error)
 
 
 """ Blueprints """
+housing_blueprint.before_request(user.valid_token)  # add auth to housing
 app.register_blueprint(housing_blueprint, url_prefix='/housing')
 app.register_blueprint(auth_blueprint, url_prefix='')
 
