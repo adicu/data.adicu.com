@@ -3,11 +3,15 @@ from flask import Blueprint, session, redirect, url_for
 from flask_oauth import OAuth
 from os import path, environ
 import sys
+import requests
 
 # add the parent directory for in-project imports
 base_dir = path.abspath(path.join(path.dirname(path.abspath(__file__)), '..'))
 if base_dir not in sys.path:
     sys.path.append(base_dir)
+
+import user
+from errors import errors
 
 auth_blueprint = Blueprint('auth_blueprint', __name__)
 
@@ -15,6 +19,9 @@ GOOGLE_CLIENT_ID = environ['GOOGLE_CLIENT_ID']
 GOOGLE_CLIENT_SECRET = environ['GOOGLE_CLIENT_SECRET']
 # one of the Redirect URIs from Google APIs console
 REDIRECT_URI = environ['REDIRECT_URI']
+
+GOOGLE_PEOPLE_URL = ("https://www.googleapis.com/oauth2/v1/userinfo?"
+                     "access_token={token}")
 
 
 oauth = OAuth()
@@ -48,6 +55,17 @@ def login():
 @google.authorized_handler
 def authorized(resp):
     access_token = resp['access_token']
-    session['google_token'] = access_token
-    # Create DB record here
-    return redirect('/')
+
+    # get user info from Google People API
+    profile = requests.get(GOOGLE_PEOPLE_URL.format(token=access_token))
+
+    if profile.status_code != 200:
+        raise errors.AppError("GOOGLE_AUTH_FAILURE")
+
+    user_email, user_name = profile.json()['email'], profile.json()['name']
+
+    # retrive/create user token
+    user_token = user.get_user(user_email, user_name)
+    session['token'] = user_token
+
+    return redirect(url_for('home'))
