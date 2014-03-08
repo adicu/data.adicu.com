@@ -172,7 +172,7 @@ def building_options(attr):
     """
     Returns all options found in the database for this attribute
 
-    @param attr: an attribute of the room objects
+    @param attr: an attribute of the building objects
     """
     if attr not in building_attributes:
         raise errors.AppError('INVALID_ATTRIBUTE', attr_name=attr)
@@ -192,7 +192,7 @@ def building_options(attr):
 @housing.route('/buildings')
 @housing.route('/buildings/<int:page>')
 def buildings(page=0):
-    """ Returns all rooms that match the given querystring """
+    """ Returns all buildings that match the given querystring """
     pg_query, values = query.build_query(BUILDINGS_TABLE, building_attributes,
                                          page=page)
     g.cursor.execute(pg_query, values)
