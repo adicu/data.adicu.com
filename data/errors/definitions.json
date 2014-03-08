@@ -40,5 +40,10 @@
         "status": 401,
         "message": "your token was not found in our system",
         "default_options": {}
+    },
+    "GOOGLE_AUTH_FAILURE": {
+        "status": 400,
+        "message": "your token was not found in our system",
+        "default_options": {}
     }
 }

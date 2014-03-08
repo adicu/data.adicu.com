@@ -14,6 +14,7 @@ from errors import errors
 GET_USER = "SELECT * FROM users_t WHERE email = %s;"
 INSERT_USER = ('INSERT INTO users_t (email, token, name) '
                'VALUES (%s, %s, %s);')
+TOKENS = 'tokens'
 
 
 def generate_token():
@@ -29,11 +30,10 @@ def generate_token():
 def create_user(email, name):
     """ creates a new API consumer """
     user_token = generate_token()
-    while g.redis.exists(user_token):   # loop until unique
+    while g.redis.sismember(TOKENS, user_token):   # loop until unique
         user_token = generate_token()
 
-    g.redis.hmset(user_token, {'email': email, 'name': name})
-
+    g.redis.sadd(TOKENS, user_token)
     g.cursor.execute(INSERT_USER, [email, user_token, name])
     g.pg_conn.commit()
 
@@ -47,7 +47,7 @@ def get_user(email, name):
     """
     g.cursor.execute(GET_USER, [email])
     user = g.cursor.fetchone()
-    if user and g.redis.exists(user['token']):
+    if user and g.redis.sismember(TOKENS, user['token']):
         return user['token']
     else:
         return create_user(email, name)
@@ -59,5 +59,5 @@ def valid_token():
         raise errors.AppError("NO_TOKEN")
 
     req_token = request.args['token']
-    if not g.redis.exists(req_token):
+    if not g.redis.sismember(TOKENS, req_token):
         raise errors.AppError("INVALID_TOKEN")

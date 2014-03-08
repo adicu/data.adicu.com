@@ -21,9 +21,7 @@ class TestingTemplate(unittest.TestCase):
         """ Instantiates a test instance of the app before each test """
         self.app = data.app.test_client()
         r = redis.Redis(connection_pool=data.redis_pool)
-        r.hmset(test_token, {
-                'email': test_email,
-                'name': test_user})
+        r.sadd('tokens', test_token)
 
     def check_error(self, resp, error_name, options=None):
         """ Tests that the resp is equal to the specified error """

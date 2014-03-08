@@ -5,12 +5,13 @@ from os import path, environ
 import sys
 import requests
 
-import user
-
 # add the parent directory for in-project imports
 base_dir = path.abspath(path.join(path.dirname(path.abspath(__file__)), '..'))
 if base_dir not in sys.path:
     sys.path.append(base_dir)
+
+import user
+from errors import errors
 
 auth_blueprint = Blueprint('auth_blueprint', __name__)
 
@@ -57,6 +58,10 @@ def authorized(resp):
 
     # get user info from Google People API
     profile = requests.get(GOOGLE_PEOPLE_URL.format(token=access_token))
+
+    if profile.status_code != 200:
+        raise errors.AppError("GOOGLE_AUTH_FAILURE")
+
     user_email, user_name = profile.json()['email'], profile.json()['name']
 
     # retrive/create user token

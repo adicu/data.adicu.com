@@ -25,7 +25,7 @@ class TestUser(MockingTemplate):
     def test_create_user(self, mock_g, mock_token):
         """ test that create_user() calls the db correctly """
         mock_token.return_value = test_token
-        mock_g.redis.exists.return_value = False
+        mock_g.redis.sismember.return_value = False
         outcome = user.create_user(test_email, test_user)
 
         # check return token
@@ -65,7 +65,7 @@ class TestUser(MockingTemplate):
         """ test that get_user() operates correctly with new users """
         mock_token.return_value = test_token
         mock_g.cursor.fetchone.return_value = None
-        mock_g.redis.exists.return_value = False
+        mock_g.redis.sismember.return_value = False
 
         outcome = user.get_user(test_email, test_user)
 
@@ -95,12 +95,12 @@ class TestUser(MockingTemplate):
             with app.test_request_context('/'):
                 user.valid_token()
 
-        mock_g.redis.exists.return_value = False
+        mock_g.redis.sismember.return_value = False
         with app.test_request_context('/?token=123'):
             with self.assertRaises(errors.AppError):
                 user.valid_token()
 
-        mock_g.redis.exists.return_value = True
+        mock_g.redis.sismember.return_value = True
         with app.test_request_context('/?token=123'):
             # don't try to catch error
             user.valid_token()
