@@ -3166,7 +3166,7 @@ COPY sections_v2_t (callnumber, sectionfull, course, term, numenrolled, maxsize,
 --
 
 COPY users_t (email, token, name, rate_limit) FROM stdin;
-test@test.com	12345	test	20000
+test@test.com	12345	test	200
 integration_test	integration_test	integration_test	100
 \.
 

@@ -24,6 +24,13 @@ class TestingTemplate(unittest.TestCase):
         self.r.sadd('tokens', test_token)
         self.r.sadd('tokens', 'integration_test')
 
+    @classmethod
+    def tearDownClass(self):
+        """ clean up Redis """
+        self.r.delete('tokens', test_token)
+        self.r.delete('rate:12345')
+        self.r.delete('rate:integration_test')
+
     def check_error(self, resp, error_name, options=None):
         """ Tests that the resp is equal to the specified error """
         expected_error = errors.error_definitions[error_name]

@@ -147,6 +147,3 @@ class TestUserIntegration(TestingTemplate):
 
         resp = self.app.get('/housing/rooms?token=integration_test')
         self.check_error(resp, 'RATE_LIMIT')
-
-        # delete the token afterwards so test can be run multiple times
-        self.r.delete('rate:integration_test')
