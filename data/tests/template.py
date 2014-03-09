@@ -20,8 +20,16 @@ class TestingTemplate(unittest.TestCase):
     def setUpClass(self):
         """ Instantiates a test instance of the app before each test """
         self.app = data.app.test_client()
-        r = redis.Redis(connection_pool=data.redis_pool)
-        r.sadd('tokens', test_token)
+        self.r = redis.Redis(connection_pool=data.redis_pool)
+        self.r.sadd('tokens', test_token)
+        self.r.sadd('tokens', 'integration_test')
+
+    @classmethod
+    def tearDownClass(self):
+        """ clean up Redis """
+        self.r.delete('tokens', test_token)
+        self.r.delete('rate:12345')
+        self.r.delete('rate:integration_test')
 
     def check_error(self, resp, error_name, options=None):
         """ Tests that the resp is equal to the specified error """

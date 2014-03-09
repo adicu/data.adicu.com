@@ -10,13 +10,13 @@ import redis
 from errors import errors
 from auth import user
 
+app = Flask(__name__)
+app.config.from_object('config.flask_config')
+
 # blueprint imports
 from housing.housing import housing as housing_blueprint
 from auth.auth import auth_blueprint
 
-
-app = Flask(__name__)
-app.config.from_object('config.flask_config')
 
 pg_pool = psycopg2.pool.SimpleConnectionPool(
     5,      # min connections
@@ -58,7 +58,7 @@ app.register_error_handler(404, errors.handle_404_error)
 
 
 """ Blueprints """
-housing_blueprint.before_request(user.valid_token)  # add auth to housing
+housing_blueprint.before_request(user.rate_limit)   # add rate limiting
 app.register_blueprint(housing_blueprint, url_prefix='/housing')
 app.register_blueprint(auth_blueprint, url_prefix='')
 

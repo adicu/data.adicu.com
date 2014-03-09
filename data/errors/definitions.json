@@ -43,7 +43,12 @@
     },
     "GOOGLE_AUTH_FAILURE": {
         "status": 400,
-        "message": "your token was not found in our system",
+        "message": "there was an error authenticating with Google, please try again",
+        "default_options": {}
+    },
+    "RATE_LIMIT": {
+        "status": 429,
+        "message": "you've run out of requests for this hour",
         "default_options": {}
     }
 }
