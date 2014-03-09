@@ -3205,6 +3205,7 @@ REVOKE ALL ON TABLE housing_t FROM PUBLIC;
 REVOKE ALL ON TABLE housing_t FROM postgres;
 GRANT ALL ON TABLE housing_t TO postgres;
 GRANT SELECT ON TABLE housing_t TO adi;
+GRANT SELECT ON TABLE housing_amenities_t TO adi;
 GRANT ALL ON TABLE users_t TO adi;
 
 
