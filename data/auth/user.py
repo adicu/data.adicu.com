@@ -68,6 +68,7 @@ def valid_token():
 
 def rate_limit():
     """ limits the user to a set number of requests per 15 minutes """
+    valid_token()   # check the token
     req_token = request.args['token']
     key = "rate:{}".format(req_token)
 
