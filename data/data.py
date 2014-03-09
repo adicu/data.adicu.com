@@ -10,13 +10,13 @@ import redis
 from errors import errors
 from auth import user
 
+app = Flask(__name__)
+app.config.from_object('config.flask_config')
+
 # blueprint imports
 from housing.housing import housing as housing_blueprint
 from auth.auth import auth_blueprint
 
-
-app = Flask(__name__)
-app.config.from_object('config.flask_config')
 
 pg_pool = psycopg2.pool.SimpleConnectionPool(
     5,      # min connections
