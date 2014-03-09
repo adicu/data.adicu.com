@@ -91,26 +91,26 @@ class TestUser(MockingTemplate):
     def test_valid_token_decorator(self, mock_g):
         """ test that the decorator throws errors appropriately """
         app = flask.Flask(__name__)
-        app.before_request(user.valid_token)
+        app.before_request(user.check_token_validity)
 
         with self.assertRaises(errors.AppError):
             with app.test_request_context('/'):
-                user.valid_token()
+                user.check_token_validity()
 
         mock_g.redis.sismember.return_value = False
         with app.test_request_context('/?token=123'):
             with self.assertRaises(errors.AppError):
-                user.valid_token()
+                user.check_token_validity()
 
         mock_g.redis.sismember.return_value = True
         with app.test_request_context('/?token=123'):
-            user.valid_token()
+            user.check_token_validity()
 
     @patch.object(user, 'g')
     def test_rate_limit_mocking(self, mock_g):
         """ test that Redis methods are called at appropriate times """
         app = flask.Flask(__name__)
-        app.before_request(user.valid_token)
+        app.before_request(user.check_token_validity)
 
         # test the key is created properly
         mock_g.redis.sismember.return_value = True

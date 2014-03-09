@@ -56,7 +56,7 @@ def get_user(email, name):
         return create_user(email, name)
 
 
-def valid_token():
+def check_token_validity():
     """ decorator for authenticated endpoints """
     if 'token' not in request.args:
         raise errors.AppError("NO_TOKEN")
@@ -68,7 +68,7 @@ def valid_token():
 
 def rate_limit():
     """ limits the user to a set number of requests per 15 minutes """
-    valid_token()   # check the token
+    check_token_validity()   # check the token
     req_token = request.args['token']
     key = "rate:{}".format(req_token)
 

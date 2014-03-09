@@ -47,4 +47,6 @@ script:
     - flake8 data/housing
     - flake8 data/tests
     - flake8 data/data.py
+    - flake8 data/lib/query.py
+    - flake8 data/lib/converters.py
     - cd data && nosetests -sv tests/
