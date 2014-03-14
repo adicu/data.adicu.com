@@ -269,7 +269,8 @@ ALTER TABLE public.sections_v2_t OWNER TO postgres;
 CREATE TABLE users_t (
     email character varying(64) NOT NULL,
     token character varying(32) NOT NULL,
-    name character varying(64) NOT NULL
+    name character varying(64) NOT NULL,
+    rate_limit integer
 );
 
 
@@ -3164,7 +3165,9 @@ COPY sections_v2_t (callnumber, sectionfull, course, term, numenrolled, maxsize,
 -- Data for Name: users_t; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY users_t (email, token, name) FROM stdin;
+COPY users_t (email, token, name, rate_limit) FROM stdin;
+test@test.com	12345	test	200
+integration_test	integration_test	integration_test	100
 \.
 
 
@@ -3202,6 +3205,8 @@ REVOKE ALL ON TABLE housing_t FROM PUBLIC;
 REVOKE ALL ON TABLE housing_t FROM postgres;
 GRANT ALL ON TABLE housing_t TO postgres;
 GRANT SELECT ON TABLE housing_t TO adi;
+GRANT SELECT ON TABLE housing_amenities_t TO adi;
+GRANT ALL ON TABLE users_t TO adi;
 
 
 --

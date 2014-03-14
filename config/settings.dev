@@ -15,6 +15,7 @@ export PG_PASSWORD=adi
 export PG_DB=data2
 export PG_LIMIT=250
 export PG_DEFAULT=20
+export RATE_LIMIT=200   # 60 minute window
 
 # Redis connection
 export REDIS_HOST=localhost
@@ -25,4 +26,3 @@ export REDIS_DB=1
 export GOOGLE_CLIENT_ID=client_id_here
 export GOOGLE_CLIENT_SECRET=client_secret_here
 export REDIRECT_URI=authorized
-

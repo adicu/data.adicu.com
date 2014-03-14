@@ -21,6 +21,7 @@ apt-get -y install python-dev
 apt-get -y install python-software-properties
 apt-get -y install libpq-dev
 sudo pip install -r /vagrant/config/requirements.txt
+pip install flake8  # for local testing
 
 # install java
 sudo apt-get -y install default-jre
