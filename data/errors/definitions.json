@@ -30,5 +30,25 @@
         "default_options": {
             "attr_name": "Your parameter"
         }
+    },
+    "NO_TOKEN": {
+        "status": 401,
+        "message": "this endpoint requires a token for access",
+        "default_options": {}
+    },
+    "INVALID_TOKEN": {
+        "status": 401,
+        "message": "your token was not found in our system",
+        "default_options": {}
+    },
+    "GOOGLE_AUTH_FAILURE": {
+        "status": 400,
+        "message": "there was an error authenticating with Google, please try again",
+        "default_options": {}
+    },
+    "RATE_LIMIT": {
+        "status": 429,
+        "message": "you've run out of requests for this hour",
+        "default_options": {}
     }
 }

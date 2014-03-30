@@ -17,6 +17,7 @@ env:
     - PG_DB=travis_test
     - PG_LIMIT=250
     - PG_DEFAULT=20
+    - RATE_LIMIT=200
 
     - REDIS_HOST=0.0.0.0
     - REDIS_PORT=6379
@@ -46,4 +47,6 @@ script:
     - flake8 data/housing
     - flake8 data/tests
     - flake8 data/data.py
+    - flake8 data/lib/query.py
+    - flake8 data/lib/converters.py
     - cd data && nosetests -sv tests/

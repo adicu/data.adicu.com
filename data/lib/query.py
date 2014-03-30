@@ -14,7 +14,7 @@ PG_LIMIT = int(environ['PG_LIMIT'])
 
 def build_select_statemnt(config_dict, option=None):
     """
-    Buildings the select statement based on the config_dict passed in. If 
+    Buildings the select statement based on the config_dict passed in. If
     option is instantiated then only that column will be returned.
     """
     if option:
@@ -47,7 +47,8 @@ def build_where_statement(config_dict):
                 config_dict[attr]['column']))
             values.append(val)  # add after the possible keyerror
         except KeyError:
-            raise errors.AppError('INVALID_ATTRIBUTE', attr_name=attr)
+            if attr != 'token':
+                raise errors.AppError('INVALID_ATTRIBUTE', attr_name=attr)
     if statements:
         return 'WHERE '+' AND '.join(statements), values
     return '', []
