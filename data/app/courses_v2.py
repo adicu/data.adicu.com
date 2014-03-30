@@ -111,8 +111,6 @@ class CoursesV2Handler(basic.BaseHandler):
 
     def _match_associated_sections(self, courses, sections):
         # put the responses associated with the courses in the courses
-        print 'COR', courses
-        print 'SEC', sections
         for course, sections in zip(courses, sections):
             course['Sections'] = sections
         return courses

@@ -20,7 +20,7 @@ class DocsHandler(app.basic.BaseHandler):
                 "housing"        : docs.housing,
             }
 
-    def get(self, *arg):
+    def get(self, *arg, **kwargs):
         userstr = self.get_secure_cookie("user")
         if userstr:
             user = json.loads(userstr)
@@ -37,6 +37,15 @@ class DocsHandler(app.basic.BaseHandler):
 
         lead = pages[current].get_lead()
         endpoints = pages[current].get_endpoints()
+
+        formatter = {
+            "API_TOKEN": user["token"] if user else "API_TOKEN",
+            "HOST": 'http://' + self.request.host
+        }
+
+        if endpoints:
+            for endpoint, meta in endpoints.iteritems():
+                meta['request'] = meta['request'].format(**formatter)
 
         self.render('docs.html',
                 pages=pages,
