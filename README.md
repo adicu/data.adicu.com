@@ -26,12 +26,14 @@ If anything is wrong, the following commands will help you diagnose the app:
 
 Take a look at the logs, in `/var/log/supervisor` as well.
 
+
 ## Importing Dev Data
 
 We use a partial dump of our data for quick-and-easy development. This gets
 loaded on VM provision by our Vagrant setup scripts. It contains a small subset
 and is not updated frequently, but is sufficient for most feature development
 and bug squashing.
+
 
 ## Data Sources
 
@@ -53,16 +55,20 @@ agreement with the school, but if you have a good reason, we can work something
 out. Otherwise, we prefer that all data access be done through the ADI API; we
 can work with you to provide any features you need in most cases.
 
+
 # app structure
 
-    |-- config/ (config settings and install scripts)
-    |-- Procfile (Heroku instructions on how to run the application)
-    |-- README.md (This file)
-    |-- data/
-        \
-        |-- data.py (the executable for this application)
-        |-- scripts/ (command line helper scripts; database start/stop scripts)
-        |-- static/ (your static files, such as js, css, imgs)
-        |-- tests/ (py.test scripts that should be used during development)
-        |-- templates/ (html templates)
+```
+|-- config/ (config settings and install scripts)
+|-- README.md (This file)
+|-- data/
+    \
+    |-- data.py (the executable for this application)
+    |-- static/ (your static files, such as js, css, imgs)
+    |-- tests/ (unittest scripts that should be used during development)
+    |-- housing/ (files associated with housing endpoints)
+    |-- auth/ (files associated with authentication and rate limiting)
+    |-- lib/ (files used by multiple endpoints for query building)
+```
+
 
