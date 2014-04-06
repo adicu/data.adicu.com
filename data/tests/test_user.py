@@ -126,7 +126,6 @@ class TestUser(MockingTemplate):
         with app.test_request_context('/'):
             user.rate_limit()
 
-
         # Test if it throws error for no token or domain
         mock_g.redis.sismember.return_value = False
         mock_g.redis.exists.return_value = False
