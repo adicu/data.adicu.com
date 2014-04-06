@@ -64,12 +64,14 @@ def check_token_validity():
     if not g.redis.sismember(TOKENS, req_token):
         raise errors.AppError("INVALID_TOKEN")
 
+
 def get_domain():
     if request.referrer:
         o = urlparse(request.referrer)
         return o.netloc
     else:
         return ""
+
 
 def rate_limit():
     """ limits the user to a set number of requests per 15 minutes """
