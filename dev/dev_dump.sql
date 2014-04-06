@@ -270,6 +270,7 @@ CREATE TABLE users_t (
     email character varying(64) NOT NULL,
     token character varying(32) NOT NULL,
     name character varying(64) NOT NULL,
+    access character varying(64),
     rate_limit integer
 );
 
@@ -3165,11 +3166,11 @@ COPY sections_v2_t (callnumber, sectionfull, course, term, numenrolled, maxsize,
 -- Data for Name: users_t; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY users_t (email, token, name, rate_limit) FROM stdin;
-test@test.com	12345	test	200
-integration_test	integration_test	integration_test	100
+COPY users_t (email, token, name, rate_limit, access) FROM stdin;
+test@test.com	12345	test	200	\N
+integration_test	integration_test	integration_test	100	\N
+a@b.c	local	local_test	500	127.0.0.1:5000
 \.
-
 
 --
 -- Name: courses_v2_t_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
