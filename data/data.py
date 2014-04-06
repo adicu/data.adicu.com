@@ -6,6 +6,7 @@ import psycopg2.pool
 import psycopg2.extras
 import redis
 import logging
+from os import environ
 from datetime import datetime
 from logging.handlers import RotatingFileHandler
 
@@ -20,11 +21,12 @@ app.config.from_object('config.flask_config')
 from housing.housing import housing as housing_blueprint
 from auth.auth import auth_blueprint
 
-my_logger = logging.getLogger('DataLogger')
 log_format = ('%(asctime)-24s %(client_ip)-10s %(status)s '
               '%(token)s %(method)s %(uri)s %(resp_time)s'.replace(' ', '\t'))
-handler = RotatingFileHandler(app.config['LOG'], maxBytes=(2 ** 20), backupCount=1)
+handler = RotatingFileHandler(app.config['LOG'], maxBytes=(2 ** 20),
+                              backupCount=1)
 handler.setFormatter(logging.Formatter(log_format))
+app.logger.addHandler(handler)
 
 
 pg_pool = psycopg2.pool.SimpleConnectionPool(
@@ -63,17 +65,18 @@ def return_connections(*args, **kwargs):
 @app.after_request
 def log_outcome(resp):
     """ Outputs to a specified logging file """
-    app.logger.info('', resp.status_code, request.method,
-                    request.path,
-                    extra={
-                        'client_ip': request.remote_addr,
-                        'method': request.method,
-                        'uri': request.path,
-                        'status': resp.status_code,
-                        'resp_time': (datetime.now() -
-                                      g.start_time).microseconds,
-                        'token': '12345'
-                    })
+    if environ.get('TESTING', 'FALSE') != 'TRUE':
+        app.logger.info('%s %s %s', resp.status_code, request.method,
+                        request.path,
+                        extra={
+                            'client_ip': request.remote_addr,
+                            'method': request.method,
+                            'uri': request.path,
+                            'status': resp.status_code,
+                            'resp_time': (datetime.now() -
+                                          g.start_time).microseconds,
+                            'token': request.args.get('token', 'NO_TOKEN')
+                        })
     return resp
 
 
@@ -94,5 +97,4 @@ def home():
         return f.read()
 
 if __name__ == '__main__':
-    app.logger.addHandler(handler)
     app.run(host=app.config['HOST'])

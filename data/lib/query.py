@@ -82,6 +82,6 @@ def build_query(table, config_dict, option=None, page=0):
         limit=PG_LIMIT,
         offset=PG_LIMIT * page
     )
-    if environ['DEBUG'] == 'TRUE':
+    if environ.get('DEBUG_SQL', 'FALSE') == 'TRUE':
         print query, values
     return query, values
