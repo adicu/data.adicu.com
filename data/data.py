@@ -1,10 +1,13 @@
 
 # library imports
-from flask import Flask, g
+from flask import Flask, g, request
 import psycopg2
 import psycopg2.pool
 import psycopg2.extras
 import redis
+import logging
+from datetime import datetime
+from logging.handlers import RotatingFileHandler
 
 # project libraries
 from errors import errors
@@ -16,6 +19,12 @@ app.config.from_object('config.flask_config')
 # blueprint imports
 from housing.housing import housing as housing_blueprint
 from auth.auth import auth_blueprint
+
+my_logger = logging.getLogger('DataLogger')
+log_format = ('%(asctime)-24s %(client_ip)-10s %(status)s '
+              '%(token)s %(method)s %(uri)s %(resp_time)s'.replace(' ', '\t'))
+handler = RotatingFileHandler(app.config['LOG'], maxBytes=(2 ** 20), backupCount=1)
+handler.setFormatter(logging.Formatter(log_format))
 
 
 pg_pool = psycopg2.pool.SimpleConnectionPool(
@@ -39,10 +48,9 @@ redis_pool = redis.ConnectionPool(
 def get_connections():
     """ Get connections from the Postgres and redis pools. """
     g.pg_conn = pg_pool.getconn()
-    # return python dictionaries from the cursor
     g.cursor = g.pg_conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-
     g.redis = redis.Redis(connection_pool=redis_pool)
+    g.start_time = datetime.now()
 
 
 @app.teardown_request
@@ -50,6 +58,23 @@ def return_connections(*args, **kwargs):
     """ Return the connection to the Postgres connection pool. """
     g.cursor.close()
     pg_pool.putconn(g.pg_conn)
+
+
+@app.after_request
+def log_outcome(resp):
+    """ Outputs to a specified logging file """
+    app.logger.info('', resp.status_code, request.method,
+                    request.path,
+                    extra={
+                        'client_ip': request.remote_addr,
+                        'method': request.method,
+                        'uri': request.path,
+                        'status': resp.status_code,
+                        'resp_time': (datetime.now() -
+                                      g.start_time).microseconds,
+                        'token': '12345'
+                    })
+    return resp
 
 
 # register error handlers
@@ -69,4 +94,5 @@ def home():
         return f.read()
 
 if __name__ == '__main__':
+    app.logger.addHandler(handler)
     app.run(host=app.config['HOST'])

@@ -16,6 +16,7 @@ try:
     PORT = environ['PORT']
     SECRET_KEY = environ['SECRET_KEY']
     DEBUG = True if environ['DEBUG'] == 'TRUE' else False
+    LOG = environ.get('LOG', 'data.log')
 
     # postgres settings
     PG_USER = environ['PG_USER']

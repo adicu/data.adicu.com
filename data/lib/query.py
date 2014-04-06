@@ -50,7 +50,7 @@ def build_where_statement(config_dict):
             if attr != 'token':
                 raise errors.AppError('INVALID_ATTRIBUTE', attr_name=attr)
     if statements:
-        return 'WHERE '+' AND '.join(statements), values
+        return 'WHERE ' + ' AND '.join(statements), values
     return '', []
 
 
@@ -80,7 +80,7 @@ def build_query(table, config_dict, option=None, page=0):
         from_stmnt=build_from_statement(table),
         where_stmnt=where_statement,
         limit=PG_LIMIT,
-        offset=PG_LIMIT*page
+        offset=PG_LIMIT * page
     )
     if environ['DEBUG'] == 'TRUE':
         print query, values
