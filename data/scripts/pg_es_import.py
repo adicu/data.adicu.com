@@ -23,6 +23,10 @@ SECTION_COLUMNS = [
     'CallNumber'
 ]
 
+ADD_INFO_COLUMNS = [
+    'GlobalCore'
+]
+
 def add_bulk_item(batch, pgrow, es_index, es_type):
     action = { 'index' : {
         "_index" : es_index,
@@ -30,7 +34,8 @@ def add_bulk_item(batch, pgrow, es_index, es_type):
         "_id" : pgrow[0]
     }}
     source = {}
-    for i, key in enumerate(COURSE_COLUMNS + SECTION_COLUMNS):
+    columns = COURSE_COLUMNS + SECTION_COLUMNS + ADD_INFO_COLUMNS
+    for i, key in enumerate(columns):
         source[key] = pgrow[i]
 
     batch.append(action)
@@ -66,9 +71,12 @@ def import_data():
     batch = []
     query = ('SELECT %s, array_agg(DISTINCT s.term) AS \"term\", '
              'array_agg(DISTINCT s.instructor1name) as \"instructor\", '
-             'array_agg(DISTINCT s.callnumber) as \"callnumber\" '
+             'array_agg(DISTINCT s.callnumber) as \"callnumber\",'
+             'array_agg(DISTINCT a.globalcore) AS \"globalcore\" '
              'FROM courses_v2_t c JOIN sections_v2_t s '
-             'ON c.course = s.course GROUP BY c.course'
+             'ON c.course = s.course '
+             'LEFT OUTER JOIN courses_add_info a '
+             'ON c.coursefull = a.coursefull GROUP BY c.course'
             ) % ', '.join('c.' + colname for colname in COURSE_COLUMNS)
     cursor = pg.cursor()
     cursor.execute(query)
