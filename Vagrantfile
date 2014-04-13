@@ -16,6 +16,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # expose port 5000 for Flask
   config.vm.network :forwarded_port,  guest: 5000,    host: 5000
 
+  # expose port 9200 for elasticsearch
+ config.vm.network :forwarded_port,  guest: 9200,    host: 9200
+
   # run the install script for dependencies
   config.vm.provision :shell, :path => "config/bootstrap.sh"
 end
