@@ -7,7 +7,13 @@ apt-get -y update
 apt-get -y install git-core git
 
 # install postgres
-sudo apt-get -y install postgresql postgresql-contrib
+sudo apt-get install postgresql
+#sudo -u postgres psql initdb -D /usr/local/pgsql/data
+###NUKE DATABASE LOST USERS AND TABLES
+sudo -u postgres psql -c "DROP OWNED BY adi";
+sudo -u postgres psql -c "DROP ROLE adi";
+#echo 'stuff is hapnen'
+#sudo -u postgres psql dropuser adi
 sudo -u postgres psql -c "CREATE USER adi WITH PASSWORD 'adi'";
 /vagrant/dev/load_dev_dump.sh
 
