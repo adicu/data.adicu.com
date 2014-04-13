@@ -1,0 +1,15 @@
+{
+    "defaultSort": "room_location",
+    "columns": {
+        "room_location_area": {
+            "column": "roomlocationarea",
+            "type": "string",
+            "description": "Residence type"
+        },
+        "residential_area": {
+            "column": "residentialarea",
+            "type": "string",
+            "description": "Campus location"
+        }
+    }
+}

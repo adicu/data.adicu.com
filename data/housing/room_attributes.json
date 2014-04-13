@@ -1,0 +1,75 @@
+{
+    "defaultSort": "room_location",
+    "columns": {
+        "room_location_area": {
+            "column": "roomlocationarea",
+            "type": "string",
+            "description": "Residence type"
+        },
+        "residential_area": {
+            "column": "residentialarea",
+            "type": "string",
+            "description": "Campus location"
+        },
+        "room_location": {
+            "column": "roomlocation",
+            "type": "string",
+            "description": "Dormitory"
+        },
+        "room_location_section": {
+            "column": "roomlocationsection",
+            "type": "string",
+            "description": "Floor/dormitory section"
+        },
+        "room_location_floor_suite": {
+            "column": "roomlocationfloorsuite",
+            "type": "string",
+            "description": "Suite number"
+        },
+        "is_suite": {
+            "column": "issuite",
+            "type": "bool",
+            "description": "Whether a room is a suite"
+        },
+        "floor_suite_webdescription": {
+            "column": "floorsuitewebdescription",
+            "type": "string",
+            "description": "Suite description"
+        },
+        "room": {
+            "column": "room",
+            "type": "string",
+            "description": "Rooms"
+        },
+        "room_area": {
+            "column": "roomarea",
+            "type": "integer",
+            "description": "Room area"
+        },
+        "room_space": {
+            "column": "roomspace",
+            "type": "string",
+            "description": "Room subdivision"
+        },
+        "room_type": {
+            "column": "roomtype",
+            "type": "string",
+            "description": "Room type/occupancy"
+        },
+        "ay_12_13_rs_status": {
+            "column": "ay1213rsstatus",
+            "type": "string",
+            "description": "Housing availability status"
+        },
+        "point_value": {
+            "column": "pointvalue",
+            "type": "double",
+            "description": "Previous group point value"
+        },
+        "lottery_number": {
+            "column": "lotterynumber",
+            "type": "integer",
+            "description": "Previous lottery number"
+        }
+    }
+}

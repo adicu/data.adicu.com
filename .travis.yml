@@ -9,6 +9,7 @@ env:
     - HOST=0.0.0.0
     - DEBUG=TRUE
     - SECRET_KEY=abc123
+    - TESTING=TRUE
 
     - PG_HOST=127.0.0.1
     - PG_PORT=5432

@@ -1,6 +1,7 @@
 #!/bin/bash
 
 source /vagrant/config/settings.dev
+export TESTING=TRUE
 
 echo '--------------------------------------'
 echo '    pep 8 complicance testing'

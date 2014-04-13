@@ -1,0 +1,49 @@
+{
+    "defaultSort": "building",
+    "columns": {
+        "building": {
+            "column": "building",
+            "type": "string"
+        },
+        "apartment_style": {
+            "column": "apartmentstyle",
+            "type": "bool"
+        },
+        "suite_style": {
+            "column": "suitestyle",
+            "type": "bool"
+        },
+        "corridor_style": {
+            "column": "corridorstyle",
+            "type": "bool"
+        },
+        "private_bathroom": {
+            "column": "privatebathroom",
+            "type": "bool"
+        },
+        "semi_private_bathroom": {
+            "column": "semiprivatebathroom",
+            "type": "bool"
+        },
+        "shared_bathroom": {
+            "column": "sharedbathroom",
+            "type": "bool"
+        },
+        "private_kitchen": {
+            "column": "privatekitchen",
+            "type": "bool"
+        },
+        "semi_private_kitchen": {
+            "column": "semiprivatekitchen",
+            "type": "bool"
+        },
+        "shared_kitchen": {
+            "column": "sharedkitchen",
+            "type": "bool"
+        },
+        "lounge": {
+            "column": "lounge",
+            "type": "string"
+        }
+    }
+}
