@@ -93,10 +93,6 @@ class TestUser(MockingTemplate):
         app = flask.Flask(__name__)
         app.before_request(user.check_token_validity)
 
-        with self.assertRaises(errors.AppError):
-            with app.test_request_context('/'):
-                user.check_token_validity()
-
         mock_g.redis.sismember.return_value = False
         with app.test_request_context('/?token=123'):
             with self.assertRaises(errors.AppError):
@@ -122,6 +118,21 @@ class TestUser(MockingTemplate):
             ('rate:123', 25, 60**2/user.SPLIT_FACTOR),
             mock_g.redis.setex.call_args[0]
         )
+
+        # Test the app takes domains as well as tokens
+        mock_g.redis.sismember.return_value = True
+        mock_g.redis.exists.return_value = False
+        mock_g.cursor.fetchone.return_value = test_record
+        with app.test_request_context('/'):
+            user.rate_limit()
+
+        # Test if it throws error for no token or domain
+        mock_g.redis.sismember.return_value = False
+        mock_g.redis.exists.return_value = False
+        mock_g.cursor.fetchone.return_value = test_record
+        with app.test_request_context('/'):
+            with self.assertRaises(errors.AppError):
+                user.rate_limit()
 
         # test if it throws error when rate limited
         mock_g.redis.sismember.return_value = True

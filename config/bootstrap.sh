@@ -19,8 +19,12 @@ sudo -u postgres psql -c "CREATE USER adi WITH PASSWORD 'adi'";
 
 # install redis
 sudo apt-get -y install redis-server
+redis-cli -n 1 del tokens
 redis-cli -n 1 sadd tokens 12345   # add test token to redis
 redis-cli -n 1 sadd tokens integration_test   # add test token to redis
+redis-cli -n 1 sadd tokens local    # add test token to redis
+redis-cli -n 1 del domains
+redis-cli -n 1 sadd domains 127.0.0.1:5000  # add test domain to redis
 
 # install python
 apt-get -y install python
