@@ -1,4 +1,4 @@
-
+ 
 """
 Collects settings from the environment and adds them to the app configuration.
 
@@ -24,7 +24,7 @@ try:
     PG_DB = environ['PG_DB']
     PG_HOST = environ['PG_HOST']
     PG_PORT = environ['PG_PORT']
-    PG_LIMIT = environ['PG_LIMIT']
+    PG_PAGE_LIMIT = environ['PG_PAGE_LIMIT']
     PG_DEFAULT = environ['PG_DEFAULT']
 
     REDIS_HOST = environ['REDIS_HOST']

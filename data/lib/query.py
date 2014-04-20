@@ -9,7 +9,7 @@ if base_dir not in sys.path:
 from errors import errors
 from flask import request
 
-PG_LIMIT = int(environ['PG_LIMIT'])
+PG_PAGE_LIMIT = int(environ['PG_PAGE_LIMIT'])
 
 
 def build_select_statemnt(config_dict, option=None):
@@ -69,7 +69,7 @@ def build_query(table, config_dict, option=None, page=0):
     @param table: string name of the queried table
     @param config_dict: dictionary of (querystring key -> database column)
     @param page: page of the results to return (only used when a query has
-        > PG_LIMIT results)
+        > PG_PAGE_LIMIT results)
     """
     where_statement, values = build_where_statement(config_dict)
     query = (
@@ -79,8 +79,8 @@ def build_query(table, config_dict, option=None, page=0):
         select_stmnt=build_select_statemnt(config_dict, option),
         from_stmnt=build_from_statement(table),
         where_stmnt=where_statement,
-        limit=PG_LIMIT,
-        offset=PG_LIMIT * page
+        limit=PG_PAGE_LIMIT,
+        offset=PG_PAGE_LIMIT * page
     )
     if environ.get('DEBUG_SQL', 'FALSE') == 'TRUE':
         print query, values
