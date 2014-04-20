@@ -12,7 +12,7 @@ class TestHousingRoutes(template.TestingTemplate):
         json_resp = json.loads(resp.data)
         self.assertEqual(200, resp.status_code)
         self.assertEqual(200, json_resp['status'])
-        self.assertEqual(100, len(json_resp['results']))
+        self.assertEqual(156, len(json_resp['results']))
 
     def test_rooms_page_too_far(self):
         """ test that an error is returned after paging too far """
@@ -78,12 +78,12 @@ class TestHousingRoutes(template.TestingTemplate):
         json_resp = json.loads(resp.data)
         self.assertEqual(200, resp.status_code)
         self.assertEqual(200, json_resp['status'])
-        self.assertEqual(len(json_resp['results']), 2)
+        self.assertEqual(len(json_resp['results']), 3)
 
     def test_buildings_two_valid_attr(self):
         """ test query for /rooms with 2 valid attr """
-        resp = self.app.get(('/housing/buildings?corridor_style=false&'
-                             'semi_private_kitchen=true&token=12345'))
+        resp = self.app.get('/housing/buildings?corridor_style=false&'
+                            'semi_private_kitchen=true&token=12345')
         json_resp = json.loads(resp.data)
         self.assertEqual(200, resp.status_code)
         self.assertEqual(200, json_resp['status'])

@@ -7,8 +7,9 @@ apt-get -y update
 apt-get -y install git-core git
 
 # install postgres
-sudo apt-get -y install postgresql postgresql-contrib
-sudo -u postgres psql -c "CREATE USER adi WITH PASSWORD 'adi'";
+sudo apt-get install postgresql
+sudo -u postgres psql -c "DROP OWNED BY adi";
+sudo -u postgres psql -c "DROP ROLE adi";
 /vagrant/dev/load_dev_dump.sh
 
 # install redis

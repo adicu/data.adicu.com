@@ -8,7 +8,7 @@ export PG_PORT=5432
 export PG_USER=adicu
 export PG_PASSWORD=development
 export PG_DB=data
-export PG_LIMIT=250
+export PG_PAGE_LIMIT=250
 export PG_DEFAULT=20
 
 # ElasticSearch connection

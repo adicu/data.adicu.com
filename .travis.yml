@@ -15,8 +15,8 @@ env:
     - PG_PORT=5432
     - PG_USER=adi
     - PG_PASSWORD=adi
-    - PG_DB=travis_test
-    - PG_LIMIT=250
+    - PG_DB=data2
+    - PG_PAGE_LIMIT=250
     - PG_DEFAULT=20
     - RATE_LIMIT=200
 
@@ -37,10 +37,7 @@ services:
     - redis-server
 
 before_script:
-    - psql -c "CREATE USER adi WITH PASSWORD 'adi';" -U postgres
-    - psql -c 'CREATE DATABASE travis_test WITH OWNER "adi";' -U postgres
-    - psql travis_test -c 'GRANT CONNECT ON DATABASE travis_test TO adi;' -U postgres
-    - psql travis_test < dev/dev_dump.sql -U postgres
+    - bash dev/load_dev_dump.sh
 
 script:
     - flake8 data/auth
